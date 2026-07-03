@@ -1,18 +1,7 @@
 {
   "date": "2026-07-03",
-  "count": 151,
+  "count": 126,
   "jobs": [
-    {
-      "score": 95,
-      "title": "Senior Product Designer",
-      "field": "Design",
-      "employer": "ENSEK",
-      "location": "UK",
-      "salary": 67698,
-      "belowGeneral": false,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/details/5786005431?utm_medium=api&utm_source=a3737efc"
-    },
     {
       "score": 87,
       "title": "UX Designer",
@@ -33,7 +22,18 @@
       "salary": 38500,
       "belowGeneral": true,
       "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5785362773?se=ZFSPcHR28RGJ_ZNmKGa4Pg&utm_medium=api&utm_source=a3737efc&v=607CD0DCCC92515853DF6BBB5ED0A748CE9DEC17"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5785362773?se=srEoJL128RGCWfu5pj3YyQ&utm_medium=api&utm_source=a3737efc&v=607CD0DCCC92515853DF6BBB5ED0A748CE9DEC17"
+    },
+    {
+      "score": 87,
+      "title": "Graphic Designer",
+      "field": "Design",
+      "employer": "Innoviz Ltd",
+      "location": "Bedford, Bedfordshire",
+      "salary": 38000,
+      "belowGeneral": true,
+      "posted": "2026-07-03",
+      "url": "https://www.adzuna.co.uk/jobs/details/5786615591?utm_medium=api&utm_source=a3737efc"
     },
     {
       "score": 87,
@@ -45,6 +45,17 @@
       "belowGeneral": true,
       "posted": "2026-07-02",
       "url": "https://www.adzuna.co.uk/jobs/details/5785368303?utm_medium=api&utm_source=a3737efc"
+    },
+    {
+      "score": 87,
+      "title": "Principal Data Analyst",
+      "field": "Data",
+      "employer": "Leeds Community Healthcare Trust",
+      "location": "Beeston, Leeds",
+      "salary": 48503,
+      "belowGeneral": false,
+      "posted": "2026-07-03",
+      "url": "https://www.adzuna.co.uk/jobs/details/5786396490?utm_medium=api&utm_source=a3737efc"
     },
     {
       "score": 87,
@@ -69,48 +80,15 @@
       "url": "https://www.adzuna.co.uk/jobs/details/5785767151?utm_medium=api&utm_source=a3737efc"
     },
     {
-      "score": 87,
-      "title": "Data Analyst",
-      "field": "Data",
-      "employer": "Global Media Group",
-      "location": "London, UK",
-      "salary": 51165,
-      "belowGeneral": false,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/details/5785368249?utm_medium=api&utm_source=a3737efc"
-    },
-    {
-      "score": 87,
-      "title": "Senior Data Analyst",
-      "field": "Data",
-      "employer": "Hippo Digital Limited",
-      "location": "Manchester Science Park, Manchester",
-      "salary": 57500,
-      "belowGeneral": false,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5785364237?se=qJHke3R28RGTHqG-hwfHew&utm_medium=api&utm_source=a3737efc&v=87A57745D450F35D600073CADB75510EF53206BD"
-    },
-    {
-      "score": 87,
-      "title": "Housing Operations Manager",
-      "field": "Operations",
-      "employer": "Home Group",
-      "location": "London, UK",
-      "salary": 44674,
+      "score": 83,
+      "title": "Senior Product Designer",
+      "field": "Design",
+      "employer": "Unity Technologies",
+      "location": "UK",
+      "salary": 45466,
       "belowGeneral": false,
       "posted": "2026-07-03",
-      "url": "https://www.adzuna.co.uk/jobs/details/5786110629?utm_medium=api&utm_source=a3737efc"
-    },
-    {
-      "score": 87,
-      "title": "Area Manager",
-      "field": "Operations",
-      "employer": "Places for People",
-      "location": "Eastleigh, Hampshire",
-      "salary": 45000,
-      "belowGeneral": false,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/details/5785818640?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5786166691?utm_medium=api&utm_source=a3737efc"
     },
     {
       "score": 83,
@@ -132,7 +110,7 @@
       "salary": 70000,
       "belowGeneral": false,
       "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5785795782?se=fLDUa3R28RGeO4cVaoOQ8Q&utm_medium=api&utm_source=a3737efc&v=89C029E1C87DE3F9D78837C7D5B45251A0683446"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5785795782?se=5psAH7128RGpZLCzkt87oQ&utm_medium=api&utm_source=a3737efc&v=89C029E1C87DE3F9D78837C7D5B45251A0683446"
     },
     {
       "score": 83,
@@ -180,14 +158,14 @@
     },
     {
       "score": 83,
-      "title": "Service Designer",
+      "title": "Senior Product Designer",
       "field": "Design",
-      "employer": "Adecco",
-      "location": "Fenchurch St, Central London",
-      "salary": 45000,
+      "employer": "ENSEK",
+      "location": "UK",
+      "salary": 67698,
       "belowGeneral": false,
       "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/details/5785249457?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5786005431?utm_medium=api&utm_source=a3737efc"
     },
     {
       "score": 83,
@@ -202,36 +180,25 @@
     },
     {
       "score": 83,
-      "title": "Mechanical and Electrical Designer",
+      "title": "Service Designer",
       "field": "Design",
-      "employer": "Royal Mail Group",
-      "location": "London, UK",
-      "salary": 55300,
+      "employer": "Adecco",
+      "location": "Fenchurch St, Central London",
+      "salary": 45000,
       "belowGeneral": false,
       "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/details/5786093534?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5785249457?utm_medium=api&utm_source=a3737efc"
     },
     {
-      "score": 83,
-      "title": "Social Motion and Video Graphics Designer",
+      "score": 75,
+      "title": "Interaction Desinger",
       "field": "Design",
-      "employer": "Department for Work and Pensions",
-      "location": "Sheffield, South Yorkshire",
-      "salary": 44182,
+      "employer": "SR2 REC LTD",
+      "location": "Newcastle Upon Tyne, Tyne & Wear",
+      "salary": 78000,
       "belowGeneral": false,
-      "posted": "2026-07-01",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5784463921?se=hjxQeHR28RGJ_ZNmKGa4Pg&utm_medium=api&utm_source=a3737efc&v=D35F98ED2068AE95E166A4B242B48C115F2398BF"
-    },
-    {
-      "score": 79,
-      "title": "Process Engineer",
-      "field": "Engineering",
-      "employer": "SRG",
-      "location": "Woolverton, Bath",
-      "salary": 35000,
-      "belowGeneral": true,
       "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786049872?se=TPBxh3R28RGTHqG-hwfHew&utm_medium=api&utm_source=a3737efc&v=E46E4BB9E5FA320DC652E06748E514A94968656A"
+      "url": "https://www.adzuna.co.uk/jobs/details/5785774317?utm_medium=api&utm_source=a3737efc"
     },
     {
       "score": 75,
@@ -242,7 +209,7 @@
       "salary": 38500,
       "belowGeneral": true,
       "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5785366559?se=fLDUa3R28RGeO4cVaoOQ8Q&utm_medium=api&utm_source=a3737efc&v=39111888501FFFD8EB9867042AD64CC2F1F46F84"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5785366559?se=5psAH7128RGpZLCzkt87oQ&utm_medium=api&utm_source=a3737efc&v=39111888501FFFD8EB9867042AD64CC2F1F46F84"
     },
     {
       "score": 75,
@@ -268,36 +235,47 @@
     },
     {
       "score": 75,
-      "title": "Product Manager (Mobile App)",
+      "title": "Head of Product Development",
       "field": "Design",
-      "employer": "Salt",
-      "location": "South East London, London",
-      "salary": 117000,
+      "employer": "Demellier",
+      "location": "Hammersmith, West London",
+      "salary": 64722,
       "belowGeneral": false,
       "posted": "2026-07-03",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786113115?se=YlcYbnR28RGRjNS7zaxw5w&utm_medium=api&utm_source=a3737efc&v=2A9D6D1EC5A590F8C5C9E4BDF3BEAADABC0C6420"
+      "url": "https://www.adzuna.co.uk/jobs/details/5786317897?utm_medium=api&utm_source=a3737efc"
     },
     {
       "score": 75,
-      "title": "Lead Product Analyst - Regional Expansion",
+      "title": "Senior New Product Introduction Manager",
       "field": "Design",
-      "employer": "Wise",
-      "location": "London, UK",
-      "salary": 62834,
+      "employer": "Raytheon",
+      "location": "Glenrothes, Fife",
+      "salary": 54772,
       "belowGeneral": false,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/details/5785773419?utm_medium=api&utm_source=a3737efc"
+      "posted": "2026-07-03",
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786260164?se=WnVMIb128RGUhK-I0RiVxg&utm_medium=api&utm_source=a3737efc&v=8BDFBDBE96963F0133936A208C9741ABB2B0DFD0"
     },
     {
       "score": 75,
-      "title": "Kitchen Sales Designer",
+      "title": "Senior Product Test Design Engineer",
       "field": "Design",
-      "employer": "Howdens Joinery",
-      "location": "Darwen, Lancashire",
-      "salary": 36984,
+      "employer": "Raytheon",
+      "location": "Glenrothes, Fife",
+      "salary": 63145,
+      "belowGeneral": false,
+      "posted": "2026-07-03",
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786260010?se=WnVMIb128RGUhK-I0RiVxg&utm_medium=api&utm_source=a3737efc&v=51A802308016C1CD989D71D7D89A67BA2388C7A8"
+    },
+    {
+      "score": 75,
+      "title": "Graphic Designer",
+      "field": "Design",
+      "employer": "Eden Brown",
+      "location": "The City, Central London",
+      "salary": 35000,
       "belowGeneral": true,
       "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/details/5785769181?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5785716228?se=srEoJL128RGCWfu5pj3YyQ&utm_medium=api&utm_source=a3737efc&v=9BF22332230678B39188976F45ED2A9676025527"
     },
     {
       "score": 75,
@@ -312,6 +290,61 @@
     },
     {
       "score": 75,
+      "title": "Kitchen Surveyor / Kitchen Designer",
+      "field": "Design",
+      "employer": "WHQS",
+      "location": "Stretton, Burton-On-Trent",
+      "salary": 36400,
+      "belowGeneral": true,
+      "posted": "2026-07-03",
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786347083?se=sEQ4Kb128RGCWfu5pj3YyQ&utm_medium=api&utm_source=a3737efc&v=7647C19AD7520D8659C16367B044720049032E7C"
+    },
+    {
+      "score": 75,
+      "title": "Data Business Analyst - Data Provisioning",
+      "field": "Data",
+      "employer": "Gattaca PBS",
+      "location": "Whiteley, Fareham",
+      "salary": 143000,
+      "belowGeneral": false,
+      "posted": "2026-07-03",
+      "url": "https://www.adzuna.co.uk/jobs/details/5786150241?utm_medium=api&utm_source=a3737efc"
+    },
+    {
+      "score": 75,
+      "title": "Data Business Analyst - Customer & Colleague Journeys",
+      "field": "Data",
+      "employer": "Gattaca PBS",
+      "location": "Whiteley, Fareham",
+      "salary": 143000,
+      "belowGeneral": false,
+      "posted": "2026-07-03",
+      "url": "https://www.adzuna.co.uk/jobs/details/5786150240?utm_medium=api&utm_source=a3737efc"
+    },
+    {
+      "score": 75,
+      "title": "Data Manager",
+      "field": "Data",
+      "employer": "Context",
+      "location": "Birmingham, West Midlands",
+      "salary": 70000,
+      "belowGeneral": false,
+      "posted": "2026-07-03",
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786108325?se=GqAzMb128RGCWfu5pj3YyQ&utm_medium=api&utm_source=a3737efc&v=FD38EE598A2D73FFDBBD0A2B043B5D2BF5910EE5"
+    },
+    {
+      "score": 75,
+      "title": "Energy Data Analyst",
+      "field": "Data",
+      "employer": "Veolia",
+      "location": "Kings Cross, Central London",
+      "salary": null,
+      "belowGeneral": false,
+      "posted": "2026-07-02",
+      "url": "https://www.adzuna.co.uk/jobs/details/5785774971?utm_medium=api&utm_source=a3737efc"
+    },
+    {
+      "score": 75,
       "title": "Data Governance Analyst",
       "field": "Data",
       "employer": "Canopius Services",
@@ -323,322 +356,146 @@
     },
     {
       "score": 75,
-      "title": "Operations CLM Business Analyst - SGI",
-      "field": "Data",
-      "employer": "SGI",
-      "location": "London, UK",
-      "salary": 59627,
-      "belowGeneral": false,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5785598502?se=qJHke3R28RGTHqG-hwfHew&utm_medium=api&utm_source=a3737efc&v=4E2229EC4BF72A96C750124F916F44AF292733B9"
-    },
-    {
-      "score": 75,
-      "title": "Operational Risk Data Governance Foundation Lead Analyst, Vice President - Citi",
-      "field": "Data",
-      "employer": "Citi",
-      "location": "UK",
-      "salary": 66580,
-      "belowGeneral": false,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5785433895?se=qJHke3R28RGTHqG-hwfHew&utm_medium=api&utm_source=a3737efc&v=989C5ABC8680988F080DE5892B42674BBF25C508"
-    },
-    {
-      "score": 75,
-      "title": "Data and Reporting Analyst",
-      "field": "Data",
-      "employer": "CES Power",
-      "location": "UK",
-      "salary": 55420,
-      "belowGeneral": false,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/details/5785368296?utm_medium=api&utm_source=a3737efc"
-    },
-    {
-      "score": 75,
-      "title": "Ceded Re Analyst",
-      "field": "Data",
-      "employer": "EXL",
-      "location": "London, UK",
-      "salary": 62250,
-      "belowGeneral": false,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/details/5785368301?utm_medium=api&utm_source=a3737efc"
-    },
-    {
-      "score": 75,
-      "title": "Financial Analyst (GB), Professional I",
-      "field": "Data",
-      "employer": "Zebra Technologies Europe Limited",
-      "location": "UK",
-      "salary": 46930,
-      "belowGeneral": false,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5785368092?se=qJHke3R28RGTHqG-hwfHew&utm_medium=api&utm_source=a3737efc&v=BDE280A0A6BDAA9C175C81D1D0F9142CE54BE95A"
-    },
-    {
-      "score": 75,
-      "title": "Snowflake Data Engineer",
-      "field": "Data",
-      "employer": "Ntt Data",
-      "location": "The City, Central London",
-      "salary": 80525,
-      "belowGeneral": false,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5785367492?se=qJHke3R28RGTHqG-hwfHew&utm_medium=api&utm_source=a3737efc&v=C60832EDAB34297485C0DA418AC617929A3E21FA"
-    },
-    {
-      "score": 75,
-      "title": "Senior Data Architect",
-      "field": "Data",
-      "employer": "Barclays",
-      "location": "UK",
-      "salary": 77493,
-      "belowGeneral": false,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5785366221?se=qJHke3R28RGTHqG-hwfHew&utm_medium=api&utm_source=a3737efc&v=83B496A4F6406533AE3361998E62C864C188242E"
-    },
-    {
-      "score": 75,
-      "title": "Team Leader - Equity Corporate Actions - M&A, IPO and Private Deals Data",
-      "field": "Data",
-      "employer": "Bloomberg",
-      "location": "London, UK",
-      "salary": 53994,
-      "belowGeneral": false,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/details/5785363553?utm_medium=api&utm_source=a3737efc"
-    },
-    {
-      "score": 75,
-      "title": "Head of Operations",
-      "field": "Operations",
-      "employer": "StrideUp",
-      "location": "Oxford Circus, Central London",
-      "salary": 81059,
-      "belowGeneral": false,
-      "posted": "2026-07-03",
-      "url": "https://www.adzuna.co.uk/jobs/details/5786142658?utm_medium=api&utm_source=a3737efc"
-    },
-    {
-      "score": 75,
       "title": "Site Manager",
       "field": "Operations",
-      "employer": "Reed",
-      "location": "West Midlands, UK",
-      "salary": 50000,
+      "employer": "HAYS",
+      "location": "Glasgow, Scotland",
+      "salary": 53199,
       "belowGeneral": false,
       "posted": "2026-07-03",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786141737?se=ZLaIfnR28RGRjNS7zaxw5w&utm_medium=api&utm_source=a3737efc&v=E494D6877318B0ACB6571D8B57A3AC4D6570BFEA"
+      "url": "https://www.adzuna.co.uk/jobs/details/5786593242?utm_medium=api&utm_source=a3737efc"
     },
     {
       "score": 75,
-      "title": "Site Manager",
+      "title": "Area Manager",
       "field": "Operations",
-      "employer": "Reed Specialist Recruitment",
-      "location": "West Midlands, UK",
-      "salary": 50000,
+      "employer": "Amazon",
+      "location": "Dentons Green, St. Helens",
+      "salary": 48974,
       "belowGeneral": false,
       "posted": "2026-07-03",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786135823?se=ZLaIfnR28RGRjNS7zaxw5w&utm_medium=api&utm_source=a3737efc&v=6BD4D0CACA1656F5EF2C544AC80914C6CC86D7B1"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786575934?se=tuURNb128RGCWfu5pj3YyQ&utm_medium=api&utm_source=a3737efc&v=1380D9E76EE3235EDD8C90E201AA5CE41CC290D0"
     },
     {
       "score": 75,
-      "title": "Regional Sales Manager (Aggregates & Asphalt)",
+      "title": "Restaurant Manager (Hourly Manager)",
       "field": "Operations",
-      "employer": "Tarmac Trading Limited",
-      "location": "Cross Green, Leeds",
-      "salary": 58022,
+      "employer": "Raising Canes",
+      "location": "Piccadilly, West London",
+      "salary": 49609,
       "belowGeneral": false,
       "posted": "2026-07-03",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786112768?se=ZLaIfnR28RGRjNS7zaxw5w&utm_medium=api&utm_source=a3737efc&v=8CBBCAEC9E95F545CE4781322FD52169385F712C"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786575413?se=tuURNb128RGCWfu5pj3YyQ&utm_medium=api&utm_source=a3737efc&v=3A6F64D0582F7B32E15BC081C800C15124F1153A"
     },
     {
       "score": 75,
-      "title": "Service Delivery Manager",
+      "title": "Senior Contracts Manager",
       "field": "Operations",
-      "employer": "NCC",
-      "location": "Bristol, South West England",
-      "salary": 65000,
+      "employer": "Peopleforge Ltd",
+      "location": "Macclesfield, Cheshire",
+      "salary": 55000,
       "belowGeneral": false,
       "posted": "2026-07-03",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786105877?se=ZLaIfnR28RGRjNS7zaxw5w&utm_medium=api&utm_source=a3737efc&v=8F876BBB580967EA3CED68B0D4B8FFC76EE77E58"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786575379?se=tuURNb128RGCWfu5pj3YyQ&utm_medium=api&utm_source=a3737efc&v=ED0CD3FF4E81F5E2F55260925468B0B66BC01BB6"
     },
     {
       "score": 75,
-      "title": "Senior Delivery Manager",
+      "title": "Commercial Finance Manager",
       "field": "Operations",
-      "employer": "National Highways",
-      "location": "UK",
-      "salary": 50000,
-      "belowGeneral": false,
-      "posted": "2026-07-03",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786130320?se=mm_mgXR28RGeO4cVaoOQ8Q&utm_medium=api&utm_source=a3737efc&v=84B78DD75A701E5ADCC8812C72A205823F9650D9"
-    },
-    {
-      "score": 75,
-      "title": "Customer Sales Manager",
-      "field": "Operations",
-      "employer": "Care UK",
-      "location": "Oxford, Oxfordshire",
+      "employer": "Robert Half",
+      "location": "Stirling, County Stirling",
       "salary": 45000,
       "belowGeneral": false,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/details/5785843557?utm_medium=api&utm_source=a3737efc"
+      "posted": "2026-07-03",
+      "url": "https://www.adzuna.co.uk/jobs/details/5786493499?utm_medium=api&utm_source=a3737efc"
     },
     {
       "score": 75,
-      "title": "Procurement Contract Manager",
-      "field": "Operations",
-      "employer": "Cambridgeshire & Peterborough Combined Authority",
-      "location": "Godmanchester, Huntingdon",
-      "salary": 42839,
-      "belowGeneral": false,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/details/5785815537?utm_medium=api&utm_source=a3737efc"
-    },
-    {
-      "score": 75,
-      "title": "Improvement Manager (Social Work)",
-      "field": "Operations",
-      "employer": "Cafcass",
-      "location": "UK",
-      "salary": 56941,
-      "belowGeneral": false,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/details/5785815483?utm_medium=api&utm_source=a3737efc"
-    },
-    {
-      "score": 75,
-      "title": "Health & safety Manager",
-      "field": "Operations",
-      "employer": "Thrive Group",
-      "location": "Normanton, West Yorkshire",
-      "salary": 51950,
+      "title": "MEICA Engineer - Water",
+      "field": "Engineering",
+      "employer": "Progressive Recruitment",
+      "location": "Manchester, Greater Manchester",
+      "salary": 104000,
       "belowGeneral": false,
       "posted": "2026-07-03",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786132355?se=MmJ3hHR28RGTHqG-hwfHew&utm_medium=api&utm_source=a3737efc&v=534735523315486C31A18FDF96EA590DBF700378"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786574378?se=IKLbP7128RGUhK-I0RiVxg&utm_medium=api&utm_source=a3737efc&v=D1FE174F7ABA33217B520A195D2683A6167BC832"
     },
     {
       "score": 75,
       "title": "Mechanical Engineer \u2013 Sting Ray",
       "field": "Engineering",
       "employer": "BAE Systems",
-      "location": "Portsmouth, Hampshire",
-      "salary": 45618,
+      "location": "Hilsea, Portsmouth",
+      "salary": 44343,
       "belowGeneral": false,
       "posted": "2026-07-03",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786119832?se=TPBxh3R28RGTHqG-hwfHew&utm_medium=api&utm_source=a3737efc&v=26517958B6FE93A192FBE7A284C7C9D5E6F5C601"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786435610?se=IKLbP7128RGUhK-I0RiVxg&utm_medium=api&utm_source=a3737efc&v=D48CDEBBAD82C0E658885D99823DDF6E23912449"
     },
     {
       "score": 75,
-      "title": "Civil Engineering - Detail Design x 3",
+      "title": "Mechanical Maintenance Engineer",
       "field": "Engineering",
-      "employer": "Jacobs",
-      "location": "Warrington, Cheshire",
-      "salary": 84035,
+      "employer": "Wienerberger",
+      "location": "Waresley, Kidderminster",
+      "salary": 45000,
       "belowGeneral": false,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786061810?se=TPBxh3R28RGTHqG-hwfHew&utm_medium=api&utm_source=a3737efc&v=FAD9695B08A72A53D04C85F67AFF873C8F8A9631"
-    },
-    {
-      "score": 75,
-      "title": "Mechanical Field Engineer - Steam Generation Facility",
-      "field": "Engineering",
-      "employer": "Amentum",
-      "location": "Barrow-In-Furness, Cumbria",
-      "salary": 45985,
-      "belowGeneral": false,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786061783?se=TPBxh3R28RGTHqG-hwfHew&utm_medium=api&utm_source=a3737efc&v=517D300FD6CAF79408ABE373A934002C0039EF6B"
-    },
-    {
-      "score": 75,
-      "title": "Jig and Tooling Engineer",
-      "field": "Engineering",
-      "employer": "Optima UK",
-      "location": "Coventry, West Midlands",
-      "salary": 70000,
-      "belowGeneral": false,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/details/5785848833?utm_medium=api&utm_source=a3737efc"
-    },
-    {
-      "score": 75,
-      "title": "Reliability & Improvement Engineer",
-      "field": "Engineering",
-      "employer": "Refresco Drinks UK Limited",
-      "location": "Bridgwater, Somerset",
-      "salary": 56764,
-      "belowGeneral": false,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/details/5785817111?utm_medium=api&utm_source=a3737efc"
-    },
-    {
-      "score": 75,
-      "title": "Consultant Process Engineer",
-      "field": "Engineering",
-      "employer": "RSK Group",
-      "location": "Freshbrook, Swindon",
-      "salary": null,
-      "belowGeneral": false,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/details/5785815535?utm_medium=api&utm_source=a3737efc"
-    },
-    {
-      "score": 75,
-      "title": "Senior Consultant Process Engineer",
-      "field": "Engineering",
-      "employer": "RSK Group",
-      "location": "Freshbrook, Swindon",
-      "salary": null,
-      "belowGeneral": false,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/details/5785815536?utm_medium=api&utm_source=a3737efc"
+      "posted": "2026-07-03",
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786349309?se=IKLbP7128RGUhK-I0RiVxg&utm_medium=api&utm_source=a3737efc&v=13DA4DC414E8C0C1E71237F1EAAC62E6998CF7EA"
     },
     {
       "score": 75,
       "title": "Engineering Manager",
       "field": "Engineering",
-      "employer": "Veolia",
-      "location": "South Yorkshire, Yorkshire And The Humber",
-      "salary": 60361,
+      "employer": "QuantSpark",
+      "location": "Blackfriars, Central London",
+      "salary": 84471,
       "belowGeneral": false,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/details/5785803532?utm_medium=api&utm_source=a3737efc"
+      "posted": "2026-07-03",
+      "url": "https://www.adzuna.co.uk/jobs/details/5786317915?utm_medium=api&utm_source=a3737efc"
     },
     {
       "score": 75,
-      "title": "Proposals Engineer",
+      "title": "ONSS Substation Electrical Engineer",
       "field": "Engineering",
-      "employer": "RecruitMe",
-      "location": "St. Martins, Stamford",
-      "salary": 45000,
+      "employer": "Morson Edge",
+      "location": "Blackfriars, Central London",
+      "salary": 109995,
       "belowGeneral": false,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/details/5785793630?utm_medium=api&utm_source=a3737efc"
+      "posted": "2026-07-03",
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786260178?se=IKLbP7128RGUhK-I0RiVxg&utm_medium=api&utm_source=a3737efc&v=91C73C3A2ACEC78BA4512468BD98EE13896B72E7"
     },
     {
       "score": 75,
-      "title": "Senior Industrial Engineer",
+      "title": "V06051 - Senior Manufacturing Engineer - NC Programmer",
       "field": "Engineering",
-      "employer": "Raytheon",
-      "location": "Glenrothes, Fife",
-      "salary": 52257,
+      "employer": "Outsource",
+      "location": "North West England, UK",
+      "salary": 53215,
       "belowGeneral": false,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5785776003?se=TPBxh3R28RGTHqG-hwfHew&utm_medium=api&utm_source=a3737efc&v=3DCC8F0D9D5CB5367A72B437BCD4DD70F1F555D0"
+      "posted": "2026-07-03",
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786258833?se=IKLbP7128RGUhK-I0RiVxg&utm_medium=api&utm_source=a3737efc&v=673013AA26B6EB1D0AEF415F83A3B0791EF61BF7"
     },
     {
       "score": 75,
-      "title": "Principal Network and Security Engineer",
+      "title": "Forward Deployed Engineer II, GenAI (French, German)",
       "field": "Engineering",
-      "employer": "Places for People",
-      "location": "UK",
-      "salary": 60316,
+      "employer": "Google",
+      "location": "London, UK",
+      "salary": 56545,
       "belowGeneral": false,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5785775420?se=TPBxh3R28RGTHqG-hwfHew&utm_medium=api&utm_source=a3737efc&v=F85115DED9BCD636E4B7E30F8094B872485F6A80"
+      "posted": "2026-07-03",
+      "url": "https://www.adzuna.co.uk/jobs/details/5786157991?utm_medium=api&utm_source=a3737efc"
+    },
+    {
+      "score": 75,
+      "title": "Principal Engineer (m/f/d) - Control & Protection System Application",
+      "field": "Engineering",
+      "employer": "GE Vernova",
+      "location": "Stafford, Staffordshire",
+      "salary": 69980,
+      "belowGeneral": false,
+      "posted": "2026-07-03",
+      "url": "https://www.adzuna.co.uk/jobs/details/5786157802?utm_medium=api&utm_source=a3737efc"
     },
     {
       "score": 67,
@@ -693,7 +550,7 @@
       "salary": 72702,
       "belowGeneral": false,
       "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5785361429?se=fLDUa3R28RGeO4cVaoOQ8Q&utm_medium=api&utm_source=a3737efc&v=0EB9C3C1C165D2B4B90D13268A2CC24476A9DF3D"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5785361429?se=5psAH7128RGpZLCzkt87oQ&utm_medium=api&utm_source=a3737efc&v=0EB9C3C1C165D2B4B90D13268A2CC24476A9DF3D"
     },
     {
       "score": 67,
@@ -705,6 +562,17 @@
       "belowGeneral": false,
       "posted": "2026-07-02",
       "url": "https://www.adzuna.co.uk/jobs/details/5785278631?utm_medium=api&utm_source=a3737efc"
+    },
+    {
+      "score": 67,
+      "title": "Lead User Researcher",
+      "field": "Design",
+      "employer": "Experis",
+      "location": "Fleet Street, Central London",
+      "salary": 60000,
+      "belowGeneral": false,
+      "posted": "2026-07-02",
+      "url": "https://www.adzuna.co.uk/jobs/details/5785249659?utm_medium=api&utm_source=a3737efc"
     },
     {
       "score": 67,
@@ -730,25 +598,25 @@
     },
     {
       "score": 67,
-      "title": "Maths Tutor",
+      "title": "System Design Authority",
       "field": "Design",
-      "employer": "Witherslack Group",
-      "location": "Carnforth, Lancashire",
-      "salary": 43117,
+      "employer": "Morson Edge",
+      "location": "Normanton, West Yorkshire",
+      "salary": 62144,
       "belowGeneral": false,
-      "posted": "2026-07-01",
-      "url": "https://www.adzuna.co.uk/jobs/details/5783681523?utm_medium=api&utm_source=a3737efc"
+      "posted": "2026-07-03",
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786574329?se=WnVMIb128RGUhK-I0RiVxg&utm_medium=api&utm_source=a3737efc&v=80BB0A439B9F1D29F7A4C9190E7778D3C2EBBB09"
     },
     {
       "score": 67,
-      "title": "Software Team Lead",
+      "title": "Educational Consultant and Bid Specialist",
       "field": "Design",
-      "employer": "Smartbox Assistive Technology",
-      "location": "Bristol, South West England",
-      "salary": 65000,
+      "employer": "Bromcom Computers Plc",
+      "location": "Bromley, South East London",
+      "salary": 50449,
       "belowGeneral": false,
       "posted": "2026-07-03",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786105921?se=YlcYbnR28RGRjNS7zaxw5w&utm_medium=api&utm_source=a3737efc&v=82F369AB808B3BB6ECAA3C792AEE66931D4EC93F"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786573756?se=WnVMIb128RGUhK-I0RiVxg&utm_medium=api&utm_source=a3737efc&v=C490C86641E01E206529D6E85515A4A0755E7997"
     },
     {
       "score": 67,
@@ -756,142 +624,87 @@
       "field": "Design",
       "employer": "Safran",
       "location": "Cwmbran, Torfaen",
-      "salary": 52355,
+      "salary": 49318,
       "belowGeneral": false,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/details/5786097622?utm_medium=api&utm_source=a3737efc"
+      "posted": "2026-07-03",
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786260066?se=WnVMIb128RGUhK-I0RiVxg&utm_medium=api&utm_source=a3737efc&v=37AFA38331300DB0F5719F60622782E2BD1257B4"
     },
     {
       "score": 67,
-      "title": "NPI Engineer",
+      "title": "Software Engineering Manager",
       "field": "Design",
-      "employer": "Redline Group Ltd",
-      "location": "Park Gate, Southampton",
-      "salary": 45000,
+      "employer": "Centrica - CHP",
+      "location": "Belgrave, Leicester",
+      "salary": 77168,
       "belowGeneral": false,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786082635?se=YlcYbnR28RGRjNS7zaxw5w&utm_medium=api&utm_source=a3737efc&v=DAE4A0B2CF1CAAAFEB6FD11CCDFBEC116AAAF3A8"
+      "posted": "2026-07-03",
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786258830?se=WnVMIb128RGUhK-I0RiVxg&utm_medium=api&utm_source=a3737efc&v=6CCFFB4B54D6243463B8F148B97469F7F08F6A46"
     },
     {
       "score": 67,
-      "title": "VodafoneThree - IT Digital Architect",
+      "title": "Solutions Architect",
       "field": "Design",
-      "employer": "VodafoneThree",
-      "location": "Farnborough, Hampshire",
-      "salary": 51273,
+      "employer": "Camlin",
+      "location": "Lisburn, Northern Ireland",
+      "salary": 50411,
       "belowGeneral": false,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786061847?se=YlcYbnR28RGRjNS7zaxw5w&utm_medium=api&utm_source=a3737efc&v=D49F8DB66426A84B15C1077FECF3A741A021946D"
+      "posted": "2026-07-03",
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786257288?se=WnVMIb128RGUhK-I0RiVxg&utm_medium=api&utm_source=a3737efc&v=1A3A17B8B19427D1BA3C125099AE26A9A5F706D7"
     },
     {
       "score": 67,
-      "title": "Software Development Engineer (Java) - Savings & Payments",
+      "title": "Electrical Systems Engineer",
       "field": "Design",
-      "employer": "Yorkshire Building Society ",
-      "location": "Bradford, West Yorkshire",
-      "salary": 55000,
+      "employer": "Rolls Royce",
+      "location": "Pear Tree, Derby",
+      "salary": 51235,
       "belowGeneral": false,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/details/5785848354?utm_medium=api&utm_source=a3737efc"
+      "posted": "2026-07-03",
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786228969?se=WnVMIb128RGUhK-I0RiVxg&utm_medium=api&utm_source=a3737efc&v=4736C7B14AE888CBBE0DB28224C1A58496C93D4A"
     },
     {
       "score": 67,
-      "title": "System Design Authority",
+      "title": "Senior Android Developer",
       "field": "Design",
-      "employer": "Morson Edge",
-      "location": "Dorset, South West England",
-      "salary": 62505,
-      "belowGeneral": false,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/details/5785839533?utm_medium=api&utm_source=a3737efc"
-    },
-    {
-      "score": 67,
-      "title": "Principal Data Engineer",
-      "field": "Design",
-      "employer": "Reed Technology",
-      "location": "Bromley, South East London",
-      "salary": 95000,
-      "belowGeneral": false,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/details/5785835722?utm_medium=api&utm_source=a3737efc"
-    },
-    {
-      "score": 67,
-      "title": "Principal RF Engineer",
-      "field": "Design",
-      "employer": "Morson Edge",
-      "location": "Southampton, Hampshire",
-      "salary": 113006,
-      "belowGeneral": false,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/details/5785834623?utm_medium=api&utm_source=a3737efc"
-    },
-    {
-      "score": 67,
-      "title": "Senior Electrical Engineer",
-      "field": "Design",
-      "employer": "Outsource",
-      "location": "Clevedon, North Somerset",
-      "salary": 50000,
-      "belowGeneral": false,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/details/5785817853?utm_medium=api&utm_source=a3737efc"
-    },
-    {
-      "score": 67,
-      "title": "Director of Commerical Transformation",
-      "field": "Design",
-      "employer": "GlobalData UK Ltd",
+      "employer": "GUARDIAN NEWS AND MEDIA",
       "location": "London, UK",
-      "salary": 80555,
+      "salary": 82000,
       "belowGeneral": false,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5785793560?se=YlcYbnR28RGRjNS7zaxw5w&utm_medium=api&utm_source=a3737efc&v=67E5BF0C3E48BB33247261EA3650A15DB8F71E52"
+      "posted": "2026-07-03",
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786210356?se=WnVMIb128RGUhK-I0RiVxg&utm_medium=api&utm_source=a3737efc&v=9FBE55992DE1293A6CC5AEECD8D465C85A5CFCB8"
     },
     {
       "score": 67,
-      "title": "Hardware Design Authority (Power Electronics)",
+      "title": "Customer Solutions Sustainability Development & Implementation Specialist (flexible in European countries)",
       "field": "Design",
-      "employer": "Raytheon",
-      "location": "Glenrothes, Fife",
-      "salary": 60951,
+      "employer": "UPS",
+      "location": "Manchester, Greater Manchester",
+      "salary": 42199,
       "belowGeneral": false,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/details/5785774212?utm_medium=api&utm_source=a3737efc"
+      "posted": "2026-07-03",
+      "url": "https://www.adzuna.co.uk/jobs/details/5786167322?utm_medium=api&utm_source=a3737efc"
     },
     {
       "score": 67,
-      "title": "Mechanical Design Engineer",
+      "title": "Front-end Web Developer",
       "field": "Design",
-      "employer": "The Recruitment Group",
-      "location": "Ducklington, Witney",
-      "salary": 42935,
+      "employer": "AVEVA",
+      "location": "Cambridge, Cambridgeshire",
+      "salary": 59969,
       "belowGeneral": false,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/details/5785770100?utm_medium=api&utm_source=a3737efc"
+      "posted": "2026-07-03",
+      "url": "https://www.adzuna.co.uk/jobs/details/5786160348?utm_medium=api&utm_source=a3737efc"
     },
     {
       "score": 67,
-      "title": "Product Design Engineer",
+      "title": "Senior Cloud Development Engineer",
       "field": "Design",
-      "employer": "Chroma Recruitment",
-      "location": "Bramhall, Stockport",
-      "salary": 35000,
-      "belowGeneral": true,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/details/5785769269?utm_medium=api&utm_source=a3737efc"
-    },
-    {
-      "score": 67,
-      "title": "Mechanical Design Engineer",
-      "field": "Design",
-      "employer": "Chroma Recruitment",
-      "location": "Appley Bridge, Wigan",
-      "salary": 45000,
+      "employer": "Spectris Plc",
+      "location": "UK",
+      "salary": 70255,
       "belowGeneral": false,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/details/5785769272?utm_medium=api&utm_source=a3737efc"
+      "posted": "2026-07-03",
+      "url": "https://www.adzuna.co.uk/jobs/details/5786150926?utm_medium=api&utm_source=a3737efc"
     },
     {
       "score": 67,
@@ -903,17 +716,6 @@
       "belowGeneral": false,
       "posted": "2026-07-02",
       "url": "https://www.adzuna.co.uk/jobs/details/5785367787?utm_medium=api&utm_source=a3737efc"
-    },
-    {
-      "score": 67,
-      "title": "Front-end Web Developer",
-      "field": "Design",
-      "employer": "AVEVA",
-      "location": "Cambridge, Cambridgeshire",
-      "salary": 55335,
-      "belowGeneral": false,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/details/5785364265?utm_medium=api&utm_source=a3737efc"
     },
     {
       "score": 67,
@@ -935,7 +737,18 @@
       "salary": 63138,
       "belowGeneral": false,
       "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5785352521?se=ZFSPcHR28RGJ_ZNmKGa4Pg&utm_medium=api&utm_source=a3737efc&v=76AC8397FD69EDA2E9BBA45143B106A9F12D612D"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5785352521?se=srEoJL128RGCWfu5pj3YyQ&utm_medium=api&utm_source=a3737efc&v=76AC8397FD69EDA2E9BBA45143B106A9F12D612D"
+    },
+    {
+      "score": 67,
+      "title": "Full Stack Engineer",
+      "field": "Design",
+      "employer": "ARM",
+      "location": "Barbican, Central London",
+      "salary": 63559,
+      "belowGeneral": false,
+      "posted": "2026-07-02",
+      "url": "https://www.adzuna.co.uk/jobs/details/5785250044?utm_medium=api&utm_source=a3737efc"
     },
     {
       "score": 67,
@@ -947,61 +760,6 @@
       "belowGeneral": false,
       "posted": "2026-07-02",
       "url": "https://www.adzuna.co.uk/jobs/details/5785249792?utm_medium=api&utm_source=a3737efc"
-    },
-    {
-      "score": 67,
-      "title": "Kotlin Developer",
-      "field": "Design",
-      "employer": "SR2",
-      "location": "Finsbury, Central London",
-      "salary": 64813,
-      "belowGeneral": false,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/details/5785249098?utm_medium=api&utm_source=a3737efc"
-    },
-    {
-      "score": 67,
-      "title": "Lead SharePoint Developer",
-      "field": "Design",
-      "employer": "ARM",
-      "location": "Cherry Hinton, Cambridge",
-      "salary": 65000,
-      "belowGeneral": false,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/details/5785247908?utm_medium=api&utm_source=a3737efc"
-    },
-    {
-      "score": 67,
-      "title": "Senior Software Engineer - Milton Keynes",
-      "field": "Design",
-      "employer": "Experis",
-      "location": "Crownhill, Milton Keynes",
-      "salary": 54000,
-      "belowGeneral": false,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/details/5785247488?utm_medium=api&utm_source=a3737efc"
-    },
-    {
-      "score": 67,
-      "title": "QA Tester (Automation)",
-      "field": "Design",
-      "employer": "The Portfolio Group",
-      "location": "Manchester Science Park, Manchester",
-      "salary": 45000,
-      "belowGeneral": false,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/details/5785246623?utm_medium=api&utm_source=a3737efc"
-    },
-    {
-      "score": 67,
-      "title": "Senior Software Engineer",
-      "field": "Design",
-      "employer": "SRT Marine Systems PLC",
-      "location": "Caversham, Reading",
-      "salary": 50000,
-      "belowGeneral": false,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/details/5785246517?utm_medium=api&utm_source=a3737efc"
     },
     {
       "score": 67,
@@ -1045,128 +803,150 @@
       "salary": 53853,
       "belowGeneral": false,
       "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5785359860?se=no1ac3R28RGeO4cVaoOQ8Q&utm_medium=api&utm_source=a3737efc&v=549E86C6F6C24EEA9E0134C048DA00F96B6F6CB3"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5785359860?se=1jioJr128RGUhK-I0RiVxg&utm_medium=api&utm_source=a3737efc&v=549E86C6F6C24EEA9E0134C048DA00F96B6F6CB3"
     },
     {
       "score": 67,
-      "title": "Java/Kotlin Software Engineer \u2013 AVP - (Developer Enablement)",
+      "title": "QA / Test Engineer \u2013 Data",
       "field": "Design",
-      "employer": "Citibank",
-      "location": "Belfast, Northern Ireland",
-      "salary": 71869,
+      "employer": "Chroma Recruitment",
+      "location": "Manchester Science Park, Manchester",
+      "salary": 60307,
       "belowGeneral": false,
       "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5785029710?se=no1ac3R28RGeO4cVaoOQ8Q&utm_medium=api&utm_source=a3737efc&v=47EB5138EB00ED493822CA7EC871E25663081ED6"
+      "url": "https://www.adzuna.co.uk/jobs/details/5785249433?utm_medium=api&utm_source=a3737efc"
     },
     {
       "score": 67,
-      "title": "Liaison/Triage Practitioner",
+      "title": "Kotlin Developer",
       "field": "Design",
-      "employer": "Psychiatry UK",
-      "location": "Pencarrow, Camelford",
-      "salary": 42862,
+      "employer": "SR2",
+      "location": "Finsbury, Central London",
+      "salary": 64813,
       "belowGeneral": false,
       "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/details/5785934005?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5785249098?utm_medium=api&utm_source=a3737efc"
     },
     {
       "score": 67,
-      "title": "Senior DevOps Engineer - 6 Months - Remote - Inside IR35",
+      "title": "Web Developer",
       "field": "Design",
-      "employer": "Morson Edge",
-      "location": "UK",
-      "salary": 130000,
+      "employer": "Reed Specialist Recruitment",
+      "location": "Low Hill, Liverpool",
+      "salary": 60000,
       "belowGeneral": false,
       "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/details/5785865079?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5785249107?utm_medium=api&utm_source=a3737efc"
     },
     {
       "score": 67,
-      "title": "Senior People Partner",
+      "title": "Practice Manager - DEE06612",
       "field": "Design",
-      "employer": "Dignity Funerals Limited",
-      "location": "Bedford, Bedfordshire",
-      "salary": 75000,
+      "employer": "Dundee City Council",
+      "location": "Dundee, Scotland",
+      "salary": 50001,
       "belowGeneral": false,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/details/5785843245?utm_medium=api&utm_source=a3737efc"
+      "posted": "2026-07-03",
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786555727?se=sEQ4Kb128RGCWfu5pj3YyQ&utm_medium=api&utm_source=a3737efc&v=25A39E958C14C71E7E6819554D2DE05053D007BE"
     },
     {
       "score": 67,
-      "title": "Principal Mechanical Engineer",
-      "field": "Design",
-      "employer": "Ridge & Partners LLP",
-      "location": "Winchester, Hampshire",
-      "salary": 55951,
-      "belowGeneral": false,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/details/5785822213?utm_medium=api&utm_source=a3737efc"
-    },
-    {
-      "score": 67,
-      "title": "Associate Mechanical Engineer",
-      "field": "Design",
-      "employer": "Ridge & Partners LLP",
-      "location": "Winchester, Hampshire",
-      "salary": 52869,
-      "belowGeneral": false,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/details/5785822287?utm_medium=api&utm_source=a3737efc"
-    },
-    {
-      "score": 67,
-      "title": "Social Expert",
-      "field": "Design",
-      "employer": "RSK Group",
-      "location": "UK",
-      "salary": 48816,
-      "belowGeneral": false,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/details/5785815359?utm_medium=api&utm_source=a3737efc"
-    },
-    {
-      "score": 67,
-      "title": "Graduate Maritime Civil Engineer",
-      "field": "Design",
-      "employer": "Haskoning",
-      "location": "London, UK",
-      "salary": 48970,
-      "belowGeneral": false,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/details/5785803531?utm_medium=api&utm_source=a3737efc"
-    },
-    {
-      "score": 67,
-      "title": "IT Procurement Manager - Wembley, London",
-      "field": "Design",
-      "employer": "Adecco",
-      "location": "Wembley, North West London",
-      "salary": 70000,
-      "belowGeneral": false,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5785785695?se=qmS2dXR28RGJ_ZNmKGa4Pg&utm_medium=api&utm_source=a3737efc&v=C5D03F54F7E1C0EE133A163F3AEA86D51DE84128"
-    },
-    {
-      "score": 67,
-      "title": "Senior Automation Engineer",
-      "field": "Design",
-      "employer": "Raytheon",
-      "location": "Glenrothes, Fife",
-      "salary": 49353,
-      "belowGeneral": false,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/details/5785774210?utm_medium=api&utm_source=a3737efc"
-    },
-    {
-      "score": 67,
-      "title": "Business Architect & Org Design Lead",
+      "title": "Electrical Technical Director",
       "field": "Design",
       "employer": "AECOM",
-      "location": "Glasgow, Scotland",
-      "salary": 58733,
+      "location": "Belfast, Northern Ireland",
+      "salary": 55230,
       "belowGeneral": false,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/details/5785773516?utm_medium=api&utm_source=a3737efc"
+      "posted": "2026-07-03",
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786551580?se=sEQ4Kb128RGCWfu5pj3YyQ&utm_medium=api&utm_source=a3737efc&v=16525191023E2070B03E800BEA2307BFE77104F4"
+    },
+    {
+      "score": 67,
+      "title": "Pre-Fabrication Detailing Lead",
+      "field": "Design",
+      "employer": "Dornan Engineering Services Ltd",
+      "location": "Farringdon, Central London",
+      "salary": 41835,
+      "belowGeneral": false,
+      "posted": "2026-07-03",
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786435048?se=sEQ4Kb128RGCWfu5pj3YyQ&utm_medium=api&utm_source=a3737efc&v=D179847FBD210014DD53A90544FBF09CBFFFD5F9"
+    },
+    {
+      "score": 67,
+      "title": "Delivery Manager - Project Controls",
+      "field": "Design",
+      "employer": "Bechtel",
+      "location": "Reading, Berkshire",
+      "salary": 71134,
+      "belowGeneral": false,
+      "posted": "2026-07-03",
+      "url": "https://www.adzuna.co.uk/jobs/details/5786388657?utm_medium=api&utm_source=a3737efc"
+    },
+    {
+      "score": 67,
+      "title": "Cladding Estimator",
+      "field": "Design",
+      "employer": "Lindum Group Ltd",
+      "location": "Peterborough, Eastern England",
+      "salary": 43748,
+      "belowGeneral": false,
+      "posted": "2026-07-03",
+      "url": "https://www.adzuna.co.uk/jobs/details/5786319289?utm_medium=api&utm_source=a3737efc"
+    },
+    {
+      "score": 67,
+      "title": "Senior Electrical Design Engineer - Power Systems",
+      "field": "Design",
+      "employer": "RINA",
+      "location": "Manchester Science Park, Manchester",
+      "salary": 69716,
+      "belowGeneral": false,
+      "posted": "2026-07-03",
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786258803?se=sEQ4Kb128RGCWfu5pj3YyQ&utm_medium=api&utm_source=a3737efc&v=61C77AB8F101DAEB5F096A98D95C696535DBFDFB"
+    },
+    {
+      "score": 67,
+      "title": "Mechanical Design Engineer, Data Centre Engineering",
+      "field": "Design",
+      "employer": "Amazon Data Services UK Limited",
+      "location": "London, UK",
+      "salary": 60273,
+      "belowGeneral": false,
+      "posted": "2026-07-03",
+      "url": "https://www.adzuna.co.uk/jobs/details/5786231681?utm_medium=api&utm_source=a3737efc"
+    },
+    {
+      "score": 67,
+      "title": "Grid Automation - Panels \"Design for X\" Transformation Leader",
+      "field": "Design",
+      "employer": "GE Vernova",
+      "location": "Stafford, Staffordshire",
+      "salary": 70644,
+      "belowGeneral": false,
+      "posted": "2026-07-03",
+      "url": "https://www.adzuna.co.uk/jobs/details/5786157827?utm_medium=api&utm_source=a3737efc"
+    },
+    {
+      "score": 67,
+      "title": "Construction Cost Engineering Manager , Cost Engineering, Amazon Global Procurement Organization",
+      "field": "Design",
+      "employer": "Amazon",
+      "location": "London, UK",
+      "salary": 71812,
+      "belowGeneral": false,
+      "posted": "2026-07-03",
+      "url": "https://www.adzuna.co.uk/jobs/details/5786155595?utm_medium=api&utm_source=a3737efc"
+    },
+    {
+      "score": 67,
+      "title": "Data Center Facility Engineer (M&E) - Hemel Hempstead , Data Center Engineering Operations",
+      "field": "Design",
+      "employer": "Amazon",
+      "location": "Hemel Hempstead, Hertfordshire",
+      "salary": 45135,
+      "belowGeneral": false,
+      "posted": "2026-07-03",
+      "url": "https://www.adzuna.co.uk/jobs/details/5786155556?utm_medium=api&utm_source=a3737efc"
     },
     {
       "score": 67,
@@ -1181,14 +961,14 @@
     },
     {
       "score": 67,
-      "title": "Senior Bid Manager",
-      "field": "Design",
-      "employer": "Stantec",
-      "location": "Manchester, Greater Manchester",
-      "salary": 56463,
+      "title": "Senior Full Stack Engineer CGEMJP00346929",
+      "field": "Data",
+      "employer": "Experis",
+      "location": "Bury, Greater Manchester",
+      "salary": 63571,
       "belowGeneral": false,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/details/5784665631?utm_medium=api&utm_source=a3737efc"
+      "posted": "2026-07-03",
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786344795?se=GqAzMb128RGCWfu5pj3YyQ&utm_medium=api&utm_source=a3737efc&v=7FE21E97BAFE6D8458933D48DF3C5645E1957D6C"
     },
     {
       "score": 67,
@@ -1214,190 +994,146 @@
     },
     {
       "score": 67,
-      "title": "Data Quality Analyst",
-      "field": "Data",
-      "employer": "Student Loans Company",
-      "location": "UK",
-      "salary": 33556,
-      "belowGeneral": true,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/details/5785367201?utm_medium=api&utm_source=a3737efc"
-    },
-    {
-      "score": 67,
-      "title": "Reporting Analyst",
-      "field": "Data",
-      "employer": "Network Plus",
-      "location": "Penketh, Warrington",
-      "salary": 36878,
-      "belowGeneral": true,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/details/5785363084?utm_medium=api&utm_source=a3737efc"
-    },
-    {
-      "score": 67,
-      "title": "TrueSight Engineer",
+      "title": "Interim Head of Customer Retentions",
       "field": "Operations",
-      "employer": "ECS",
-      "location": "UK",
-      "salary": 122200,
+      "employer": "HAYS",
+      "location": "Hull, East Riding Of Yorkshire",
+      "salary": 53721,
       "belowGeneral": false,
       "posted": "2026-07-03",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786130714?se=ZLaIfnR28RGRjNS7zaxw5w&utm_medium=api&utm_source=a3737efc&v=B769A319DF6B905D843E39FC7FF7B66AEE397B7A"
+      "url": "https://www.adzuna.co.uk/jobs/details/5786593220?utm_medium=api&utm_source=a3737efc"
     },
     {
       "score": 67,
-      "title": "Military Area Manager",
+      "title": "Technical Services Engineer - HV",
       "field": "Operations",
-      "employer": "Amazon",
-      "location": "Newton Hill, Wakefield",
-      "salary": 33729,
+      "employer": "NG Bailey",
+      "location": "Bristol, South West England",
+      "salary": 56375,
+      "belowGeneral": false,
+      "posted": "2026-07-03",
+      "url": "https://www.adzuna.co.uk/jobs/details/5786583882?utm_medium=api&utm_source=a3737efc"
+    },
+    {
+      "score": 67,
+      "title": "Academic Director",
+      "field": "Operations",
+      "employer": "Study Group",
+      "location": "Stratford, East London",
+      "salary": 60664,
+      "belowGeneral": false,
+      "posted": "2026-07-03",
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786583003?se=tuURNb128RGCWfu5pj3YyQ&utm_medium=api&utm_source=a3737efc&v=7A47233EBD591C65505B647A1D2D78803113C299"
+    },
+    {
+      "score": 67,
+      "title": "Independent Living Area Manager",
+      "field": "Operations",
+      "employer": "BPHA",
+      "location": "Clapham, Bedford",
+      "salary": 40000,
       "belowGeneral": true,
       "posted": "2026-07-03",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786113123?se=ZLaIfnR28RGRjNS7zaxw5w&utm_medium=api&utm_source=a3737efc&v=FEA38B604BC5894D6E1E7A2359B9D493811CC9FC"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786576720?se=tuURNb128RGCWfu5pj3YyQ&utm_medium=api&utm_source=a3737efc&v=5949308E7874870FAC33275C57CE6DD838886DF8"
     },
     {
       "score": 67,
-      "title": "Area Manager, DBT3",
+      "title": "Management Accountant",
       "field": "Operations",
-      "employer": "Amazon",
+      "employer": "Round Peg Solutions",
+      "location": "Whisby Moor, Lincoln",
+      "salary": 45763,
+      "belowGeneral": false,
+      "posted": "2026-07-03",
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786573286?se=tuURNb128RGCWfu5pj3YyQ&utm_medium=api&utm_source=a3737efc&v=F0D440A49EDDA336217D84D475E6B4D188B8435F"
+    },
+    {
+      "score": 67,
+      "title": "Senior Building Surveyor",
+      "field": "Operations",
+      "employer": "Hays",
+      "location": "Birmingham, West Midlands",
+      "salary": 55000,
+      "belowGeneral": false,
+      "posted": "2026-07-03",
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786572651?se=tuURNb128RGCWfu5pj3YyQ&utm_medium=api&utm_source=a3737efc&v=A486234A900A742D3B6029510D393AF10B78803A"
+    },
+    {
+      "score": 67,
+      "title": "Store Manager",
+      "field": "Operations",
+      "employer": "Oliver Bonas",
+      "location": "Clapham Park, South West London",
+      "salary": 34379,
+      "belowGeneral": true,
+      "posted": "2026-07-03",
+      "url": "https://www.adzuna.co.uk/jobs/details/5786396516?utm_medium=api&utm_source=a3737efc"
+    },
+    {
+      "score": 67,
+      "title": "Site Engineer (Belfast)",
+      "field": "Operations",
+      "employer": "HAYS",
       "location": "Belfast, Northern Ireland",
-      "salary": 40736,
-      "belowGeneral": true,
-      "posted": "2026-07-03",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786113103?se=ZLaIfnR28RGRjNS7zaxw5w&utm_medium=api&utm_source=a3737efc&v=188FE65A2FD730DCA0C29AFC43636394EB7983F9"
-    },
-    {
-      "score": 67,
-      "title": "Security Management Specialist",
-      "field": "Operations",
-      "employer": "Harvey Nash",
-      "location": "South East London, London",
-      "salary": 66017,
+      "salary": 47580,
       "belowGeneral": false,
       "posted": "2026-07-03",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786109862?se=ZLaIfnR28RGRjNS7zaxw5w&utm_medium=api&utm_source=a3737efc&v=7B0D9DF026FBDC8D685651C2AE535286431580C8"
+      "url": "https://www.adzuna.co.uk/jobs/details/5786593247?utm_medium=api&utm_source=a3737efc"
     },
     {
       "score": 67,
-      "title": "Social Impact Associate",
+      "title": "Project Manager (ALN School projects)",
       "field": "Operations",
-      "employer": "Experian Ltd",
-      "location": "Nottingham, Nottinghamshire",
-      "salary": 46421,
+      "employer": "HAYS",
+      "location": "Cardiff, Cardiff County",
+      "salary": 45803,
       "belowGeneral": false,
       "posted": "2026-07-03",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786107335?se=ZLaIfnR28RGRjNS7zaxw5w&utm_medium=api&utm_source=a3737efc&v=18B7B0B690AC4DF79B0E2B5F2AD3FCF388A87EE8"
+      "url": "https://www.adzuna.co.uk/jobs/details/5786593239?utm_medium=api&utm_source=a3737efc"
     },
     {
       "score": 67,
-      "title": "Pricing Architect",
+      "title": "Dozer Driver",
       "field": "Operations",
-      "employer": "Royal Mail Group",
-      "location": "London, UK",
-      "salary": 57444,
-      "belowGeneral": false,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/details/5786093595?utm_medium=api&utm_source=a3737efc"
-    },
-    {
-      "score": 67,
-      "title": "Financial Reporting & Planning Accountant",
-      "field": "Operations",
-      "employer": "Yorkshire Building Society ",
-      "location": "Holbeck, Leeds",
-      "salary": 45000,
-      "belowGeneral": false,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786082736?se=mm_mgXR28RGeO4cVaoOQ8Q&utm_medium=api&utm_source=a3737efc&v=72B13A6CF4A14BF702DA723BCDA92F4AC662997B"
-    },
-    {
-      "score": 67,
-      "title": "Retail Store Manager",
-      "field": "Operations",
-      "employer": "The Works",
-      "location": "Belle Vale, Liverpool",
-      "salary": 36592,
-      "belowGeneral": true,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/details/5785868649?utm_medium=api&utm_source=a3737efc"
-    },
-    {
-      "score": 67,
-      "title": "Area Retail Manager - Aberdeen",
-      "field": "Operations",
-      "employer": "Motor Fuel Group",
-      "location": "Torry, Aberdeen",
-      "salary": 38000,
-      "belowGeneral": true,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/details/5785815373?utm_medium=api&utm_source=a3737efc"
-    },
-    {
-      "score": 67,
-      "title": "Engineer",
-      "field": "Operations",
-      "employer": "Ramsay Health Care",
-      "location": "Kettering, Northamptonshire",
-      "salary": 43403,
+      "employer": "Mando Solutions Ltd",
+      "location": "Shepton Mallet, Somerset",
+      "salary": 61069,
       "belowGeneral": false,
       "posted": "2026-07-03",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786130210?se=MmJ3hHR28RGTHqG-hwfHew&utm_medium=api&utm_source=a3737efc&v=91162591870BBEA1CD31043CEAEBE3FB91CD8A72"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786577642?se=xArsO7128RGCWfu5pj3YyQ&utm_medium=api&utm_source=a3737efc&v=7E37B3FDEAB742A69C353E981880C0F8CB6E5564"
     },
     {
       "score": 67,
-      "title": "Mechanical & Electrical Manager - Local Authority",
-      "field": "Operations",
-      "employer": "Reed",
-      "location": "Reading, Berkshire",
-      "salary": 104000,
-      "belowGeneral": false,
-      "posted": "2026-07-03",
-      "url": "https://www.adzuna.co.uk/jobs/details/5786120363?utm_medium=api&utm_source=a3737efc"
-    },
-    {
-      "score": 67,
-      "title": "Large CNC Turner",
-      "field": "Operations",
-      "employer": "Reed",
-      "location": "Lymington, Hampshire",
-      "salary": 46134,
-      "belowGeneral": false,
-      "posted": "2026-07-03",
-      "url": "https://www.adzuna.co.uk/jobs/details/5786119262?utm_medium=api&utm_source=a3737efc"
-    },
-    {
-      "score": 67,
-      "title": "Senior Manufacturing Engineer",
-      "field": "Operations",
-      "employer": "GKN Aerospace",
-      "location": "London Luton Airport, Luton",
-      "salary": 49719,
-      "belowGeneral": false,
-      "posted": "2026-07-03",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786113720?se=MmJ3hHR28RGTHqG-hwfHew&utm_medium=api&utm_source=a3737efc&v=9FD8AC11F03F047BC6D9B7466492112551F0F160"
-    },
-    {
-      "score": 67,
-      "title": "Oracle Fusion S2F (Store to Fulfill) Functional Consultant",
+      "title": "Director, AI Security Specialist - EMEA",
       "field": "Engineering",
-      "employer": "Tata Consultancy Services",
-      "location": "London, UK",
-      "salary": 60862,
+      "employer": "Zscaler",
+      "location": "UK",
+      "salary": 91989,
       "belowGeneral": false,
       "posted": "2026-07-03",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786121510?se=TPBxh3R28RGTHqG-hwfHew&utm_medium=api&utm_source=a3737efc&v=3574437E3F4A0CCFB7736B58DF5B46763E899BD4"
+      "url": "https://www.adzuna.co.uk/jobs/details/5786167765?utm_medium=api&utm_source=a3737efc"
     },
     {
       "score": 67,
-      "title": "Head of New Product Development",
+      "title": "Manager, Environmental Health & Safety, Specs Operations",
       "field": "Engineering",
-      "employer": "James Fisher and Sons",
-      "location": "Westhill, Inverness",
-      "salary": 53553,
+      "employer": "Snap Inc.",
+      "location": "Abingdon, Oxfordshire",
+      "salary": 64309,
       "belowGeneral": false,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786061771?se=TPBxh3R28RGTHqG-hwfHew&utm_medium=api&utm_source=a3737efc&v=3DD4AFC4CD47DBA987AE5365444A13B800A079E7"
+      "posted": "2026-07-03",
+      "url": "https://www.adzuna.co.uk/jobs/details/5786163660?utm_medium=api&utm_source=a3737efc"
+    },
+    {
+      "score": 67,
+      "title": "Principal, Data Analytics & Business Intelligence",
+      "field": "Engineering",
+      "employer": "Pearson",
+      "location": "UK",
+      "salary": 72253,
+      "belowGeneral": false,
+      "posted": "2026-07-03",
+      "url": "https://www.adzuna.co.uk/jobs/details/5786161025?utm_medium=api&utm_source=a3737efc"
     },
     {
       "score": 63,
@@ -1408,7 +1144,29 @@
       "salary": null,
       "belowGeneral": false,
       "posted": "2026-07-03",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786106188?se=YlcYbnR28RGRjNS7zaxw5w&utm_medium=api&utm_source=a3737efc&v=A77F9D0AC74B43F7D3ABA831A64C60BFBD783271"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786258859?se=WnVMIb128RGUhK-I0RiVxg&utm_medium=api&utm_source=a3737efc&v=34EB931853B28CCECF6DB570272CC277D037C206"
+    },
+    {
+      "score": 63,
+      "title": "Health & Safety Specialist",
+      "field": "Operations",
+      "employer": "TSP",
+      "location": "Telford, Shropshire",
+      "salary": null,
+      "belowGeneral": false,
+      "posted": "2026-07-03",
+      "url": "https://www.adzuna.co.uk/jobs/details/5786608336?utm_medium=api&utm_source=a3737efc"
+    },
+    {
+      "score": 63,
+      "title": "Telehandler",
+      "field": "Operations",
+      "employer": "Carbon60",
+      "location": "Pinvin, Pershore",
+      "salary": null,
+      "belowGeneral": false,
+      "posted": "2026-07-03",
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786577423?se=xArsO7128RGCWfu5pj3YyQ&utm_medium=api&utm_source=a3737efc&v=887F704B1753429BC9EF5609E7CADCAAB5D3153C"
     },
     {
       "score": 59,
@@ -1441,95 +1199,84 @@
       "salary": 35944,
       "belowGeneral": true,
       "posted": "2026-07-01",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5783902713?se=fLDUa3R28RGeO4cVaoOQ8Q&utm_medium=api&utm_source=a3737efc&v=9012A5EE13600CB76BFA417AF23AE8DB1299E46B"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5783902713?se=5psAH7128RGpZLCzkt87oQ&utm_medium=api&utm_source=a3737efc&v=9012A5EE13600CB76BFA417AF23AE8DB1299E46B"
     },
     {
       "score": 59,
-      "title": "Fabric Sourcing Partner",
+      "title": "QA Engineer",
       "field": "Design",
-      "employer": "ASOS",
+      "employer": "MCS Group",
+      "location": "County Antrim, Northern Ireland",
+      "salary": 34442,
+      "belowGeneral": true,
+      "posted": "2026-07-03",
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786448266?se=WnVMIb128RGUhK-I0RiVxg&utm_medium=api&utm_source=a3737efc&v=17AF4869DC261540D6839E2E17F1AA6D6912EFEC"
+    },
+    {
+      "score": 59,
+      "title": "Program Quality Engineer",
+      "field": "Design",
+      "employer": "Safran",
+      "location": "Staverton Technology Park, Staverton",
+      "salary": 35162,
+      "belowGeneral": true,
+      "posted": "2026-07-03",
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786260223?se=WnVMIb128RGUhK-I0RiVxg&utm_medium=api&utm_source=a3737efc&v=737EE34BAFBE4C81CAC501B48195694B73CBC94E"
+    },
+    {
+      "score": 59,
+      "title": "Software Development Engineer, AWS S3 Tables",
+      "field": "Design",
+      "employer": "Evi Technologies Limited",
+      "location": "Cambridge, Cambridgeshire",
+      "salary": 35339,
+      "belowGeneral": true,
+      "posted": "2026-07-03",
+      "url": "https://www.adzuna.co.uk/jobs/details/5786231669?utm_medium=api&utm_source=a3737efc"
+    },
+    {
+      "score": 59,
+      "title": "Specialist Technician - Metal",
+      "field": "Design",
+      "employer": "UNIVERSITY OF THE ARTS LONDON",
       "location": "London, UK",
-      "salary": 40158,
+      "salary": 40199,
       "belowGeneral": true,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/details/5785773424?utm_medium=api&utm_source=a3737efc"
+      "posted": "2026-07-03",
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786209933?se=WnVMIb128RGUhK-I0RiVxg&utm_medium=api&utm_source=a3737efc&v=12528632E4F7AA7865409754E63C004A97CC6D94"
     },
     {
       "score": 59,
-      "title": "Mechanical Engineer",
+      "title": "Full Stack Developer (Backend-Leaning) - Junior to Mid",
       "field": "Design",
-      "employer": "YT Technologies",
-      "location": "Bristol, South West England",
-      "salary": 40000,
+      "employer": "Trendtype",
+      "location": "Brixton, South West London",
+      "salary": 35000,
       "belowGeneral": true,
       "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5785723738?se=YlcYbnR28RGRjNS7zaxw5w&utm_medium=api&utm_source=a3737efc&v=FEF1A9921140CD5E6C96FC37808059BF77EBDB92"
+      "url": "https://www.adzuna.co.uk/jobs/details/5785250104?utm_medium=api&utm_source=a3737efc"
     },
     {
       "score": 59,
-      "title": "Assistant Accommodation Manager",
+      "title": "Cladding Buyer",
       "field": "Design",
-      "employer": "Sanctuary",
-      "location": "Liverpool, Merseyside",
-      "salary": 40135,
+      "employer": "Lindum Group Ltd",
+      "location": "Peterborough, Eastern England",
+      "salary": 39641,
       "belowGeneral": true,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786061865?se=qmS2dXR28RGJ_ZNmKGa4Pg&utm_medium=api&utm_source=a3737efc&v=5F9F6B6366004F7618045805A485F471B980F8D8"
+      "posted": "2026-07-03",
+      "url": "https://www.adzuna.co.uk/jobs/details/5786319223?utm_medium=api&utm_source=a3737efc"
     },
     {
       "score": 59,
-      "title": "Senior Network Engineer - Basildon",
+      "title": "Groups, Conference and Events Planning Executive - Maternity Cover",
       "field": "Design",
-      "employer": "Arc",
-      "location": "Vange, Basildon",
-      "salary": 37152,
+      "employer": "Hilton",
+      "location": "London, UK",
+      "salary": 33830,
       "belowGeneral": true,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/details/5785977248?utm_medium=api&utm_source=a3737efc"
-    },
-    {
-      "score": 59,
-      "title": "Mechanical Design Engineer",
-      "field": "Design",
-      "employer": "Ridge & Partners LLP",
-      "location": "Winchester, Hampshire",
-      "salary": 41237,
-      "belowGeneral": true,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/details/5785819277?utm_medium=api&utm_source=a3737efc"
-    },
-    {
-      "score": 59,
-      "title": "Principal Consultant - Ecology",
-      "field": "Design",
-      "employer": "Haskoning",
-      "location": "Scotland, UK",
-      "salary": 37624,
-      "belowGeneral": true,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/details/5785801998?utm_medium=api&utm_source=a3737efc"
-    },
-    {
-      "score": 59,
-      "title": "Senior Philanthropy Officer",
-      "field": "Design",
-      "employer": "George Watson's College",
-      "location": "UK",
-      "salary": 38099,
-      "belowGeneral": true,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/details/5784797896?utm_medium=api&utm_source=a3737efc"
-    },
-    {
-      "score": 59,
-      "title": "Senior Typesetter",
-      "field": "Design",
-      "employer": "Games Workshop Limited",
-      "location": "Lenton, Nottingham",
-      "salary": 33485,
-      "belowGeneral": true,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/details/5784645785?utm_medium=api&utm_source=a3737efc"
+      "posted": "2026-07-03",
+      "url": "https://www.adzuna.co.uk/jobs/details/5786158711?utm_medium=api&utm_source=a3737efc"
     },
     {
       "score": 59,
@@ -1544,124 +1291,102 @@
     },
     {
       "score": 59,
-      "title": "Intake Team Lead",
+      "title": "HGV CE Driver",
       "field": "Operations",
-      "employer": "McCain Foods  Ltd",
-      "location": "Wolverhampton, West Midlands",
-      "salary": 37301,
+      "employer": "FCC Environment",
+      "location": "Pershore, Worcestershire",
+      "salary": 37294,
       "belowGeneral": true,
       "posted": "2026-07-03",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786112748?se=ZLaIfnR28RGRjNS7zaxw5w&utm_medium=api&utm_source=a3737efc&v=381ACD4F132FC20D52F5C81723D9092C148C8DE3"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786577085?se=tuURNb128RGCWfu5pj3YyQ&utm_medium=api&utm_source=a3737efc&v=E21C9E9E495F29FE82837F9F1826BBF932E1B806"
     },
     {
       "score": 59,
-      "title": "Senior Recruitment Consultant",
+      "title": "Senior ICT Officer - MOR11962",
       "field": "Operations",
-      "employer": "Reed",
-      "location": "Bournemouth, Dorset",
-      "salary": 36031,
+      "employer": "Moray Council",
+      "location": "Elgin, Moray",
+      "salary": 40001,
       "belowGeneral": true,
       "posted": "2026-07-03",
-      "url": "https://www.adzuna.co.uk/jobs/details/5786116818?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786555722?se=RDlGOL128RGpZLCzkt87oQ&utm_medium=api&utm_source=a3737efc&v=B8E5B380C4BB17C20B174B1909FCBFF0FB4987AD"
     },
     {
       "score": 59,
-      "title": "Operations Performance Leader, South East and Greater London Region",
+      "title": "Articulated Dumper Driver",
       "field": "Operations",
-      "employer": "Royal Mail Group",
-      "location": "South East London, London",
-      "salary": 37213,
+      "employer": "Mando Solutions Ltd",
+      "location": "Radstock, Bath & N E Somerset",
+      "salary": 40555,
       "belowGeneral": true,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/details/5786093551?utm_medium=api&utm_source=a3737efc"
+      "posted": "2026-07-03",
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786577466?se=xArsO7128RGCWfu5pj3YyQ&utm_medium=api&utm_source=a3737efc&v=32A0CC65E56189C4FA74987266E718396260B1CB"
     },
     {
       "score": 59,
-      "title": "Infrastructure Support Analyst",
+      "title": "Quality Inspector",
       "field": "Operations",
-      "employer": "UK Research and Innovation",
-      "location": "London, UK",
-      "salary": 36787,
+      "employer": "Round Peg Solutions",
+      "location": "Whisby Moor, Lincoln",
+      "salary": 40000,
       "belowGeneral": true,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786061889?se=mm_mgXR28RGeO4cVaoOQ8Q&utm_medium=api&utm_source=a3737efc&v=CFA316FAA6EB05F15EBD8C9B54FB4479E51A4ACA"
+      "posted": "2026-07-03",
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786577128?se=xArsO7128RGCWfu5pj3YyQ&utm_medium=api&utm_source=a3737efc&v=0D4FD67A71B8304988577C3DED6ECCE81783AFDA"
     },
     {
       "score": 59,
-      "title": "People Advisor",
-      "field": "Operations",
-      "employer": "Moto",
-      "location": "Harlington, Dunstable",
-      "salary": 36141,
-      "belowGeneral": true,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/details/5786003021?utm_medium=api&utm_source=a3737efc"
-    },
-    {
-      "score": 59,
-      "title": "Supported Housing Officer",
-      "field": "Operations",
-      "employer": "Places for People",
-      "location": "Camden, North West London",
+      "title": "Application Technician",
+      "field": "Engineering",
+      "employer": "Redline Group Ltd",
+      "location": "Chineham, Basingstoke",
       "salary": 35000,
       "belowGeneral": true,
       "posted": "2026-07-03",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786130213?se=MmJ3hHR28RGTHqG-hwfHew&utm_medium=api&utm_source=a3737efc&v=80F4564550627EF22F515A77AEFC4A0CA8E176C3"
-    },
-    {
-      "score": 59,
-      "title": "HGV Class 2 Driver",
-      "field": "Operations",
-      "employer": "Nationwide Platforms",
-      "location": "Dunton Bassett, Lutterworth",
-      "salary": 34817,
-      "belowGeneral": true,
-      "posted": "2026-07-03",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786113683?se=MmJ3hHR28RGTHqG-hwfHew&utm_medium=api&utm_source=a3737efc&v=924C524D66C68BAF4F256906EB0681F432E53018"
-    },
-    {
-      "score": 59,
-      "title": "Maintenance Welder / Fabricator",
-      "field": "Engineering",
-      "employer": "HRC Recruitment",
-      "location": "Glasgow, Scotland",
-      "salary": 35915,
-      "belowGeneral": true,
-      "posted": "2026-07-03",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786113691?se=TPBxh3R28RGTHqG-hwfHew&utm_medium=api&utm_source=a3737efc&v=081F3767AC957F2C59B2BCEF53430B2E61B05962"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786570004?se=IKLbP7128RGUhK-I0RiVxg&utm_medium=api&utm_source=a3737efc&v=8BC568B90B21F45C791620B090007994D1B12D65"
     },
     {
       "score": 55,
-      "title": "Head Veterinary Nurse",
+      "title": "Designated Social Care Officer, Rochdale Council",
       "field": "Design",
-      "employer": "Vets Now",
-      "location": "Cambusbarron, Stirling",
-      "salary": null,
-      "belowGeneral": false,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/details/5785815406?utm_medium=api&utm_source=a3737efc"
-    },
-    {
-      "score": 55,
-      "title": "Production Operative",
-      "field": "Operations",
-      "employer": "Industrial",
-      "location": "Northants, East Midlands",
+      "employer": "The Talent Crowd",
+      "location": "Rochdale, Greater Manchester",
       "salary": null,
       "belowGeneral": false,
       "posted": "2026-07-03",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786113898?se=MmJ3hHR28RGTHqG-hwfHew&utm_medium=api&utm_source=a3737efc&v=EC0825347FB6058609506F48DD75DE572A85DF32"
+      "url": "https://www.adzuna.co.uk/jobs/details/5786194886?utm_medium=api&utm_source=a3737efc"
     },
     {
       "score": 55,
-      "title": "CNC Laser Cutter Supervisor",
-      "field": "Engineering",
-      "employer": "Major Recruitment",
-      "location": "Nottingham, Nottinghamshire",
+      "title": "Maintenance Engineer",
+      "field": "Operations",
+      "employer": "TSP",
+      "location": "Redditch, Worcestershire",
       "salary": null,
       "belowGeneral": false,
-      "posted": "2026-07-02",
-      "url": "https://www.adzuna.co.uk/jobs/details/5785774136?utm_medium=api&utm_source=a3737efc"
+      "posted": "2026-07-03",
+      "url": "https://www.adzuna.co.uk/jobs/details/5786605367?utm_medium=api&utm_source=a3737efc"
+    },
+    {
+      "score": 55,
+      "title": "Vehicle Operative - PDI",
+      "field": "Operations",
+      "employer": "Manpower",
+      "location": "UK",
+      "salary": null,
+      "belowGeneral": false,
+      "posted": "2026-07-03",
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786577329?se=xArsO7128RGCWfu5pj3YyQ&utm_medium=api&utm_source=a3737efc&v=F9B44792A763D48D8DD1170E9B245C9AC2217E02"
+    },
+    {
+      "score": 55,
+      "title": "Technician - York",
+      "field": "Engineering",
+      "employer": "Rullion Limited",
+      "location": "Yorkshire And The Humber, UK",
+      "salary": null,
+      "belowGeneral": false,
+      "posted": "2026-07-03",
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5786570415?se=IKLbP7128RGUhK-I0RiVxg&utm_medium=api&utm_source=a3737efc&v=E64B76016F285CCFCE3341F50DB2A8E726834D4B"
     }
   ]
 }

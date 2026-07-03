@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sponsorship job monitor</title>
+<style>
+:root{--bg:#fff;--card:#fff;--text:#1a1a1a;--muted:#666;--faint:#8a8a8a;--border:#e6e6e6;--surface:#f4f4f2;
+--info:#185fa5;--info-bg:#e6f1fb;--success:#1f7a4d;--success-bg:#e7f4ee;--warn:#8a5a00;--warn-bg:#faf0da;--danger:#a3312d;--danger-bg:#fbebea;}
+@media(prefers-color-scheme:dark){:root{--bg:#191919;--card:#232323;--text:#ededed;--muted:#a8a8a8;--faint:#888;--border:#343434;--surface:#222;
+--info:#78b0ec;--info-bg:#122f4c;--success:#6fc79f;--success-bg:#123829;--warn:#e0b25a;--warn-bg:#382c12;--danger:#e88a86;--danger-bg:#381a19;}}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;margin:0;line-height:1.5}
+.wrap{max-width:820px;margin:0 auto;padding:24px 16px}
+h1{font-size:20px;font-weight:600;margin:0}
+.sub{font-size:13px;color:var(--muted);margin:4px 0 18px}
+.lbl{font-size:12px;color:var(--faint);margin-bottom:6px}
+.pill{position:relative;font-size:13px;padding:6px 12px;border-radius:8px;border:1px solid var(--border);background:var(--card);color:var(--text);cursor:pointer}
+.pill.on{border-color:var(--info);background:var(--info-bg);color:var(--info)}
+.dot{position:absolute;top:-3px;right:-3px;width:8px;height:8px;border-radius:50%;background:var(--info)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px;margin:16px 0}
+.stat{background:var(--surface);border-radius:8px;padding:10px 12px}
+.stat b{font-size:22px;font-weight:600;display:block}
+.stat span{font-size:12px;color:var(--muted)}
+.controls{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin:14px 0}
+select,input[type=range]{accent-color:var(--info)}
+.job{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start;margin-bottom:10px}
+.badge{flex-shrink:0;width:44px;height:44px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:600}
+.jt{font-size:15px;font-weight:600}
+.jm{font-size:13px;color:var(--muted);margin:2px 0 6px}
+.tag{font-size:11px;padding:2px 8px;border-radius:6px;display:inline-block}
+.tag.s{color:var(--info);background:var(--info-bg)}
+.tag.w{color:var(--warn);background:var(--warn-bg)}
+a.view{flex-shrink:0;align-self:center;font-size:13px;color:var(--info);text-decoration:none;white-space:nowrap}
+.foot{margin-top:16px;font-size:12px;color:var(--faint);border-top:1px solid var(--border);padding-top:10px}
+.empty{font-size:14px;color:var(--muted);padding:16px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:6px">
+    <h1>Sponsorship job monitor</h1>
+    <div id="updated" style="font-size:12px;color:var(--faint)"></div>
+  </div>
+  <div class="sub">Employers licensed to sponsor a Skilled Worker visa, in your fields. Updated daily.</div>
+  <div class="lbl">Browse by day (unread days marked)</div>
+  <div id="dates" class="row" style="margin-bottom:16px"></div>
+  <div id="stats" class="stats"></div>
+  <div class="controls">
+    <label style="font-size:13px;color:var(--muted)">Field
+      <select id="field"><option>All</option><option>Design</option><option>Data</option><option>Operations</option><option>Engineering</option></select>
+    </label>
+    <label style="font-size:13px;color:var(--muted);display:flex;align-items:center;gap:8px;flex:1;min-width:180px">Min fit
+      <input id="minfit" type="range" min="0" max="90" value="0" step="5" style="flex:1">
+      <b id="mv" style="min-width:22px">0</b>
+    </label>
+  </div>
+  <div id="jobs"></div>
+  <div class="foot">Licensed sponsor means the employer <em>can</em> sponsor, not that a given role will. Confirm sponsorship on each advert before applying. Roles below the general salary floor are flagged.</div>
+</div>
+<script>
+const $ = s => document.querySelector(s);
+let INDEX = {days:[]}, view = null, cache = {};
+const money = n => n ? "£" + Number(n).toLocaleString("en-GB") : "salary n/a";
+const band = s => s>=80?"success":(s>=60?"warn":"danger");
+const bandBg = s => s>=80?"var(--success-bg)":(s>=60?"var(--warn-bg)":"var(--danger-bg)");
+const bandFg = s => s>=80?"var(--success)":(s>=60?"var(--warn)":"var(--danger)");
+
+async function getDay(d){ if(cache[d]) return cache[d]; try{ const r=await fetch("./data/"+d+".json",{cache:"no-store"}); cache[d]=await r.json(); }catch(e){ cache[d]={jobs:[]}; } return cache[d]; }
+
+async function currentJobs(){
+  if(view==="WEEK"){ let all=[]; for(const d of INDEX.days.slice(0,7)){ const j=(await getDay(d.date)).jobs||[]; j.forEach(x=>all.push({...x,day:d.date})); } return all; }
+  return ((await getDay(view)).jobs||[]).map(x=>({...x,day:view}));
+}
+
+function renderDates(){
+  const last = localStorage.getItem("lastSeen") || "";
+  let h = INDEX.days.map(d=>{
+    const on = view===d.date, unread = d.date>last;
+    return `<button class="pill ${on?'on':''}" data-k="${d.date}">${d.date} <span style="color:var(--faint)">(${d.count})</span>${unread?'<span class="dot"></span>':''}</button>`;
+  }).join("");
+  h += `<button class="pill ${view==='WEEK'?'on':''}" data-k="WEEK" style="background:${view==='WEEK'?'var(--info-bg)':'var(--surface)'}">Last 7 days (catch-up)</button>`;
+  $("#dates").innerHTML = h;
+  document.querySelectorAll("#dates button").forEach(b=>b.onclick=()=>{view=b.dataset.k;render();});
+}
+
+async function render(){
+  renderDates();
+  const jobs0 = await currentJobs();
+  const minf = +$("#minfit").value, fld = $("#field").value;
+  const jobs = jobs0.filter(j=>j.score>=minf && (fld==="All"||j.field===fld)).sort((a,b)=>b.score-a.score);
+  const avg = jobs.length ? Math.round(jobs.reduce((x,j)=>x+j.score,0)/jobs.length) : 0;
+  const week = INDEX.days.slice(0,7).reduce((x,d)=>x+d.count,0);
+  const lab = view==="WEEK" ? "last 7 days" : view;
+  $("#stats").innerHTML =
+    `<div class="stat"><b>${jobs.length}</b><span>roles shown (${lab})</span></div>`+
+    `<div class="stat"><b>${avg}</b><span>average fit</span></div>`+
+    `<div class="stat"><b>${week}</b><span>new this week</span></div>`+
+    `<div class="stat"><b>All A</b><span>sponsor rating</span></div>`;
+  $("#jobs").innerHTML = jobs.length ? jobs.map(j=>`
+    <div class="job">
+      <div class="badge" style="background:${bandBg(j.score)};color:${bandFg(j.score)}">${j.score}</div>
+      <div style="flex:1;min-width:0">
+        <div class="jt">${j.title}</div>
+        <div class="jm">${j.employer} &middot; ${j.location} &middot; ${money(j.salary)}${view==="WEEK"?" &middot; "+j.day:""}</div>
+        <div class="row">
+          <span class="tag s">Licensed sponsor</span>
+          ${j.belowGeneral?'<span class="tag w">Below general salary floor</span>':''}
+          ${j.posted?`<span style="font-size:11px;color:var(--faint)">posted ${j.posted}</span>`:''}
+        </div>
+      </div>
+      <a class="view" href="${j.url||'#'}" target="_blank" rel="noopener">View &amp; confirm &#8599;</a>
+    </div>`).join("") : `<div class="empty">No roles match these filters for this day.</div>`;
+}
+
+$("#minfit").oninput = function(){ $("#mv").textContent=this.value; render(); };
+$("#field").onchange = render;
+
+(async function init(){
+  try{
+    const r = await fetch("./data/index.json",{cache:"no-store"});
+    INDEX = await r.json();
+  }catch(e){ INDEX = {days:[]}; }
+  $("#updated").textContent = INDEX.updated ? ("Updated " + INDEX.updated.slice(0,16).replace("T"," ")) : "";
+  if(!INDEX.days || !INDEX.days.length){
+    $("#jobs").innerHTML = `<div class="empty">No data yet. Run the workflow once from the Actions tab, then refresh.</div>`;
+    return;
+  }
+  view = INDEX.days[0].date;
+  await render();
+  localStorage.setItem("lastSeen", INDEX.days[0].date);  // mark everything up to today as seen
+})();
+</script>
+</body>
+</html>

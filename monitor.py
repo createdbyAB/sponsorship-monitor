@@ -70,6 +70,19 @@ PHD_PAGES     = 2       # 25 results per page
 PHD_MAX_DAYS  = 120     # studentships are advertised months ahead of the deadline
 PHD_ENRICH    = 50      # detail pages fetched per run, best scoring first
 
+# EURAXESS covers doctoral posts across Europe and several partner portals, so
+# this is what reaches Germany, France, Spain, the Nordics and beyond. Its search
+# is a POST, but the redirect shows keywords are really a facet, so a plain GET
+# works once the query is built that way. 447 is First Stage Researcher (R1),
+# which is how EURAXESS labels PhD-level positions.
+EURAXESS_QUERIES = [
+    "carbon capture", "waste valorisation", "circular economy",
+    "chemical engineering", "sustainable process", "biomass conversion",
+]
+EURAXESS_R1      = "447"
+EURAXESS_PAGES   = 2    # 10 results per page
+EURAXESS_ENRICH  = 25   # detail pages fetched per run, for the deadline
+
 # Research interests, most wanted first. Drives the fit score, so reorder these
 # rather than the queries above if the ranking feels wrong.
 PHD_INTERESTS = [
@@ -415,6 +428,76 @@ def phd_detail(url):
     return {"funding": funding, "intlEligible": intl, "stipend": stipend,
             "funding_for": funding_for}
 
+# ------------------------------------------------------------------ EURAXESS
+_E_ITEM  = re.compile(r'<article class="ecl-content-item"(.*?)</article>', re.S)
+_E_TITLE = re.compile(r'ecl-content-block__title"><a\s+href="(/jobs/\d+)"\s+class="[^"]*"\s*><span>(.*?)</span>', re.S)
+_E_ORG   = re.compile(r'primary-meta-item"><a href="[^"]*"[^>]*>(.*?)</a>', re.S)
+_E_POST  = re.compile(r'Posted on:\s*(\d{1,2} [A-Za-z]+ \d{4})')
+_E_LOC   = re.compile(r'Number of offers:[^,]*,\s*([^,<]+)')
+_E_DEAD  = re.compile(r'Application Deadline\s*:?\s*(\d{1,2} [A-Za-z]{3,} \d{4})', re.I)
+
+def _longdate(s):
+    for fmt in ("%d %B %Y", "%d %b %Y"):
+        try:
+            return datetime.datetime.strptime(s.strip(), fmt).date().isoformat()
+        except (ValueError, AttributeError):
+            continue
+    return ""
+
+def euraxess(keyword, pages=EURAXESS_PAGES):
+    out = []
+    for p in range(pages):
+        q = urllib.parse.urlencode({"f[0]": "keywords:" + keyword,
+                                    "f[1]": "job_research_profile:" + EURAXESS_R1,
+                                    "page": p})
+        try:
+            page = fetch("https://euraxess.ec.europa.eu/jobs/search?" + q)
+        except Exception as e:
+            print("euraxess error:", keyword, e, file=sys.stderr)
+            break
+        items = _E_ITEM.findall(page)
+        if not items:
+            break
+        for b in items:
+            t = _E_TITLE.search(b)
+            if not t:
+                continue
+            out.append({
+                "title": _text(t.group(2)),
+                "employer": _grab(_E_ORG, b),
+                "department": "",
+                "country": _grab(_E_LOC, b),
+                "location": _grab(_E_LOC, b),
+                "salary": None,
+                "posted": _longdate(_grab(_E_POST, b)),
+                "deadline": "",
+                "url": "https://euraxess.ec.europa.eu" + t.group(1),
+            })
+        if len(items) < 10:
+            break
+        time.sleep(1.0)
+    return out
+
+def euraxess_detail(url):
+    """The deadline, plus whatever the advert says about funding. EURAXESS posts
+    are usually salaried research contracts rather than student stipends, and a
+    Marie Sklodowska-Curie action is open to any nationality by design, so that
+    is the one case where eligibility can be called without guessing."""
+    try:
+        page = fetch(url)
+    except Exception as e:
+        print("euraxess detail error:", url, e, file=sys.stderr)
+        return {}
+    text = re.sub(r"\s+", " ", html.unescape(_TAGS.sub(" ", page)))
+    msca = bool(re.search(r"marie s[kc]|msca|horizon europe", text, re.I))
+    funded = msca or bool(re.search(r"\b(fully funded|funded|salary|stipend|scholarship|"
+                                    r"gross|remuneration)\b", text, re.I))
+    intl = True if msca or re.search(r"any nationality|all nationalities|regardless of nationality|"
+                                     r"international (?:candidates|applicants) (?:are )?welcome",
+                                     text, re.I) else None
+    return {"deadline": _longdate(_grab(_E_DEAD, text)),
+            "funding": "full" if funded else "", "intlEligible": intl, "msca": msca}
+
 def classify_phd(funding, intl):
     """For a self-funding international applicant, eligibility is the question
     that decides everything, so it drives the ramp the way sponsorship does on
@@ -663,7 +746,50 @@ def build_phds():
             "funding": funding, "intlEligible": intl, "stipend": stipend,
         })
     print("%-12s %d queries -> %d kept (%d enriched)"
-          % ("phd", len(PHD_QUERIES), len(out), min(len(out), PHD_ENRICH)), file=sys.stderr)
+          % ("phd/jobs.ac", len(PHD_QUERIES), len(out), min(len(out), PHD_ENRICH)), file=sys.stderr)
+
+    # --- EURAXESS: doctoral posts across Europe and its partner portals ------
+    euro = []
+    for keyword in EURAXESS_QUERIES:
+        for row in euraxess(keyword):
+            key = norm(row["title"]) + "|" + norm(row["employer"])
+            if key in seen or not row["title"]:
+                continue
+            if not within_days(row["posted"], PHD_MAX_DAYS):
+                continue
+            seen.add(key)
+            row["score"] = phd_interest_score(row["title"] + " " + row["employer"])
+            euro.append(row)
+        time.sleep(1.0)
+    euro.sort(key=lambda r: r["score"], reverse=True)
+    for i, row in enumerate(euro):
+        extra = {}
+        if i < EURAXESS_ENRICH:
+            extra = euraxess_detail(row["url"])
+            time.sleep(0.6)
+        funding = extra.get("funding", "")
+        intl = extra.get("intlEligible")
+        status, note = classify_phd(funding, intl)
+        if not note:
+            note = ""
+        if extra.get("msca"):
+            note = ("Marie Sklodowska-Curie funded, which is open to any nationality and carries a "
+                    "mobility rule. Check you meet the rule for this host country.")
+        elif funding:
+            note = ("A European doctoral post, usually a salaried contract rather than a student "
+                    "stipend. The advert does not state nationality rules, so confirm them.")
+        score = row["score"] + (8 if funding else 0) + (10 if intl is True else 0)
+        out.append({
+            "score": min(100, score), "title": row["title"], "field": "Research",
+            "employer": row["employer"], "location": row["country"], "country": row["country"] or "Europe",
+            "salary": None, "belowGeneral": False, "posted": row["posted"],
+            "deadline": extra.get("deadline", ""), "url": row["url"], "section": "phd",
+            "status": status, "note": note, "source": "euraxess",
+            "funding": funding, "intlEligible": intl, "stipend": None,
+        })
+    print("%-12s %d queries -> %d kept (%d enriched)"
+          % ("phd/euraxess", len(EURAXESS_QUERIES), len(euro), min(len(euro), EURAXESS_ENRICH)),
+          file=sys.stderr)
 
     # Optional web sweep, the only thing here that reaches past the UK.
     if GOOGLE_API_KEY and GOOGLE_CSE_ID:
@@ -769,6 +895,18 @@ def demo():
            employer="Ghent University", location="Ghent, Belgium", country="Belgium",
            section="phd", status="strong", field="Research", source="jobs.ac.uk",
            funding="full", intlEligible=True, stipend=None, salary=None, deadline=d(99)),
+        mk(score=91, title="MSCA-DN e-ChemIn: Doctorate Candidate, Polymer Electrolytes",
+           employer="INM Leibniz Institute", location="Sweden", country="Sweden",
+           section="phd", status="strong", field="Research", source="euraxess",
+           funding="full", intlEligible=True, stipend=None, salary=None, deadline=d(54),
+           note="Marie Sklodowska-Curie funded, which is open to any nationality and carries a "
+                "mobility rule. Check you meet the rule for this host country."),
+        mk(score=85, title="PhD student: Lignin-sourced carbons for biorefinery",
+           employer="Hasselt University", location="Belgium", country="Belgium",
+           section="phd", status="caution", field="Research", source="euraxess",
+           funding="full", intlEligible=None, stipend=None, salary=None, deadline=d(57),
+           note="A European doctoral post, usually a salaried contract rather than a student "
+                "stipend. The advert does not state nationality rules, so confirm them."),
         mk(score=71, title="PhD Studentship in Life Cycle Assessment: Evaluating Technologies",
            employer="Teagasc", location="Dublin, Ireland", country="Ireland",
            section="phd", status="strong", field="Research", source="jobs.ac.uk",

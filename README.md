@@ -32,9 +32,17 @@ Stipends are sanity checked the same way salaries are: adverts mix monthly figur
 
 ### Coverage, honestly
 
-jobs.ac.uk is a UK site. A typical run returns mostly UK studentships plus a handful from Ireland, Belgium, Switzerland, Denmark and Germany. **It returns almost nothing from the US or Canada.** Those come from the optional Google source, so until `GOOGLE_API_KEY` and `GOOGLE_CSE_ID` are set the PhD tab is effectively UK and Europe. Google rows are marked weak and unverified, as everywhere else.
+Two sources feed this tab. **jobs.ac.uk** covers the UK. **EURAXESS** covers doctoral posts across Europe and several partner portals, which is where the rest of the world creeps in. A typical run returns around 140 openings across 20-odd countries:
 
-FindAPhD is not used: it sits behind a Cloudflare challenge that returns a CAPTCHA even for `robots.txt`, and getting past that means defeating bot detection.
+> UK, Netherlands, France, Belgium, Spain, Sweden, Germany, Portugal, Italy, Poland, Switzerland, Finland, Ireland, Denmark, Norway, Austria, Czech Republic, Croatia, Luxembourg, Israel, China
+
+**Still missing: the US, Canada, Australia and New Zealand.** Neither source covers them meaningfully. Those depend entirely on the optional Google source, so until `GOOGLE_API_KEY` and `GOOGLE_CSE_ID` are set, the PhD tab is Europe only. Google rows are marked weak and unverified, as everywhere else.
+
+EURAXESS searches by POST, but the redirect reveals that keywords are really a facet, so a plain GET works once the query is built as `f[0]=keywords:...`. Positions are filtered to `job_research_profile:447`, which is how EURAXESS labels First Stage Researcher (R1), its PhD level.
+
+A Marie Sklodowska-Curie post is the one case where eligibility can be stated without guessing: MSCA funding is open to any nationality by design, subject to a mobility rule, so those are marked strong and the note says what to check. Other European doctoral posts are usually salaried contracts rather than student stipends, and rarely state nationality rules, so they land as caution with a note saying so.
+
+FindAPhD is not used: it sits behind a Cloudflare challenge that returns a CAPTCHA even for `robots.txt`, and getting past that means defeating bot detection. Nature Careers is parseable and genuinely global, so it is the obvious next source if the Google route is not enough.
 
 ## Where the data comes from
 
@@ -42,7 +50,8 @@ FindAPhD is not used: it sits behind a Cloudflare challenge that returns a CAPTC
 | --- | --- | --- | --- |
 | GOV.UK register of licensed sponsors | the sponsor gate on every row | published CSV | no |
 | Adzuna | jobs and H&S | API, one call per keyword per day | yes, already set |
-| jobs.ac.uk | H&S at universities, and every PhD | scrape of the public search | no |
+| jobs.ac.uk | H&S at universities, and UK PhDs | scrape of the public search | no |
+| EURAXESS | doctoral posts across Europe | scrape of the public search | no |
 | reed.co.uk | H&S across the whole UK market | the page's own JSON payload | no |
 | Google Programmable Search | H&S and PhD leads from the open web, including the US and Canada | JSON API | optional |
 

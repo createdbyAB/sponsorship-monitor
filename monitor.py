@@ -132,8 +132,10 @@ COUNTRY_HINTS = [
 # Programmable Search engine. See the README for why this is the only sanctioned
 # way to search the open web here, and why its rows are treated as unconfirmed.
 # This is what reaches past the UK for PhDs, so it matters more here than for H&S.
-GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY", "")
-GOOGLE_CSE_ID  = os.environ.get("GOOGLE_CSE_ID", "")
+# Stripped, because a stray newline or space pasted into a secret is invisible
+# in the GitHub UI and makes every call come back 400.
+GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY", "").strip()
+GOOGLE_CSE_ID  = os.environ.get("GOOGLE_CSE_ID", "").strip()
 GOOGLE_QUERIES = ["health and safety manager visa sponsorship UK",
                   "health and safety advisor jobs UK sponsorship"]
 # These carry the countries the scraped sources cannot reach. Point the search
@@ -478,6 +480,11 @@ def euraxess(keyword, pages=EURAXESS_PAGES):
             print("euraxess error:", keyword, e, file=sys.stderr)
             break
         items = _E_ITEM.findall(page)
+        # This source has come back thin from a data centre IP while being fine
+        # from a laptop, with no error to show for it. Log what actually arrived
+        # so a short page is visible rather than silently becoming a small tab.
+        print("  euraxess %-22s p%d: %6d bytes, %2d items"
+              % (keyword[:22], p, len(page), len(items)), file=sys.stderr)
         if not items:
             break
         for b in items:
@@ -546,8 +553,19 @@ def google_search(query, limit=10):
                                 "q": query, "num": min(10, limit)})
     try:
         data = json.loads(fetch("https://www.googleapis.com/customsearch/v1?" + q))
+    except urllib.error.HTTPError as e:
+        # The status alone says nothing useful. Google puts the actual complaint
+        # in the body, so surface it, minus anything that could echo the key.
+        try:
+            body = json.loads(e.read().decode("utf-8", "replace"))
+            reason = body.get("error", {}).get("message", "")
+        except Exception:
+            reason = ""
+        reason = reason.replace(GOOGLE_API_KEY, "***").replace(GOOGLE_CSE_ID, "***")
+        print("google error %s: %s | %s" % (e.code, query[:40], reason[:200]), file=sys.stderr)
+        return []
     except Exception as e:
-        print("google error:", query, e, file=sys.stderr)
+        print("google error:", query[:40], e, file=sys.stderr)
         return []
     out = []
     for item in data.get("items", []):

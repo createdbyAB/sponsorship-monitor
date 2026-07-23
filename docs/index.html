@@ -89,7 +89,7 @@ button{font:inherit;color:inherit;background:none;border:none;padding:0;cursor:p
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
 
 /* ---------- shell ---------- */
-.main{max-width:1180px;margin:0 auto;padding:14px 16px calc(28px + env(safe-area-inset-bottom));
+.main{max-width:2100px;margin:0 auto;padding:14px 16px calc(28px + env(safe-area-inset-bottom));
       display:grid;grid-template-columns:1fr auto;
       grid-template-areas:"brand meta" "days days" "tiles tiles" "switch switch" "body body" "foot foot";}
 .brand{grid-area:brand;display:flex;align-items:center;gap:8px;min-width:0}
@@ -325,7 +325,7 @@ button{font:inherit;color:inherit;background:none;border:none;padding:0;cursor:p
   .scrim{display:none}
   .count{font-size:11px;color:var(--text-45)}
   .desktop-sort{display:flex!important;gap:6px;flex-wrap:wrap;justify-content:flex-end}
-  .list{grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+  .list{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:14px}
   .card{padding:15px 16px}
   .title{font-size:14.5px}
   .where{font-size:12px}
@@ -335,7 +335,12 @@ button{font:inherit;color:inherit;background:none;border:none;padding:0;cursor:p
   .foot{margin:0;padding:16px 22px;border-top:1px solid var(--line)}
   .empty{grid-column:1/-1}
 }
-@media (min-width:1340px){ .list{grid-template-columns:1fr 1fr 1fr} }
+/* More card columns as the screen grows, so a wide monitor is filled rather
+   than framed by black. The rail stays a fixed 236px, so these track the
+   content width, and every card holds a sensible 300 to 380px. */
+@media (min-width:1260px){ .list{grid-template-columns:repeat(3,minmax(0,1fr))} }
+@media (min-width:1680px){ .list{grid-template-columns:repeat(4,minmax(0,1fr))} }
+@media (min-width:2040px){ .list{grid-template-columns:repeat(5,minmax(0,1fr))} }
 </style>
 </head>
 <body>

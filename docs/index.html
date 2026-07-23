@@ -427,8 +427,7 @@ button{font:inherit;color:inherit;background:none;border:none;padding:0;cursor:p
 
   </div>
 
-  <p class="foot">A licensed sponsor <em>can</em> sponsor a Skilled Worker visa. It does not mean a given role is a
-  sponsored vacancy. Always confirm sponsorship and salary on the advert before you apply.</p>
+  <p class="foot" id="foot"></p>
 
 </div>
 
@@ -531,7 +530,8 @@ function normalise(raw, day){
       funding: item.funding || "",
       intlEligible: item.intlEligible,
       deadline: item.deadline || "",
-      stipend: item.stipend || null
+      stipend: item.stipend || null,
+      country: item.country || ""
     });
   };
   if (Array.isArray(raw.jobs)) raw.jobs.forEach(j => push(j, HS_RE.test(j.title || "") ? "hs" : "jobs"));
@@ -576,7 +576,10 @@ function daysToDeadline(r){
   const today = INDEX.days.length ? INDEX.days[0].date : null;
   return daysBetween(today, r.deadline);
 }
+// PhD rows carry an explicit country, since "Ghent" is not a useful filter chip.
+// Everything else filters on the first part of the location string.
 const firstPlace = loc => String(loc || "").split(",")[0].trim();
+const placeOf = r => r.country || firstPlace(r.location);
 const isRemote = r => /remote|home.?based|hybrid/i.test(r.location + " " + r.title);
 const sectionRows = () => rows.filter(r => r.section === section);
 
@@ -597,7 +600,7 @@ function applyFilters(list){
     if (f.field && r.field !== f.field) return false;
     if (f.place){
       if (f.place === "Remote"){ if (!isRemote(r)) return false; }
-      else if (firstPlace(r.location) !== f.place) return false;
+      else if (placeOf(r) !== f.place) return false;
     }
     if (f.recency){
       const a = ageDays(r);
@@ -707,7 +710,7 @@ function renderRail(){
     esc(v) + '</button>').join("");
 
   const tally = {};
-  all.forEach(r => { const p = firstPlace(r.location); if (p) tally[p] = (tally[p] || 0) + 1; });
+  all.forEach(r => { const p = placeOf(r); if (p) tally[p] = (tally[p] || 0) + 1; });
   const places = Object.keys(tally).sort((a, b) => tally[b] - tally[a]).slice(0, 5);
   if (all.some(isRemote)) places.unshift("Remote");
   $("#f-place-cap").textContent = section === "phd" ? "Country" : "Location";
@@ -930,8 +933,22 @@ function wireEmpty(){
   });
 }
 
+// The caveat that matters differs by section. A sponsor licence has nothing to
+// do with a studentship, so saying it on the PhD tab would just be noise.
+const FOOTNOTE = {
+  jobs: "A licensed sponsor <em>can</em> sponsor a Skilled Worker visa. It does not mean a given " +
+        "role is a sponsored vacancy. Always confirm sponsorship and salary on the advert before you apply.",
+  hs:   "A licensed sponsor <em>can</em> sponsor a Skilled Worker visa. It does not mean a given " +
+        "role is a sponsored vacancy. The meter compares the advertised salary against the general " +
+        "floor, which is a guide, not the decision.",
+  phd:  "A studentship is not a Skilled Worker vacancy, so the sponsor register does not apply here. " +
+        "What matters is whether the funding covers fees and a stipend, and whether an international " +
+        "student can hold it. Both come from the advert, so confirm them there."
+};
+
 function renderAll(){
   $$("#switcher .tab").forEach(t => t.setAttribute("aria-selected", t.dataset.sec === section));
+  $("#foot").innerHTML = FOOTNOTE[section];
   renderDays();
   renderTiles();
   renderRail();
@@ -967,6 +984,7 @@ addEventListener("keydown", e => { if (e.key === "Escape" && $("#rail").classLis
 
 /* ---------- boot ---------- */
 (async function init(){
+  $("#foot").innerHTML = FOOTNOTE[section];
   try {
     const r = await fetch("./data/index.json", {cache:"no-store"});
     INDEX = await r.json();

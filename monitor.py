@@ -55,13 +55,79 @@ REED_QUERIES  = ["health and safety", "hse manager", "safety officer"]
 REED_PAGES    = 2       # 25 results per page
 REED_MAX_DAYS = 30
 
+# --- funded PhDs ------------------------------------------------------------
+# jobs.ac.uk searches, run against its PhD facet. The first few are the field,
+# the rest are the research areas worth chasing.
+PHD_QUERIES = [
+    "chemical engineering",
+    "carbon capture",
+    "waste valorisation",
+    "circular economy",
+    "sustainable process engineering",
+    "hydrogen decarbonisation",
+]
+PHD_PAGES     = 2       # 25 results per page
+PHD_MAX_DAYS  = 120     # studentships are advertised months ahead of the deadline
+PHD_ENRICH    = 50      # detail pages fetched per run, best scoring first
+
+# Research interests, most wanted first. Drives the fit score, so reorder these
+# rather than the queries above if the ranking feels wrong.
+PHD_INTERESTS = [
+    (r"waste valoris|valoris|circular econom|resource recovery|waste to (?:energy|value)", 18),
+    (r"carbon captur|\bccus?\b|co2 (?:utilis|convers|capture)|direct air capture", 18),
+    (r"sustainab|decarbonis|net zero|green (?:chemistry|hydrogen|process)|renewable", 14),
+    (r"biomass|biorefin|bioenergy|biofuel|anaerobic digestion", 12),
+    (r"catalys|process intensif|reactor|separation|membrane", 10),
+    (r"hydrogen|electrolys|energy storage|fuel cell", 10),
+    (r"life cycle assess|\blca\b|techno-?economic", 8),
+    (r"wastewater|water treatment|effluent|pollution", 8),
+]
+PHD_FIELD = re.compile(r"chemical engineer|process engineer|chemical (?:and|&) biological|"
+                       r"chem(?:ical)? eng\b|energy engineer|environmental engineer", re.I)
+
+# Countries worth watching beyond the UK. Used to label a row and to fill the
+# country filter on the dashboard.
+COUNTRY_HINTS = [
+    ("USA", r"\b(usa|united states|u\.s\.a?\.)\b|\b(boston|cambridge, ma|new york|california|"
+            r"berkeley|stanford|texas|chicago|michigan|seattle|atlanta|pittsburgh)\b"),
+    ("Canada", r"\bcanada\b|\b(ontario|quebec|british columbia|alberta|toronto|montreal|"
+               r"vancouver|ottawa|waterloo|calgary|edmonton)\b"),
+    ("Australia", r"\baustralia\b|\b(sydney|melbourne|brisbane|canberra|adelaide|queensland)\b"),
+    ("New Zealand", r"\bnew zealand\b|\b(auckland|wellington|christchurch)\b"),
+    ("Netherlands", r"\bnetherlands\b|\b(amsterdam|delft|eindhoven|utrecht|wageningen|"
+                    r"groningen|twente|rotterdam|leiden)\b"),
+    ("Germany", r"\bgermany\b|\b(berlin|munich|münchen|aachen|karlsruhe|dresden|heidelberg|"
+                r"stuttgart|hamburg|leipzig|bonn|jülich|julich|darmstadt|freiburg)\b"),
+    ("Switzerland", r"\bswitzerland\b|\b(zurich|zürich|lausanne|geneva|basel|epfl|eth)\b"),
+    ("Belgium", r"\bbelgium\b|\b(ghent|gent|leuven|brussels|antwerp|liege)\b"),
+    ("Sweden", r"\bsweden\b|\b(stockholm|lund|gothenburg|uppsala|chalmers|linköping)\b"),
+    ("Denmark", r"\bdenmark\b|\b(copenhagen|aarhus|lyngby)\b"),
+    ("Norway", r"\bnorway\b|\b(oslo|trondheim|bergen|ntnu)\b"),
+    ("Finland", r"\bfinland\b|\b(helsinki|espoo|aalto|tampere)\b"),
+    ("Ireland", r"\bireland\b|\b(dublin|cork|galway|limerick|maynooth)\b"),
+    ("France", r"\bfrance\b|\b(paris|lyon|grenoble|toulouse|marseille|nantes)\b"),
+    ("Spain", r"\bspain\b|\b(madrid|barcelona|valencia|seville)\b"),
+    ("Italy", r"\bitaly\b|\b(rome|milan|turin|bologna|padua)\b"),
+    ("Austria", r"\baustria\b|\b(vienna|graz|innsbruck|linz)\b"),
+    ("Singapore", r"\bsingapore\b|\bnanyang\b|\bnus\b"),
+    ("Hong Kong", r"\bhong kong\b"),
+    ("Saudi Arabia", r"\bsaudi\b|\bkaust\b|\briyadh\b|\bdhahran\b"),
+    ("UAE", r"\b(uae|united arab emirates|abu dhabi|dubai|khalifa)\b"),
+]
+
 # Optional. Set GOOGLE_API_KEY and GOOGLE_CSE_ID to also sweep a Google
 # Programmable Search engine. See the README for why this is the only sanctioned
 # way to search the open web here, and why its rows are treated as unconfirmed.
+# This is what reaches past the UK for PhDs, so it matters more here than for H&S.
 GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY", "")
 GOOGLE_CSE_ID  = os.environ.get("GOOGLE_CSE_ID", "")
 GOOGLE_QUERIES = ["health and safety manager visa sponsorship UK",
                   "health and safety advisor jobs UK sponsorship"]
+GOOGLE_PHD_QUERIES = [
+    "funded PhD chemical engineering carbon capture international students USA",
+    "fully funded PhD position waste valorisation Canada international",
+    "PhD studentship chemical engineering sustainability fully funded international",
+]
 
 NEW_ENTRANT_FLOOR = 33400   # early-career Skilled Worker rate (applies to AB)
 GENERAL_FLOOR     = 41700   # roles between the two are flagged
@@ -160,6 +226,7 @@ _J_RESULT = re.compile(r'<div class="j-search-result__result[^"]*"\s+data-advert
                        r'(.*?)(?=<div class="j-search-result__result|<div id="job-listings-end|$)', re.S)
 _J_LINK   = re.compile(r'<a href="(/job/[^"]+)"\s*>\s*(.*?)\s*</a>', re.S)
 _J_EMP    = re.compile(r'j-search-result__employer">\s*<b>\s*(.*?)\s*</b>', re.S)
+_J_DEPT   = re.compile(r'j-search-result__department">\s*(.*?)\s*</div>', re.S)
 _J_LOC    = re.compile(r'<div>Location:\s*(.*?)\s*</div>', re.S)
 _J_SAL    = re.compile(r'j-search-result__info">\s*<strong>Salary:\s*</strong>\s*(.*?)</div>', re.S)
 _J_PLACED = re.compile(r'<strong>Date Placed:\s*</strong>\s*(\d{1,2}\s+[A-Za-z]{3})', re.S)
@@ -197,11 +264,16 @@ def _grab(rx, block):
     m = rx.search(block)
     return _text(m.group(1)) if m else ""
 
-def jobs_ac_uk(keyword, pages=JACUK_PAGES):
+def jobs_ac_uk(keyword, pages=JACUK_PAGES, phds=False):
     today, out = datetime.date.today(), []
     for p in range(pages):
-        q = urllib.parse.urlencode({"keywords": keyword, "sort": "re", "s": 1,
-                                    "pageSize": 25, "startIndex": 1 + p * 25})
+        params = {"keywords": keyword, "sort": "re", "s": 1,
+                  "pageSize": 25, "startIndex": 1 + p * 25}
+        if phds:
+            # The PhD facet on the ordinary search. Without it the same URL
+            # returns lectureships and admin posts rather than studentships.
+            params["jobTypeFacet[]"] = "phds"
+        q = urllib.parse.urlencode(params)
         try:
             page = fetch("https://www.jobs.ac.uk/search/?" + q)
         except Exception as e:
@@ -218,8 +290,10 @@ def jobs_ac_uk(keyword, pages=JACUK_PAGES):
             out.append({
                 "title": _text(link.group(2)),
                 "employer": _grab(_J_EMP, b),
+                "department": _grab(_J_DEPT, b),
                 "location": _grab(_J_LOC, b),
                 "salary": _first_pounds(salary_text),
+                "salary_text": salary_text,
                 "posted": _daymon(_grab(_J_PLACED, b), today),
                 "deadline": _daymon(_grab(_J_CLOSES, b), today),
                 "url": "https://www.jobs.ac.uk" + link.group(1),
@@ -275,6 +349,86 @@ def reed(keyword, pages=REED_PAGES):
             })
         time.sleep(1.0)
     return out
+
+# ---------------------------------------------------------------- funded PhDs
+_J_FUNDFOR = re.compile(r"Funding for:\s*([^\n]{0,120}?)\s*(?:Funding amount|Hours|Placed On|Closes)", re.I)
+_J_FUNDAMT = re.compile(r"Funding amount:\s*([^\n]{0,120}?)\s*(?:Hours|Placed On|Closes)", re.I)
+
+def country_of(text):
+    """Best guess at the country from a location string. jobs.ac.uk is a UK
+    site listing mostly UK institutions, so UK is the fallback, not a claim."""
+    for name, pattern in COUNTRY_HINTS:
+        if re.search(pattern, text or "", re.I):
+            return name
+    return "UK"
+
+def phd_interest_score(text):
+    """Fit against the research interests, plus a bonus for the field itself."""
+    s = 45
+    if PHD_FIELD.search(text or ""):
+        s += 15
+    hits = 0
+    for pattern, weight in PHD_INTERESTS:
+        if re.search(pattern, text or "", re.I):
+            s += weight
+            hits += 1
+            if hits == 3:          # three matching themes is already a strong fit
+                break
+    return s
+
+def phd_detail(url):
+    """Funding and eligibility from the advert page. The search results do not
+    carry either, and for an international applicant eligibility is the whole
+    question, so it is worth one extra request per shortlisted studentship."""
+    try:
+        page = fetch(url)
+    except Exception as e:
+        print("jobs.ac.uk detail error:", url, e, file=sys.stderr)
+        return {}
+    text = re.sub(r"\s+", " ", html.unescape(_TAGS.sub(" ", page)))
+    mf, ma = _J_FUNDFOR.search(text), _J_FUNDAMT.search(text)
+    funding_for = mf.group(1).strip() if mf else ""
+    amount = ma.group(1).strip() if ma else ""
+    low = (funding_for + " " + amount).lower()
+
+    intl = None
+    if re.search(r"worldwide|international|overseas|non-?uk|\beu\b.*\bstudents\b", low):
+        intl = True
+    elif re.search(r"uk students|home students|uk only|home only", low):
+        intl = False
+
+    funding = ""
+    if re.search(r"fully funded|full funding|covers? (?:full )?(?:tuition|fees)", text, re.I):
+        funding = "full"
+    elif _first_pounds(amount) or _first_pounds(funding_for):
+        funding = "full"
+    elif re.search(r"self-?funded|no funding|fees only", low):
+        funding = ""
+    elif re.search(r"part(?:ial|ly) fund|fees only", low):
+        funding = "partial"
+    # Adverts quote monthly figures, part-time rates and fee-only amounts in the
+    # same field. Anything that is not plausibly a yearly UK stipend is dropped
+    # rather than shown as one, since the card labels it "per year".
+    stipend = _first_pounds(amount)
+    if stipend and not (8000 <= stipend <= 80000):
+        stipend = None
+    return {"funding": funding, "intlEligible": intl, "stipend": stipend,
+            "funding_for": funding_for}
+
+def classify_phd(funding, intl):
+    """For a self-funding international applicant, eligibility is the question
+    that decides everything, so it drives the ramp the way sponsorship does on
+    the jobs side."""
+    if intl is False:
+        return "weak", ("Funded for home students only, so this one is not open to you on "
+                        "the funding as advertised. Worth a look only if you find another source.")
+    if funding in ("full", "partial") and intl is True:
+        return "strong", ""
+    if funding in ("full", "partial"):
+        return "caution", ("Funded, but the advert does not say whether international students "
+                           "can apply. Check the eligibility before you spend time on it.")
+    return "caution", ("Funding is not stated on the advert. Confirm there is a stipend and fees "
+                       "cover, and that international students can apply.")
 
 # --------------------------------------------------------- google web search
 # Google's robots.txt disallows /search, so the result pages are off limits.
@@ -449,12 +603,94 @@ def build_today():
             time.sleep(1.0)
         print("%-12s %d queries -> %d kept" % ("google", len(GOOGLE_QUERIES), found), file=sys.stderr)
 
-    for bucket in (jobs, hs):
+    phd = build_phds()
+
+    for bucket in (jobs, hs, phd):
         bucket.sort(key=lambda m: m["score"], reverse=True)
     print("Adzuna calls:", calls, file=sys.stderr)
-    # No PhD source is wired up yet. The dashboard renders its own empty state
-    # for this section, so leave the list present but empty rather than absent.
-    return {"jobs": jobs, "hs": hs, "phd": []}
+    return {"jobs": jobs, "hs": hs, "phd": phd}
+
+def build_phds():
+    """Funded PhD openings, ranked against the research interests.
+
+    The sponsor register does not apply here: a studentship is not a Skilled
+    Worker vacancy. What matters instead is whether it is funded and whether an
+    international student can hold the funding.
+    """
+    found, seen = [], set()
+    for keyword in PHD_QUERIES:
+        for row in jobs_ac_uk(keyword, pages=PHD_PAGES, phds=True):
+            key = norm(row["title"]) + "|" + norm(row["employer"])
+            if key in seen:
+                continue
+            if not within_days(row["posted"], PHD_MAX_DAYS):
+                continue
+            seen.add(key)
+            blurb = " ".join([row["title"], row.get("department", ""), row["employer"]])
+            row["score"] = min(100, phd_interest_score(blurb))
+            found.append(row)
+        time.sleep(1.0)
+
+    # Only the best scoring ones earn a detail fetch, which is where funding and
+    # eligibility actually live. The rest keep what the search page gave us.
+    found.sort(key=lambda r: r["score"], reverse=True)
+    out = []
+    for i, row in enumerate(found):
+        extra = {}
+        if i < PHD_ENRICH:
+            extra = phd_detail(row["url"])
+            time.sleep(0.6)
+        funding = extra.get("funding", "")
+        intl = extra.get("intlEligible")
+        stipend = extra.get("stipend") or row.get("salary")
+        if stipend and not (8000 <= stipend <= 80000):
+            stipend = None
+        if not funding and stipend:
+            funding = "full"
+        status, note = classify_phd(funding, intl)
+        # A perfect topic you cannot hold the funding for is not a good match,
+        # so eligibility moves the score far more than any research theme does.
+        score = row["score"] + (8 if funding else 0)
+        score += 10 if intl is True else (-35 if intl is False else 0)
+        country = country_of(row["location"] + " " + row["employer"])
+        out.append({
+            "score": min(100, score), "title": row["title"], "field": "Research",
+            "employer": row["employer"],
+            "location": ", ".join(v for v in (row["location"], country) if v and v != row["location"]),
+            "country": country, "salary": None, "belowGeneral": False,
+            "posted": row["posted"], "deadline": row["deadline"], "url": row["url"],
+            "section": "phd", "status": status, "note": note, "source": "jobs.ac.uk",
+            "funding": funding, "intlEligible": intl, "stipend": stipend,
+        })
+    print("%-12s %d queries -> %d kept (%d enriched)"
+          % ("phd", len(PHD_QUERIES), len(out), min(len(out), PHD_ENRICH)), file=sys.stderr)
+
+    # Optional web sweep, the only thing here that reaches past the UK.
+    if GOOGLE_API_KEY and GOOGLE_CSE_ID:
+        n = 0
+        for query in GOOGLE_PHD_QUERIES:
+            for hit in google_search(query):
+                if not hit["url"] or not re.search(r"phd|doctoral|studentship", hit["title"], re.I):
+                    continue
+                key = norm(hit["title"]) + "|web"
+                if key in seen:
+                    continue
+                seen.add(key)
+                country = country_of(hit["title"] + " " + hit["employer"] + " " + hit["url"])
+                out.append({
+                    "score": min(100, phd_interest_score(hit["title"])), "title": hit["title"],
+                    "field": "Research", "employer": hit["employer"] or "institution not named",
+                    "location": country, "country": country, "salary": None, "belowGeneral": False,
+                    "posted": "", "deadline": "", "url": hit["url"], "section": "phd",
+                    "status": "weak", "source": "google",
+                    "note": ("Found by web search, so none of the funding or eligibility has been "
+                             "checked. Open it and confirm before you count on it."),
+                    "funding": "", "intlEligible": None, "stipend": None,
+                })
+                n += 1
+            time.sleep(1.0)
+        print("%-12s %d queries -> %d kept" % ("phd/google", len(GOOGLE_PHD_QUERIES), n), file=sys.stderr)
+    return out
 
 def write(day):
     os.makedirs(DATA_DIR, exist_ok=True)
@@ -523,7 +759,32 @@ def demo():
            location="", salary=None, section="hs", status="weak", field="Operations",
            source="google", note=classify(0, on_register=False)[1]),
     ]
-    return {"jobs": jobs, "hs": hs, "phd": []}
+    d = lambda n: (datetime.date.today() + datetime.timedelta(days=n)).isoformat()
+    phd = [
+        mk(score=81, title="PhD in Lasers and the Circular Economy",
+           employer="University of Nottingham", location="Nottingham", country="UK",
+           section="phd", status="strong", field="Research", source="jobs.ac.uk",
+           funding="full", intlEligible=True, stipend=21805, salary=None, deadline=d(25)),
+        mk(score=78, title="5 PhD Vacancies in Mechanics of Materials",
+           employer="Ghent University", location="Ghent, Belgium", country="Belgium",
+           section="phd", status="strong", field="Research", source="jobs.ac.uk",
+           funding="full", intlEligible=True, stipend=None, salary=None, deadline=d(99)),
+        mk(score=71, title="PhD Studentship in Life Cycle Assessment: Evaluating Technologies",
+           employer="Teagasc", location="Dublin, Ireland", country="Ireland",
+           section="phd", status="strong", field="Research", source="jobs.ac.uk",
+           funding="full", intlEligible=True, stipend=21744, salary=None, deadline=d(1)),
+        mk(score=55, title="PhD Studentship: CO2 Utilisation for Subsurface Energy Storage",
+           employer="The University of Manchester", location="Manchester", country="UK",
+           section="phd", status="caution", field="Research", source="jobs.ac.uk",
+           funding="full", intlEligible=None, stipend=21805, salary=None, deadline=d(42),
+           note=classify_phd("full", None)[1]),
+        mk(score=46, title="PhD Studentships: Process Industries Net Zero CDT",
+           employer="Newcastle University", location="Newcastle upon Tyne", country="UK",
+           section="phd", status="weak", field="Research", source="jobs.ac.uk",
+           funding="full", intlEligible=False, stipend=21805, salary=None, deadline=d(3),
+           note=classify_phd("full", False)[1]),
+    ]
+    return {"jobs": jobs, "hs": hs, "phd": phd}
 
 if __name__ == "__main__":
     write(demo() if "--demo" in sys.argv else build_today())

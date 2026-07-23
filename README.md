@@ -12,9 +12,29 @@ One shell, one card language, three tabs.
 | --- | --- | --- |
 | **Jobs** | sponsored roles across the monitored fields | salary, posted age |
 | **H&S** | health and safety roles, routed by job title | salary vs visa floor meter |
-| **PhD** | funded PhD openings | funding, international eligibility, deadline |
+| **PhD** | funded chemical engineering studentships | funding, international eligibility, deadline |
 
-The PhD tab is built and reads a `phd` array from each day file, but no PhD source is wired up yet, so it shows its own empty state. Fill that array and the cards appear with no change to the page.
+## Funded PhDs
+
+Chemical engineering studentships, ranked against the research interests in `PHD_INTERESTS`: waste valorisation and circular economy first, then carbon capture, sustainability and decarbonisation, biomass, catalysis and reactors, hydrogen, life cycle assessment, and water. Reorder that list to change the ranking.
+
+**Eligibility drives the ramp here, not the sponsor register.** A studentship is not a Skilled Worker vacancy, so a licence is irrelevant. What decides whether an opening is any use to an international applicant is whether it is funded and whether that funding is open to them:
+
+| Status | Means |
+| --- | --- |
+| **strong** | funded, and international students can hold the funding |
+| **caution** | funded, but the advert does not say who is eligible |
+| **weak** | home students only, or funding not stated |
+
+jobs.ac.uk publishes eligibility as a structured field (`Funding for: UK Students` versus `UK Students, EU Students, International Students`), but only on the advert page, not in search results. So the best scoring studentships each get one extra request to read it, capped at `PHD_ENRICH` per run. A home-only studentship is pushed well down the ranking, because a perfect topic you cannot be funded for is not a good match.
+
+Stipends are sanity checked the same way salaries are: adverts mix monthly figures, fee-only amounts and part-time rates into one field, so anything outside £8,000 to £80,000 a year is shown as "stipend not stated" rather than presented as an annual figure.
+
+### Coverage, honestly
+
+jobs.ac.uk is a UK site. A typical run returns mostly UK studentships plus a handful from Ireland, Belgium, Switzerland, Denmark and Germany. **It returns almost nothing from the US or Canada.** Those come from the optional Google source, so until `GOOGLE_API_KEY` and `GOOGLE_CSE_ID` are set the PhD tab is effectively UK and Europe. Google rows are marked weak and unverified, as everywhere else.
+
+FindAPhD is not used: it sits behind a Cloudflare challenge that returns a CAPTCHA even for `robots.txt`, and getting past that means defeating bot detection.
 
 ## Where the data comes from
 
@@ -22,9 +42,9 @@ The PhD tab is built and reads a `phd` array from each day file, but no PhD sour
 | --- | --- | --- | --- |
 | GOV.UK register of licensed sponsors | the sponsor gate on every row | published CSV | no |
 | Adzuna | jobs and H&S | API, one call per keyword per day | yes, already set |
-| jobs.ac.uk | H&S at universities | scrape of the public search | no |
+| jobs.ac.uk | H&S at universities, and every PhD | scrape of the public search | no |
 | reed.co.uk | H&S across the whole UK market | the page's own JSON payload | no |
-| Google Programmable Search | H&S leads from the open web | JSON API | optional |
+| Google Programmable Search | H&S and PhD leads from the open web, including the US and Canada | JSON API | optional |
 
 Every source is polite: a descriptive user agent, a pause between requests, and only paths the site's `robots.txt` allows. If a site changes shape the parser returns nothing and the run carries on with the others, so a break shows up as a thinner H&S tab rather than a failed workflow.
 

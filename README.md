@@ -16,6 +16,27 @@ One shell, one card language, three tabs.
 
 The PhD tab is built and reads a `phd` array from each day file, but no PhD source is wired up yet, so it shows its own empty state. Fill that array and the cards appear with no change to the page.
 
+## Where the data comes from
+
+| Source | Used for | How |
+| --- | --- | --- |
+| GOV.UK register of licensed sponsors | the sponsor gate on every row | published CSV |
+| Adzuna | jobs and H&S | API, one call per keyword per day |
+| jobs.ac.uk | H&S at universities | HTML scrape of the public search |
+
+Universities are almost all licensed sponsors and their adverts run for weeks, so the jobs.ac.uk window (`JACUK_MAX_DAYS`) is much wider than the Adzuna one. Two queries saturate the results; more just repeat them. The scraper sends a descriptive user agent, pauses between requests, and only touches `/search/`, which `jobs.ac.uk/robots.txt` allows. If their markup changes the parser returns nothing and the run carries on with Adzuna alone, so a break shows up as a thin H&S tab rather than a failed workflow.
+
+Whatever a source returns, a row only lands in the H&S tab if its **title** matches the H&S pattern, so a loose search term cannot leak into the wrong section.
+
+## Marking roles done or hidden
+
+Every card has two buttons:
+
+- **Done** for a role you have applied to. It stays in the counts and moves to the Done view.
+- **Hide** for one you do not want. It drops out of the list and out of the tile counts.
+
+Both are reversible with **Undo**, and the **Show** control in the filters switches between Open, Done and Hidden. Marks live in that browser's local storage, keyed on the advert so a role stays marked as it reappears on later days. They do not sync between devices, and clearing site data clears them.
+
 ## What's in here
 
 - `monitor.py` — the daily script (Python standard library only, nothing to install)
@@ -34,9 +55,9 @@ The PhD tab is built and reads a `phd` array from each day file, but no PhD sour
 
 ## Change what it watches
 
-Edit the `KEYWORDS` list at the top of `monitor.py` (search term, field). Salary floors are `NEW_ENTRANT_FLOOR` and `GENERAL_FLOOR`; both are published to the page, so the threshold meter and the card copy follow whatever you set.
+Edit the `KEYWORDS` list at the top of `monitor.py` (search term, field). `HS_KEYWORDS` holds the extra Adzuna sweeps aimed at the H&S tab, and `JACUK_QUERIES` the jobs.ac.uk searches. Salary floors are `NEW_ENTRANT_FLOOR` and `GENERAL_FLOOR`; both are published to the page, so the threshold meter and the card copy follow whatever you set.
 
-Only one of the current keywords targets health and safety, so that tab stays thin. Add more H&S search terms to fill it out, keeping an eye on the Adzuna call budget (one call per keyword per day).
+**Watch the Adzuna budget.** Every entry in `KEYWORDS` and `HS_KEYWORDS` costs one call per day, currently 15 in total, or about 460 a month. jobs.ac.uk costs nothing. Trim `HS_KEYWORDS` first if you need to cut back; the run prints its call count to the log.
 
 ## The data file
 

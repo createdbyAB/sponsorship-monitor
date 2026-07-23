@@ -16,10 +16,13 @@ colour, icon and word on its card. Standard library only.
 Run:  python monitor.py         (live)
       python monitor.py --demo  (writes sample data)
 """
-import os, re, csv, io, json, sys, datetime, difflib, urllib.parse, urllib.request
+import os, re, csv, io, json, sys, time, html, datetime, difflib, urllib.parse, urllib.request
 
 ADZUNA_ID  = os.environ.get("ADZUNA_ID", "")
 ADZUNA_KEY = os.environ.get("ADZUNA_KEY", "")
+
+UA = ("sponsorship-monitor (personal daily job alert; "
+      "+https://github.com/createdbyAB/sponsorship-monitor)")
 
 # (search term, field) -- edit this list to change what gets monitored
 KEYWORDS = [
@@ -30,6 +33,22 @@ KEYWORDS = [
     ("area manager", "Operations"), ("health and safety", "Operations"),
     ("process engineer", "Engineering"),
 ]
+
+# Extra Adzuna sweeps aimed squarely at the health and safety tab. Anything they
+# return is still routed by title, so a loose term cannot pollute the section.
+# Each entry costs one Adzuna call per day, so keep the list short.
+HS_KEYWORDS = [
+    "health and safety advisor", "health and safety manager",
+    "hse manager", "safety officer",
+]
+
+# jobs.ac.uk searches. Universities are almost all licensed sponsors, and their
+# adverts run for weeks rather than days, so this window is much wider than the
+# Adzuna one. Two queries saturate the results; more just repeat them.
+JACUK_QUERIES  = ["health and safety", "safety officer"]
+JACUK_PAGES    = 2      # 25 results per page
+JACUK_MAX_DAYS = 45
+
 NEW_ENTRANT_FLOOR = 33400   # early-career Skilled Worker rate (applies to AB)
 GENERAL_FLOOR     = 41700   # roles between the two are flagged
 COUNTRY, MAX_DAYS_OLD = "gb", 2
@@ -51,7 +70,7 @@ def norm(name):
     return re.sub(r"\s+", " ", _SUFFIX.sub(" ", n)).strip()
 
 def fetch(url):
-    req = urllib.request.Request(url, headers={"User-Agent": "sponsorship-monitor"})
+    req = urllib.request.Request(url, headers={"User-Agent": UA})
     with urllib.request.urlopen(req, timeout=90) as r:
         return r.read().decode("utf-8", "replace")
 
@@ -90,6 +109,83 @@ def adzuna(keyword):
         print("Adzuna error:", keyword, e, file=sys.stderr)
         return []
 
+# ---------------------------------------------------------------- jobs.ac.uk
+# HTML scrape of the public search. jobs.ac.uk/robots.txt allows /search/ (it
+# only disallows /job/feedback/ and /enhanced/fp/). One polite request per page,
+# a descriptive user agent, and a pause between queries.
+_J_RESULT = re.compile(r'<div class="j-search-result__result[^"]*"\s+data-advert-id="(\d+)">'
+                       r'(.*?)(?=<div class="j-search-result__result|<div id="job-listings-end|$)', re.S)
+_J_LINK   = re.compile(r'<a href="(/job/[^"]+)"\s*>\s*(.*?)\s*</a>', re.S)
+_J_EMP    = re.compile(r'j-search-result__employer">\s*<b>\s*(.*?)\s*</b>', re.S)
+_J_LOC    = re.compile(r'<div>Location:\s*(.*?)\s*</div>', re.S)
+_J_SAL    = re.compile(r'j-search-result__info">\s*<strong>Salary:\s*</strong>\s*(.*?)</div>', re.S)
+_J_PLACED = re.compile(r'<strong>Date Placed:\s*</strong>\s*(\d{1,2}\s+[A-Za-z]{3})', re.S)
+_J_CLOSES = re.compile(r'j-search-result__date--blue[^"]*">\s*(\d{1,2}\s+[A-Za-z]{3})\s*</span>', re.S)
+_TAGS     = re.compile(r"<[^>]+>")
+
+def _text(s):
+    return re.sub(r"\s+", " ", html.unescape(_TAGS.sub(" ", s or ""))).strip()
+
+def _first_pounds(s):
+    """First £ figure in a salary blurb. Ignores hourly rates."""
+    m = re.search(r"£\s?([\d,]+)", s or "")
+    if not m:
+        return None
+    try:
+        v = int(m.group(1).replace(",", ""))
+    except ValueError:
+        return None
+    return v if v >= 1000 else None
+
+def _daymon(s, today):
+    """'10 Jul' -> ISO date, picking the year that lands nearest today."""
+    if not s:
+        return ""
+    for year in (today.year, today.year - 1, today.year + 1):
+        try:
+            d = datetime.datetime.strptime(s + " " + str(year), "%d %b %Y").date()
+        except ValueError:
+            continue
+        if abs((d - today).days) <= 200:
+            return d.isoformat()
+    return ""
+
+def _grab(rx, block):
+    m = rx.search(block)
+    return _text(m.group(1)) if m else ""
+
+def jobs_ac_uk(keyword, pages=JACUK_PAGES):
+    today, out = datetime.date.today(), []
+    for p in range(pages):
+        q = urllib.parse.urlencode({"keywords": keyword, "sort": "re", "s": 1,
+                                    "pageSize": 25, "startIndex": 1 + p * 25})
+        try:
+            page = fetch("https://www.jobs.ac.uk/search/?" + q)
+        except Exception as e:
+            print("jobs.ac.uk error:", keyword, e, file=sys.stderr)
+            break
+        blocks = _J_RESULT.findall(page)
+        if not blocks:
+            break
+        for _id, b in blocks:
+            link = _J_LINK.search(b)
+            if not link:
+                continue
+            salary_text = _grab(_J_SAL, b)
+            out.append({
+                "title": _text(link.group(2)),
+                "employer": _grab(_J_EMP, b),
+                "location": _grab(_J_LOC, b),
+                "salary": _first_pounds(salary_text),
+                "posted": _daymon(_grab(_J_PLACED, b), today),
+                "deadline": _daymon(_grab(_J_CLOSES, b), today),
+                "url": "https://www.jobs.ac.uk" + link.group(1),
+            })
+        if len(blocks) < 25:
+            break
+        time.sleep(1.0)
+    return out
+
 def score(job, field, keyword):
     title = (job.get("title") or "").lower()
     s = 55
@@ -117,33 +213,88 @@ def classify(pay):
         "No salary on the listing. The employer holds a licence, so confirm the pay and "
         "the sponsorship on the advert before you apply.")
 
+def make_row(title, employer, location, pay, posted, url, field, section,
+             source, base_score, deadline=""):
+    status, note = classify(pay)
+    return {
+        "score": base_score, "title": title, "field": field, "employer": employer,
+        "location": location, "salary": int(pay) if pay else None,
+        "belowGeneral": bool(pay and pay < GENERAL_FLOOR),
+        "posted": posted, "deadline": deadline, "url": url,
+        "section": section, "status": status, "note": note, "source": source,
+    }
+
+def within_days(posted, limit):
+    if not posted:
+        return True          # undated adverts are kept and judged on their own merits
+    try:
+        d = datetime.date.fromisoformat(posted)
+    except ValueError:
+        return True
+    return 0 <= (datetime.date.today() - d).days <= limit
+
 def build_today():
     sponsors = load_sponsors()
     print("Licensed Skilled Worker sponsors loaded:", len(sponsors), file=sys.stderr)
     seen, jobs, hs = set(), [], []
-    for keyword, field in KEYWORDS:
+    calls = 0
+
+    def take(title, employer, key_extra=""):
+        """Dedupe and sponsor gate, shared by every source."""
+        key = norm(title) + "|" + norm(employer) + key_extra
+        if key in seen:
+            return False
+        if not is_sponsor(employer, sponsors):
+            return False
+        seen.add(key)
+        return True
+
+    # --- Adzuna: the monitored fields, routed into jobs or H&S by title -------
+    for keyword, field in KEYWORDS + [(k, "Operations") for k in HS_KEYWORDS]:
+        hs_only = keyword in HS_KEYWORDS
+        calls += 1
         for job in adzuna(keyword):
             company = (job.get("company") or {}).get("display_name", "")
             title = re.sub("<.*?>", "", job.get("title") or "")
-            key = norm(title) + "|" + norm(company)
-            if key in seen or not is_sponsor(company, sponsors):
+            is_hs = bool(_HS.search(title))
+            # The H&S sweeps exist to fill one tab. If a term drifts, drop the
+            # result rather than letting it land in the general jobs list.
+            if hs_only and not is_hs:
                 continue
             pay = job.get("salary_min") or 0
             if pay and pay < NEW_ENTRANT_FLOOR:
                 continue
-            seen.add(key)
-            status, note = classify(pay)
-            section = "hs" if _HS.search(title) else "jobs"
-            (hs if section == "hs" else jobs).append({
-                "score": score(job, field, keyword), "title": title, "field": field,
-                "employer": company, "location": (job.get("location") or {}).get("display_name", ""),
-                "salary": int(pay) if pay else None,
-                "belowGeneral": bool(pay and pay < GENERAL_FLOOR),
-                "posted": (job.get("created") or "")[:10], "url": job.get("redirect_url", ""),
-                "section": section, "status": status, "note": note,
-            })
+            if not take(title, company):
+                continue
+            section = "hs" if is_hs else "jobs"
+            (hs if is_hs else jobs).append(make_row(
+                title, company, (job.get("location") or {}).get("display_name", ""),
+                pay, (job.get("created") or "")[:10], job.get("redirect_url", ""),
+                field, section, "adzuna", score(job, field, keyword)))
+
+    # --- jobs.ac.uk: universities, which are nearly all licensed sponsors -----
+    for keyword in JACUK_QUERIES:
+        for job in jobs_ac_uk(keyword):
+            title = job["title"]
+            if not _HS.search(title):
+                continue
+            if not within_days(job["posted"], JACUK_MAX_DAYS):
+                continue
+            pay = job["salary"] or 0
+            if pay and pay < NEW_ENTRANT_FLOOR:
+                continue
+            if not take(title, job["employer"]):
+                continue
+            hs.append(make_row(
+                title, job["employer"], job["location"], pay, job["posted"],
+                job["url"], "Operations", "hs", "jobs.ac.uk",
+                score({"title": title, "salary_min": pay}, "Operations", keyword),
+                deadline=job["deadline"]))
+        time.sleep(1.0)
+
     for bucket in (jobs, hs):
         bucket.sort(key=lambda m: m["score"], reverse=True)
+    print("Adzuna calls:", calls, "| jobs.ac.uk queries:", len(JACUK_QUERIES), file=sys.stderr)
     # No PhD source is wired up yet. The dashboard renders its own empty state
     # for this section, so leave the list present but empty rather than absent.
     return {"jobs": jobs, "hs": hs, "phd": []}
@@ -177,8 +328,12 @@ def write(day):
 
 def demo():
     """Sample data covering every card state, for previewing without API keys."""
-    mk = lambda **kw: dict({"field": "Design", "posted": datetime.date.today().isoformat(),
-                            "url": "https://example.com", "note": "", "belowGeneral": False}, **kw)
+    n = [0]
+    def mk(**kw):
+        n[0] += 1
+        return dict({"field": "Design", "posted": datetime.date.today().isoformat(),
+                     "url": "https://example.com/advert/%d" % n[0], "note": "",
+                     "belowGeneral": False, "deadline": "", "source": "adzuna"}, **kw)
     jobs = [
         mk(score=92, title="Senior Software Engineer", employer="Monzo Bank", location="London, UK",
            salary=65000, section="jobs", status="strong", field="Engineering"),
@@ -193,6 +348,10 @@ def demo():
     hs = [
         mk(score=88, title="Health and Safety Manager", employer="Skanska", location="Birmingham",
            salary=52000, section="hs", status="strong", field="Operations"),
+        mk(score=87, title="Health and Safety Audit Manager", employer="University of Bath",
+           location="Bath", salary=47389, section="hs", status="strong", field="Operations",
+           source="jobs.ac.uk", posted="2026-07-17",
+           deadline=(datetime.date.today() + datetime.timedelta(days=24)).isoformat()),
         mk(score=78, title="Health and Safety Advisor", employer="Balfour Beatty", location="Manchester",
            salary=42000, section="hs", status="caution", field="Operations",
            note="Licence held. The pay clears the floor, so confirm on the advert that this role "

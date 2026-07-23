@@ -198,8 +198,24 @@ button{font:inherit;color:inherit;background:none;border:none;padding:0;cursor:p
 /* ---------- opportunity card ---------- */
 .list{display:grid;gap:9px;margin-top:12px}
 .card{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--track);border-radius:9px;
-      padding:13px 14px;display:block;text-decoration:none;color:inherit;transition:border-color .15s}
+      padding:13px 14px;display:block;color:inherit;transition:border-color .15s,opacity .15s}
 .card:hover{border-color:var(--line-10)}
+.tlink{color:inherit;text-decoration:none}
+.tlink:hover{text-decoration:underline;text-underline-offset:2px}
+.tlink::after{content:" ↗";font-size:.8em;opacity:.4;white-space:nowrap}
+/* marked cards stay legible but step back visually */
+.card.marked{opacity:.62}
+.card.marked:hover{opacity:1}
+.actions{display:flex;gap:6px;margin-top:11px;padding-top:10px;border-top:1px solid var(--line)}
+.act{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;
+     font:600 10px var(--mono);letter-spacing:.05em;border-radius:6px;background:transparent;
+     border:1px solid var(--line-10);color:var(--text-45);transition:background .15s,color .15s}
+.act:hover{color:var(--text);background:var(--inset)}
+.act.go:hover{border-color:var(--strong-edge);color:var(--strong-tx);background:var(--strong-panel)}
+.act.no:hover{border-color:var(--weak-edge);color:var(--weak-tx);background:var(--weak-panel)}
+.marktag{font:600 10px var(--mono);letter-spacing:.05em;padding:4px 8px;border-radius:5px}
+.marktag.done{background:var(--strong-panel);color:var(--strong-tx)}
+.marktag.hidden{background:var(--track);color:var(--text-60)}
 .card.strong{border-left-color:var(--strong)}
 .card.caution{border-left-color:var(--caution)}
 .card.weak{border-left-color:var(--weak)}
@@ -314,6 +330,7 @@ button{font:inherit;color:inherit;background:none;border:none;padding:0;cursor:p
   .where{font-size:12px}
   .fit .n{font-size:28px}
   .gauge span{height:5px}
+  .act{min-height:32px}
   .foot{margin:0;padding:16px 22px;border-top:1px solid var(--line)}
   .empty{grid-column:1/-1}
 }
@@ -353,7 +370,10 @@ button{font:inherit;color:inherit;background:none;border:none;padding:0;cursor:p
         <button type="button" class="reset" id="reset">Reset</button>
       </div>
 
-      <div class="cap" id="cap-first">Eligibility</div>
+      <div class="cap" id="cap-first">Show</div>
+      <div class="chips" id="f-show"></div>
+
+      <div class="cap">Eligibility</div>
       <div class="chips" id="f-status">
         <button type="button" class="chip strong" data-v="strong" aria-pressed="false">&#10003; Strong</button>
         <button type="button" class="chip caution" data-v="caution" aria-pressed="false">&#9888; Caution</button>
@@ -442,8 +462,24 @@ let view = null;          // "YYYY-MM-DD" or "WEEK"
 let section = "jobs";
 let rows = [];
 
-const blank = () => ({status:[], minfit:0, money:null, field:null, place:null, recency:null, sort:"fit"});
+const blank = () => ({show:"open", status:[], minfit:0, money:null, field:null, place:null,
+                      recency:null, sort:"fit"});
 const F = {jobs: blank(), hs: blank(), phd: Object.assign(blank(), {sort:"deadline"})};
+
+/* ---------- done / hidden marks ----------
+   Kept in this browser only, since the site is static. Keyed on the advert URL
+   so a role stays marked as it reappears in later days of the archive. */
+let MARKS = {};
+try { MARKS = JSON.parse(localStorage.getItem("marks") || "{}") || {}; } catch(e){ MARKS = {}; }
+// Composite on purpose. The query string is dropped so tracking parameters that
+// churn between runs do not lose a mark, and the title and employer are folded
+// in so two adverts can never share a key if a URL is missing or repeated.
+const markKey = r => String(r.url || "").split("?")[0] + "|" + r.title + "|" + r.employer;
+const markOf  = r => MARKS[markKey(r)] || "";
+function setMark(k, value){
+  if (value) MARKS[k] = value; else delete MARKS[k];
+  try { localStorage.setItem("marks", JSON.stringify(MARKS)); } catch(e){}
+}
 
 /* ---------- theme ---------- */
 (function initTheme(){
@@ -546,6 +582,10 @@ const sectionRows = () => rows.filter(r => r.section === section);
 function applyFilters(list){
   const f = F[section];
   return list.filter(r => {
+    const mark = markOf(r);
+    if (f.show === "open"   && mark) return false;
+    if (f.show === "done"   && mark !== "done") return false;
+    if (f.show === "hidden" && mark !== "hidden") return false;
     if (f.status.length && f.status.indexOf(r.status) < 0) return false;
     if (f.minfit && r.score < f.minfit) return false;
     if (f.money){
@@ -609,7 +649,9 @@ function renderDays(){
 }
 
 function renderTiles(){
-  const all = sectionRows();
+  // Hidden roles are gone as far as the counts are concerned. Done ones still
+  // count, because they are still live opportunities you acted on.
+  const all = sectionRows().filter(r => markOf(r) !== "hidden");
   const strong = all.filter(r => r.status === "strong").length;
   const refDay = view === "WEEK" ? (INDEX.days[0] || {}).date : view;
   const fresh = all.filter(r => r.posted && r.posted === refDay).length;
@@ -637,6 +679,15 @@ function renderTiles(){
 function renderRail(){
   const f = F[section];
   const all = sectionRows();
+
+  const nDone   = all.filter(r => markOf(r) === "done").length;
+  const nHidden = all.filter(r => markOf(r) === "hidden").length;
+  const nOpen   = all.length - nDone - nHidden;
+  $("#f-show").innerHTML = [["open","Open",nOpen], ["done","Done",nDone], ["hidden","Hidden",nHidden]]
+    .map(s => '<button type="button" class="chip" data-v="' + s[0] + '" aria-pressed="' +
+              (f.show === s[0]) + '">' + s[1] +
+              '<span style="opacity:.55;margin-left:5px">' + s[2] + '</span></button>')
+    .join("");
 
   $$("#f-status .chip").forEach(b => b.setAttribute("aria-pressed", f.status.indexOf(b.dataset.v) >= 0));
   $("#minfit").value = f.minfit;
@@ -677,6 +728,7 @@ function renderRail(){
 function wireChips(){
   const f = () => F[section];
   const toggle = (key, val) => { f()[key] = f()[key] === val ? null : val; renderAll(); };
+  $$("#f-show .chip").forEach(b => b.onclick = () => { f().show = b.dataset.v; renderAll(); });
   $$("#f-status .chip").forEach(b => b.onclick = () => {
     const s = f().status, i = s.indexOf(b.dataset.v);
     if (i < 0) s.push(b.dataset.v); else s.splice(i, 1);
@@ -750,8 +802,12 @@ function cardHtml(r){
         (over >= 0 && over < 12 ? " · just clears, confirm on the advert" : "") + '</div></div>';
     }
     const age = ageDays(r);
-    const facts = [shortMoney(r.salary), age === null ? null : (age === 0 ? "today" : age + "d")]
-                  .filter(Boolean).join(" · ");
+    const dl = daysToDeadline(r);
+    const facts = [
+      shortMoney(r.salary),
+      (dl !== null && dl >= 0) ? "closes " + dl + "d"
+        : (age === null ? null : (age === 0 ? "today" : age + "d"))
+    ].filter(Boolean).join(" · ");
     const label = r.status === "strong" ? "SPONSOR ✓" : r.status === "caution" ? "CONFIRM" : "LONG SHOT";
     foot = '<div class="cardfoot' + (body ? "" : " ruled") + '">' +
       '<span class="status ' + r.status + '"><span class="dot" aria-hidden="true"></span>' + label + '</span>' +
@@ -760,13 +816,27 @@ function cardHtml(r){
 
   const note = r.note ? '<div class="note ' + r.status + '">' + esc(r.note) + '</div>' : "";
 
-  return '<a class="card ' + r.status + '" href="' + esc(r.url || "#") + '" target="_blank" rel="noopener">' +
+  // Done and hidden are per-browser marks, so the buttons carry the state.
+  const mark = markOf(r);
+  const key = markKey(r);
+  const actions = mark
+    ? '<div class="actions">' +
+        '<span class="marktag ' + mark + '">' + (mark === "done" ? "✓ DONE" : "✕ HIDDEN") + '</span>' +
+        '<button type="button" class="act" data-mark="" data-key="' + esc(key) + '">↺ UNDO</button>' +
+      '</div>'
+    : '<div class="actions">' +
+        '<button type="button" class="act go" data-mark="done" data-key="' + esc(key) + '">✓ DONE</button>' +
+        '<button type="button" class="act no" data-mark="hidden" data-key="' + esc(key) + '">✕ HIDE</button>' +
+      '</div>';
+
+  return '<article class="card ' + r.status + (mark ? " marked" : "") + '">' +
     '<div class="cardtop"><div style="min-width:0">' +
-      '<div class="title">' + esc(r.title) + '</div>' +
+      '<div class="title"><a class="tlink" href="' + esc(r.url || "#") + '" target="_blank" rel="noopener">' +
+        esc(r.title) + '</a></div>' +
       '<div class="where">' + esc(where) + '</div></div>' +
       '<div class="fit"><span class="n">' + r.score + '</span><span class="k">FIT</span></div></div>' +
     '<div class="gauge" role="img" aria-label="Fit score ' + r.score + ' out of 100">' + gauge + '</div>' +
-    body + foot + note + '</a>';
+    body + foot + note + actions + '</article>';
 }
 
 function renderList(){
@@ -782,6 +852,13 @@ function renderList(){
   $("#apply").textContent = "Show " + sorted.length + (sorted.length === 1 ? " match" : " matches");
 
   $("#list").innerHTML = sorted.map(cardHtml).join("");
+  $$("#list .act").forEach(b => b.onclick = () => {
+    const said = b.dataset.mark === "done" ? "Marked done"
+               : b.dataset.mark === "hidden" ? "Hidden" : "Restored";
+    setMark(b.dataset.key, b.dataset.mark);
+    renderAll();                       // rewrites the live region with the new count
+    $("#live").textContent = said + ". " + $("#count").textContent;
+  });
   $("#emptyslot").innerHTML = sorted.length ? "" : emptyHtml(all.length);
   if (!sorted.length) wireEmpty();
   $("#live").textContent = sorted.length + " " + unit + " in " + SECTION_NAME[section];
@@ -808,6 +885,25 @@ function emptyHtml(total){
   }
   const f = F[section];
   const unit = section === "phd" ? "opening" : "role";
+
+  if (f.show === "done" || f.show === "hidden"){
+    return '<div class="empty">' + glyph +
+      '<h2>Nothing ' + (f.show === "done" ? "marked done" : "hidden") + ' here yet</h2>' +
+      '<p>Use the buttons on a card to mark it done once you have applied, or hide it if it is not for you. ' +
+      'Marks are kept in this browser and follow the role through the archive.</p>' +
+      '<div class="acts"><button type="button" class="btn" data-act="open">Back to open</button></div>' + '</div>';
+  }
+  if (f.show === "open" && !activeCount()){
+    return '<div class="empty">' + glyph +
+      '<h2>You have cleared the list</h2>' +
+      '<p>Every ' + unit + ' on this day is marked done or hidden. Switch the Show filter to see them again, ' +
+      'or pick another day from the archive.</p>' +
+      '<div class="acts">' +
+        '<button type="button" class="btn" data-act="done">See done</button>' +
+        '<button type="button" class="btn ghost" data-act="hidden">See hidden</button>' +
+      '</div>' + next + '</div>';
+  }
+
   const because = f.minfit ? "a minimum fit of " + f.minfit : "the filters you have set";
   return '<div class="empty">' + glyph +
     '<h2>No ' + unit + 's match these filters</h2>' +
@@ -826,6 +922,7 @@ function wireEmpty(){
     if (a === "clear") F[section] = blank();
     if (a === "loosen"){ const f = F[section]; f.minfit = Math.max(0, f.minfit - 20); f.status = []; }
     if (a === "week"){ view = "WEEK"; await loadView(); }
+    if (a === "open" || a === "done" || a === "hidden") F[section].show = a;
     renderAll();
   });
 }

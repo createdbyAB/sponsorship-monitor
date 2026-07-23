@@ -36,7 +36,11 @@ Two sources feed this tab. **jobs.ac.uk** covers the UK. **EURAXESS** covers doc
 
 > UK, Netherlands, France, Belgium, Spain, Sweden, Germany, Portugal, Italy, Poland, Switzerland, Finland, Ireland, Denmark, Norway, Austria, Czech Republic, Croatia, Luxembourg, Israel, China
 
-**Still missing: the US, Canada, Australia and New Zealand.** Neither source covers them meaningfully. Those depend entirely on the optional Google source, so until `GOOGLE_API_KEY` and `GOOGLE_CSE_ID` are set, the PhD tab is Europe only. Google rows are marked weak and unverified, as everywhere else.
+**jobRxiv** is what reaches North America. Two gates apply to it: the title has to be a studentship rather than a post that merely requires a doctorate (a board like this mixes in postdocs, faculty roles, and AI data-labelling gigs advertised as "Chemistry Expert (PhD)"), and it has to be in the field. Note that its visible `/jobs/` page renders listings in the browser and serves an empty shell to a scraper, so the source reads the AJAX endpoint the page itself calls.
+
+**Two sources fail from GitHub Actions but work from a laptop.** EURAXESS honours its keyword facet from a residential IP and silently ignores it from a data centre one, returning an identical generic page for every query with HTTP 200 and no error. That is why every source is judged on its own text as well as its query, and why the run logs bytes and item counts per page.
+
+Australia and New Zealand remain uncovered. Nothing found so far reaches them: their academic boards either refuse a plain client or carry no doctoral vacancies.
 
 EURAXESS searches by POST, but the redirect reveals that keywords are really a facet, so a plain GET works once the query is built as `f[0]=keywords:...`. Positions are filtered to `job_research_profile:447`, which is how EURAXESS labels First Stage Researcher (R1), its PhD level.
 
@@ -56,6 +60,7 @@ Both are indexed by Google, which is the point of the next section: the search e
 | Adzuna | jobs and H&S | API, one call per keyword per day | yes, already set |
 | jobs.ac.uk | H&S at universities, and UK PhDs | scrape of the public search | no |
 | EURAXESS | doctoral posts across Europe | scrape of the public search | no |
+| jobRxiv | doctoral posts worldwide, including North America | its listings JSON endpoint | no |
 | reed.co.uk | H&S across the whole UK market | the page's own JSON payload | no |
 | Google Programmable Search | H&S and PhD leads from the open web, including the US and Canada | JSON API | optional |
 

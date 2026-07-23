@@ -84,17 +84,30 @@ EURAXESS_R1      = "447"
 EURAXESS_PAGES   = 2    # 10 results per page
 EURAXESS_ENRICH  = 25   # detail pages fetched per run, for the deadline
 
+# jobRxiv is a STEM board carrying doctoral vacancies worldwide, which is the
+# only source here that reaches North America. Note the endpoint: the visible
+# /jobs/ page renders its listings in the browser and serves an empty shell to a
+# scraper, so it must be read through the AJAX endpoint the page itself calls.
+JOBRXIV_QUERIES = [
+    "PhD chemical engineering", "PhD carbon capture", "PhD waste valorisation",
+    "PhD circular economy", "PhD sustainability engineering", "PhD biomass",
+]
+JOBRXIV_PAGES    = 2
+JOBRXIV_PER_PAGE = 25
+JOBRXIV_MAX_DAYS = 120
+
 # Research interests, most wanted first. Drives the fit score, so reorder these
 # rather than the queries above if the ranking feels wrong.
 PHD_INTERESTS = [
-    (r"waste valoris|valoris|circular econom|resource recovery|waste to (?:energy|value)", 18),
+    (r"waste valoris|valoris|circular econom|resource recovery|waste to (?:energy|value)|"
+     r"recycl|critical raw material|urban mining", 18),
     (r"carbon captur|\bccus?\b|co2 (?:utilis|convers|capture)|direct air capture", 18),
     (r"sustainab|decarbonis|net zero|green (?:chemistry|hydrogen|process)|renewable", 14),
     (r"biomass|biorefin|bioenergy|biofuel|anaerobic digestion", 12),
     (r"catalys|process intensif|reactor|separation|membrane", 10),
     (r"hydrogen|electrolys|energy storage|fuel cell", 10),
     (r"life cycle assess|\blca\b|techno-?economic", 8),
-    (r"wastewater|water treatment|effluent|pollution", 8),
+    (r"wastewater|water treatment|effluent|pollution|hydrolog|desalinat", 8),
 ]
 # "\bchem" is deliberately broad: it takes chemical, chemistry, electrochemical
 # and project names like e-ChemIn, all of which are on topic for a chemical
@@ -577,6 +590,62 @@ def euraxess_detail(url):
     return {"deadline": _longdate(_grab(_E_DEAD, text)),
             "funding": "full" if funded else "", "intlEligible": intl, "msca": msca}
 
+# -------------------------------------------------------------------- jobRxiv
+_R_ITEM = re.compile(r'<li class="[^"]*job_listing[^"]*"[^>]*>(.*?)</li>', re.S)
+_R_LINK = re.compile(r'<a href="(https://jobrxiv\.org/job/[^"]+)"', re.S)
+_R_TITLE = re.compile(r'<h4>\s*(.*?)\s*(?:<span|</h4>)', re.S)
+_R_EMP  = re.compile(r'ws-meta-company-name">.*?</i>\s*(.*?)\s*</span>', re.S)
+_R_LOC  = re.compile(r'ws-meta-job-location">.*?</i>\s*(.*?)\s*</span>', re.S)
+_R_DATE = re.compile(r'<time datetime="(\d{4}-\d{2}-\d{2})"', re.S)
+
+# A board like this mixes studentships with posts that merely require a doctorate.
+# "Post Doctoral Scholar" contains "Doctoral", so the exclusion has to run second.
+_PHD_TITLE = re.compile(r"\bph\.?d\b|\bdoctoral\b|\bdoctorate\b|studentship", re.I)
+_NOT_PHD   = re.compile(r"post-?\s?doc|postdoctoral|post doctoral|\bprofessor\b|faculty|"
+                        r"lecturer|research associate|research scientist|research fellow|"
+                        r"technician|\bmanager\b|director|coordinator|administrator|"
+                        # AI data-labelling gigs advertise as "Chemistry Expert (PhD)",
+                        # which is a contract job wanting a doctorate, not a studentship.
+                        r"\bexpert\b|annotat|\bai (?:safety|trainer|training)\b|freelance|"
+                        r"contractor|part-?time remote", re.I)
+
+def is_phd_vacancy(title):
+    return bool(_PHD_TITLE.search(title or "")) and not _NOT_PHD.search(title or "")
+
+def jobrxiv(keyword, pages=JOBRXIV_PAGES):
+    out = []
+    for p in range(1, pages + 1):
+        q = urllib.parse.urlencode({"search_keywords": keyword,
+                                    "per_page": JOBRXIV_PER_PAGE, "page": p})
+        try:
+            data = json.loads(fetch("https://jobrxiv.org/jm-ajax/get_listings/?" + q))
+        except Exception as e:
+            print("jobrxiv error:", keyword, e, file=sys.stderr)
+            break
+        if not data.get("found_jobs"):
+            break
+        items = _R_ITEM.findall(data.get("html") or "")
+        for b in items:
+            link, title = _R_LINK.search(b), _R_TITLE.search(b)
+            if not (link and title):
+                continue
+            loc = _grab(_R_LOC, b)
+            out.append({
+                "title": _text(title.group(1)),
+                "employer": _grab(_R_EMP, b),
+                "department": "",
+                "location": loc,
+                "country": country_of(loc, link.group(1), default=""),
+                "salary": None,
+                "posted": _grab(_R_DATE, b),
+                "deadline": "",
+                "url": link.group(1),
+            })
+        if p >= (data.get("max_num_pages") or 1):
+            break
+        time.sleep(1.0)
+    return out
+
 def classify_phd(funding, intl):
     """For a self-funding international applicant, eligibility is the question
     that decides everything, so it drives the ramp the way sponsorship does on
@@ -918,6 +987,39 @@ def build_phds():
     print("%-12s %d queries -> %d kept (%d enriched)"
           % ("phd/euraxess", len(EURAXESS_QUERIES), len(euro), min(len(euro), EURAXESS_ENRICH)),
           file=sys.stderr)
+
+    # --- jobRxiv: the only source here that reaches North America ------------
+    rx, rx_off = [], 0
+    for keyword in JOBRXIV_QUERIES:
+        for row in jobrxiv(keyword):
+            key = norm(row["title"]) + "|" + norm(row["employer"])
+            if key in seen or not row["title"]:
+                continue
+            # Two gates: it has to be a studentship rather than a post wanting a
+            # doctorate, and it has to be in the field.
+            if not is_phd_vacancy(row["title"]):
+                continue
+            blurb = row["title"] + " " + row["employer"] + " " + row.get("department", "")
+            if not phd_relevant(blurb):
+                rx_off += 1
+                continue
+            if not within_days(row["posted"], JOBRXIV_MAX_DAYS):
+                continue
+            seen.add(key)
+            status, note = classify_phd("", None)
+            out.append({
+                "score": min(100, phd_interest_score(blurb)), "title": row["title"],
+                "field": "Research", "employer": row["employer"],
+                "location": row["location"], "country": row["country"],
+                "salary": None, "belowGeneral": False, "posted": row["posted"],
+                "deadline": "", "url": row["url"], "section": "phd",
+                "status": status, "source": "jobrxiv", "note": note,
+                "funding": "", "intlEligible": None, "stipend": None,
+            })
+            rx.append(row)
+        time.sleep(1.0)
+    print("%-12s %d queries -> %d kept (%d off-topic)"
+          % ("phd/jobrxiv", len(JOBRXIV_QUERIES), len(rx), rx_off), file=sys.stderr)
 
     # Optional web sweep, the only thing here that reaches past the UK.
     if GOOGLE_API_KEY and GOOGLE_CSE_ID:

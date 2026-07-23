@@ -49,6 +49,20 @@ JACUK_QUERIES  = ["health and safety", "safety officer"]
 JACUK_PAGES    = 2      # 25 results per page
 JACUK_MAX_DAYS = 45
 
+# reed.co.uk searches. Much the widest H&S source, covering the whole UK market
+# rather than one sector. Adverts run for weeks, same as jobs.ac.uk.
+REED_QUERIES  = ["health and safety", "hse manager", "safety officer"]
+REED_PAGES    = 2       # 25 results per page
+REED_MAX_DAYS = 30
+
+# Optional. Set GOOGLE_API_KEY and GOOGLE_CSE_ID to also sweep a Google
+# Programmable Search engine. See the README for why this is the only sanctioned
+# way to search the open web here, and why its rows are treated as unconfirmed.
+GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY", "")
+GOOGLE_CSE_ID  = os.environ.get("GOOGLE_CSE_ID", "")
+GOOGLE_QUERIES = ["health and safety manager visa sponsorship UK",
+                  "health and safety advisor jobs UK sponsorship"]
+
 NEW_ENTRANT_FLOOR = 33400   # early-career Skilled Worker rate (applies to AB)
 GENERAL_FLOOR     = 41700   # roles between the two are flagged
 COUNTRY, MAX_DAYS_OLD = "gb", 2
@@ -69,10 +83,39 @@ def norm(name):
     n = re.sub(r"[^a-z0-9 ]", " ", (name or "").lower())
     return re.sub(r"\s+", " ", _SUFFIX.sub(" ", n)).strip()
 
+class _Redirect(urllib.request.HTTPRedirectHandler):
+    """urllib does not follow 308 by itself, and reed.co.uk answers with one."""
+    def http_error_308(self, req, fp, code, msg, headers):
+        return self.http_error_301(req, fp, 301, msg, headers)
+
+_OPENER = urllib.request.build_opener(_Redirect)
+
 def fetch(url):
     req = urllib.request.Request(url, headers={"User-Agent": UA})
-    with urllib.request.urlopen(req, timeout=90) as r:
+    with _OPENER.open(req, timeout=90) as r:
         return r.read().decode("utf-8", "replace")
+
+# Agencies advertise on behalf of an employer they do not name. The agency may
+# well hold a licence, but that says nothing about who would actually sponsor
+# you, so these rows get flagged rather than trusted.
+_AGENCY = re.compile(r"\b(recruit\w*|resourc\w*|staffing|talent|personnel|placements?|"
+                     r"headhunt\w*|manpower|employment agency|search & selection|"
+                     r"search and selection)\b", re.I)
+
+def looks_like_agency(name):
+    return bool(_AGENCY.search(name or ""))
+
+def sane_salary(lo, hi):
+    """A trustworthy annual minimum, or None if the advert's figures look like
+    a placeholder band. Boards often pad the range out to catch more searches,
+    and a bogus low figure would wrongly sink a role under the visa floor."""
+    lo = int(lo or 0)
+    hi = int(hi or 0)
+    if lo < 12000:
+        return None                 # hourly, pro-rata, or a filler value
+    if hi and hi >= lo * 2:
+        return None                 # a band that wide is not a real minimum
+    return lo
 
 def load_sponsors():
     """Set of normalised names of Skilled Worker licensed sponsors."""
@@ -186,6 +229,81 @@ def jobs_ac_uk(keyword, pages=JACUK_PAGES):
         time.sleep(1.0)
     return out
 
+# ------------------------------------------------------------------ reed.co.uk
+# reed.co.uk/robots.txt allows /jobs for the generic agent. The page is a Next.js
+# app, so the listings come from its own JSON payload rather than from parsing
+# rendered markup, which is both cleaner and far less likely to break.
+_NEXT = re.compile(r'<script id="__NEXT_DATA__" type="application/json">(.*?)</script>', re.S)
+
+def reed(keyword, pages=REED_PAGES):
+    out = []
+    for p in range(1, pages + 1):
+        q = urllib.parse.urlencode({"keywords": keyword, "pageno": p})
+        try:
+            page = fetch("https://www.reed.co.uk/jobs?" + q)
+        except Exception as e:
+            print("reed error:", keyword, e, file=sys.stderr)
+            break
+        m = _NEXT.search(page)
+        if not m:
+            print("reed: no data payload for", keyword, file=sys.stderr)
+            break
+        try:
+            jobs = json.loads(m.group(1))["props"]["pageProps"]["searchResults"]["jobs"]
+        except Exception as e:
+            print("reed: unexpected payload shape:", e, file=sys.stderr)
+            break
+        if not jobs:
+            break
+        for j in jobs:
+            x = j.get("jobDetail") or {}
+            if x.get("salaryType") not in (None, 5):        # 5 = annual
+                continue
+            out.append({
+                "title": x.get("jobTitle") or "",
+                "employer": x.get("ouName") or j.get("profileName") or "",
+                "location": ", ".join(v for v in (x.get("displayLocationName"),
+                                                  x.get("countyLocation")) if v),
+                "salary": sane_salary(x.get("salaryFrom"), x.get("salaryTo")),
+                "posted": (x.get("displayDate") or "")[:10],
+                "deadline": (x.get("expiryDate") or "")[:10],
+                "url": "https://www.reed.co.uk" + (j.get("url") or ""),
+                # ouType 1 is an agency, 2 is the employer advertising directly.
+                # Checked against reed's own agency filter, which returns only
+                # type 1. Far more reliable than guessing from the trading name.
+                "agency": x.get("ouType") == 1,
+            })
+        time.sleep(1.0)
+    return out
+
+# --------------------------------------------------------- google web search
+# Google's robots.txt disallows /search, so the result pages are off limits.
+# The Programmable Search JSON API is the supported way to run a web search, so
+# that is what this uses, and only when both credentials are present.
+def google_search(query, limit=10):
+    if not (GOOGLE_API_KEY and GOOGLE_CSE_ID):
+        return []
+    q = urllib.parse.urlencode({"key": GOOGLE_API_KEY, "cx": GOOGLE_CSE_ID,
+                                "q": query, "num": min(10, limit)})
+    try:
+        data = json.loads(fetch("https://www.googleapis.com/customsearch/v1?" + q))
+    except Exception as e:
+        print("google error:", query, e, file=sys.stderr)
+        return []
+    out = []
+    for item in data.get("items", []):
+        title = (item.get("title") or "").strip()
+        # Page titles are usually "Role - Employer - Location | Board". Take the
+        # second part as a guess at the employer, and never treat it as fact.
+        parts = [p.strip() for p in re.split(r"\s+[-|–]\s+", title) if p.strip()]
+        out.append({
+            "title": parts[0] if parts else title,
+            "employer": parts[1] if len(parts) > 1 else "",
+            "location": "", "salary": None, "posted": "", "deadline": "",
+            "url": item.get("link") or "",
+        })
+    return out
+
 def score(job, field, keyword):
     title = (job.get("title") or "").lower()
     s = 55
@@ -196,13 +314,22 @@ def score(job, field, keyword):
     if field == "Design" and "designer" in title: s += 8
     return max(0, min(100, s))
 
-def classify(pay):
+def classify(pay, agency=False, on_register=True):
     """Status plus the plain-language note the card shows underneath it.
 
-    Everything reaching this point is already at a licensed sponsor, so the
-    only open question is whether the pay clears the general floor. Copy is
-    deliberately plain and never claims more certainty than the data supports.
+    Copy is deliberately plain and never claims more certainty than the data
+    supports. The three things that can pull a row down from strong are: the
+    employer not being confirmed on the register, the advert coming from an
+    agency that will not name the employer, and the pay not clearing the floor.
     """
+    if not on_register:
+        return "weak", (
+            "Found by web search, not by a job board we can check. Nobody has confirmed "
+            "this employer holds a licence, so treat it as a lead to look into yourself.")
+    if agency:
+        return "caution", (
+            "Advertised by an agency. The agency holds a licence, but it does not name the "
+            "employer who would actually sponsor you, so ask them before you apply.")
     if pay and pay >= GENERAL_FLOOR:
         return "strong", ""
     if pay:
@@ -210,12 +337,12 @@ def classify(pay):
             "Pay is under the general floor of £{:,}. It can still work on the new entrant "
             "rate, but confirm the salary and the sponsorship on the advert.".format(GENERAL_FLOOR))
     return "caution", (
-        "No salary on the listing. The employer holds a licence, so confirm the pay and "
-        "the sponsorship on the advert before you apply.")
+        "No salary stated, or the advert gives too wide a band to trust. The employer holds "
+        "a licence, so confirm the pay and the sponsorship on the advert before you apply.")
 
 def make_row(title, employer, location, pay, posted, url, field, section,
-             source, base_score, deadline=""):
-    status, note = classify(pay)
+             source, base_score, deadline="", on_register=True, agency=False):
+    status, note = classify(pay, agency or looks_like_agency(employer), on_register)
     return {
         "score": base_score, "title": title, "field": field, "employer": employer,
         "location": location, "salary": int(pay) if pay else None,
@@ -272,29 +399,59 @@ def build_today():
                 pay, (job.get("created") or "")[:10], job.get("redirect_url", ""),
                 field, section, "adzuna", score(job, field, keyword)))
 
-    # --- jobs.ac.uk: universities, which are nearly all licensed sponsors -----
-    for keyword in JACUK_QUERIES:
-        for job in jobs_ac_uk(keyword):
-            title = job["title"]
-            if not _HS.search(title):
-                continue
-            if not within_days(job["posted"], JACUK_MAX_DAYS):
-                continue
-            pay = job["salary"] or 0
-            if pay and pay < NEW_ENTRANT_FLOOR:
-                continue
-            if not take(title, job["employer"]):
-                continue
-            hs.append(make_row(
-                title, job["employer"], job["location"], pay, job["posted"],
-                job["url"], "Operations", "hs", "jobs.ac.uk",
-                score({"title": title, "salary_min": pay}, "Operations", keyword),
-                deadline=job["deadline"]))
-        time.sleep(1.0)
+    # --- scraped boards: same shape, same gate, different window -------------
+    def board(name, getter, queries, max_days):
+        found = 0
+        for keyword in queries:
+            for job in getter(keyword):
+                title = job["title"]
+                if not _HS.search(title):
+                    continue
+                if not within_days(job["posted"], max_days):
+                    continue
+                pay = job["salary"] or 0
+                if pay and pay < NEW_ENTRANT_FLOOR:
+                    continue
+                if not take(title, job["employer"]):
+                    continue
+                hs.append(make_row(
+                    title, job["employer"], job["location"], pay, job["posted"],
+                    job["url"], "Operations", "hs", name,
+                    score({"title": title, "salary_min": pay}, "Operations", keyword),
+                    deadline=job["deadline"], agency=job.get("agency", False)))
+                found += 1
+            time.sleep(1.0)
+        print("%-12s %d queries -> %d kept" % (name, len(queries), found), file=sys.stderr)
+
+    board("jobs.ac.uk", jobs_ac_uk, JACUK_QUERIES, JACUK_MAX_DAYS)
+    board("reed.co.uk", reed, REED_QUERIES, REED_MAX_DAYS)
+
+    # --- optional web search: leads, not verified vacancies ------------------
+    if GOOGLE_API_KEY and GOOGLE_CSE_ID:
+        found = 0
+        for query in GOOGLE_QUERIES:
+            for hit in google_search(query):
+                title = hit["title"]
+                if not _HS.search(title) or not hit["url"]:
+                    continue
+                # No employer field to trust here, so the register decides the
+                # status rather than gating entry, and the card says as much.
+                on_register = bool(hit["employer"]) and is_sponsor(hit["employer"], sponsors)
+                key = norm(title) + "|" + norm(hit["employer"]) + "|web"
+                if key in seen:
+                    continue
+                seen.add(key)
+                hs.append(make_row(
+                    title, hit["employer"] or "employer not named", "", 0, "",
+                    hit["url"], "Operations", "hs", "google", 55,
+                    on_register=on_register))
+                found += 1
+            time.sleep(1.0)
+        print("%-12s %d queries -> %d kept" % ("google", len(GOOGLE_QUERIES), found), file=sys.stderr)
 
     for bucket in (jobs, hs):
         bucket.sort(key=lambda m: m["score"], reverse=True)
-    print("Adzuna calls:", calls, "| jobs.ac.uk queries:", len(JACUK_QUERIES), file=sys.stderr)
+    print("Adzuna calls:", calls, file=sys.stderr)
     # No PhD source is wired up yet. The dashboard renders its own empty state
     # for this section, so leave the list present but empty rather than absent.
     return {"jobs": jobs, "hs": hs, "phd": []}
@@ -352,10 +509,19 @@ def demo():
            location="Bath", salary=47389, section="hs", status="strong", field="Operations",
            source="jobs.ac.uk", posted="2026-07-17",
            deadline=(datetime.date.today() + datetime.timedelta(days=24)).isoformat()),
+        mk(score=87, title="Corporate Health and Safety Manager", employer="The Hyde Group",
+           location="London", salary=66000, section="hs", status="strong", field="Operations",
+           source="reed.co.uk"),
+        mk(score=87, title="Health and Safety Officer", employer="Hamilton Woods",
+           location="Birmingham", salary=45000, section="hs", status="caution", field="Operations",
+           source="reed.co.uk", note=classify(45000, agency=True)[1]),
         mk(score=78, title="Health and Safety Advisor", employer="Balfour Beatty", location="Manchester",
            salary=42000, section="hs", status="caution", field="Operations",
            note="Licence held. The pay clears the floor, so confirm on the advert that this role "
                 "is offered with sponsorship."),
+        mk(score=55, title="Health and Safety Manager", employer="employer not named",
+           location="", salary=None, section="hs", status="weak", field="Operations",
+           source="google", note=classify(0, on_register=False)[1]),
     ]
     return {"jobs": jobs, "hs": hs, "phd": []}
 

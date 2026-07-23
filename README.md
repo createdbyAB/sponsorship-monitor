@@ -111,6 +111,16 @@ A web search result carries a title and a link but no employer, salary or date. 
 
 **Implausible salary bands are treated as no salary.** Boards pad ranges out to catch more searches, so a role advertised as "£10,000 to £50,000" is not really offering £10,000. Where the top of the band is at least double the bottom, or the bottom is under £12,000, the figure is dropped rather than believed, and the row becomes **caution** with a note. Without this, real roles would silently vanish under the visa floor.
 
+## What is new since last time
+
+The boards behind this advertise for weeks, so most of what a run returns was already there yesterday. Every opportunity therefore carries a **`firstSeen`** date, tracked in `docs/data/seen.json` against a stable key (the advert URL without its query string, plus title and employer, so churning tracking parameters do not make an old row look new).
+
+The dashboard **opens on the New view**, which is only what turned up since the last run. One tap on **All open** gets the full list back, per section. On a quiet day you get a "nothing new" panel telling you how many are still open rather than a blank screen.
+
+Repeats are filtered, not deleted. Dropping them from the day file would be simpler, but anything you did not act on the day it appeared would vanish from your daily view while still being open for another month. `seen.json` is pruned at `SEEN_KEEP_DAYS`, currently 180.
+
+Note that **Reset** and **Clear all** land on All open rather than New. Someone clearing filters wants to see more, and returning them to a view that can be empty does the opposite.
+
 ## Marking roles done or hidden
 
 Every card has two buttons:

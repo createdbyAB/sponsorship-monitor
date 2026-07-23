@@ -462,8 +462,14 @@ let view = null;          // "YYYY-MM-DD" or "WEEK"
 let section = "jobs";
 let rows = [];
 
-const blank = () => ({show:"open", status:[], minfit:0, money:null, field:null, place:null,
-                      recency:null, sort:"fit"});
+// Opens on what turned up since the last run, because the boards behind this
+// advertise for weeks and most of a day's rows are yesterday's. One tap on
+// "All open" gets the full list back.
+// Clearing filters lands on "All open", not back on "New". Someone who presses
+// Reset or Clear all wants to see more, and sending them to a view that can be
+// empty on a quiet day does the opposite.
+const blank = (show = "new") => ({show, status:[], minfit:0, money:null, field:null, place:null,
+                                  recency:null, sort:"fit"});
 const F = {jobs: blank(), hs: blank(), phd: Object.assign(blank(), {sort:"deadline"})};
 
 /* ---------- done / hidden marks ----------
@@ -526,6 +532,7 @@ function normalise(raw, day){
       url: item.url || "",
       note: item.note || "",
       source: item.source || "",
+      firstSeen: item.firstSeen || "",
       day,
       funding: item.funding || "",
       intlEligible: item.intlEligible,
@@ -580,6 +587,15 @@ function daysToDeadline(r){
 // Everything else filters on the first part of the location string.
 const firstPlace = loc => String(loc || "").split(",")[0].trim();
 const placeOf = r => r.country || firstPlace(r.location);
+
+// The scraped boards advertise for weeks, so most of a day's rows were already
+// there yesterday. firstSeen is stamped by the pipeline against a running index.
+// Archive days written before that existed fall back to the posted date, which
+// is the best available answer for them.
+function isNew(r){
+  const ref = view === "WEEK" ? r.day : view;
+  return r.firstSeen ? r.firstSeen === ref : !!(r.posted && r.posted === ref);
+}
 const isRemote = r => /remote|home.?based|hybrid/i.test(r.location + " " + r.title);
 const sectionRows = () => rows.filter(r => r.section === section);
 
@@ -588,6 +604,7 @@ function applyFilters(list){
   const f = F[section];
   return list.filter(r => {
     const mark = markOf(r);
+    if (f.show === "new"    && (mark || !isNew(r))) return false;
     if (f.show === "open"   && mark) return false;
     if (f.show === "done"   && mark !== "done") return false;
     if (f.show === "hidden" && mark !== "hidden") return false;
@@ -658,8 +675,7 @@ function renderTiles(){
   // count, because they are still live opportunities you acted on.
   const all = sectionRows().filter(r => markOf(r) !== "hidden");
   const strong = all.filter(r => r.status === "strong").length;
-  const refDay = view === "WEEK" ? (INDEX.days[0] || {}).date : view;
-  const fresh = all.filter(r => r.posted && r.posted === refDay).length;
+  const fresh = all.filter(isNew).length;
   const caution = all.filter(r => r.status === "caution").length;
   const closing = all.filter(r => { const d = daysToDeadline(r); return d !== null && d >= 0 && d <= 14; }).length;
 
@@ -688,7 +704,9 @@ function renderRail(){
   const nDone   = all.filter(r => markOf(r) === "done").length;
   const nHidden = all.filter(r => markOf(r) === "hidden").length;
   const nOpen   = all.length - nDone - nHidden;
-  $("#f-show").innerHTML = [["open","Open",nOpen], ["done","Done",nDone], ["hidden","Hidden",nHidden]]
+  const nNew    = all.filter(r => !markOf(r) && isNew(r)).length;
+  $("#f-show").innerHTML = [["new","New",nNew], ["open","All open",nOpen],
+                            ["done","Done",nDone], ["hidden","Hidden",nHidden]]
     .map(s => '<button type="button" class="chip" data-v="' + s[0] + '" aria-pressed="' +
               (f.show === s[0]) + '">' + s[1] +
               '<span style="opacity:.55;margin-left:5px">' + s[2] + '</span></button>')
@@ -892,6 +910,18 @@ function emptyHtml(total){
   const f = F[section];
   const unit = section === "phd" ? "opening" : "role";
 
+  if (f.show === "new"){
+    const stillOpen = sectionRows().filter(r => markOf(r) !== "hidden" && markOf(r) !== "done").length;
+    return '<div class="empty">' + glyph +
+      '<h2>Nothing new today</h2>' +
+      '<p>' + (stillOpen
+        ? stillOpen + ' ' + (section === "phd" ? "opening" : "role") + (stillOpen === 1 ? " is" : "s are") +
+          ' still open from earlier runs. These boards advertise for weeks, so a quiet day is normal.'
+        : 'Nothing is open here at the moment.') + '</p>' +
+      (stillOpen ? '<div class="acts"><button type="button" class="btn" data-act="open">' +
+                   'See all ' + stillOpen + ' open</button></div>' : "") +
+      next + '</div>';
+  }
   if (f.show === "done" || f.show === "hidden"){
     return '<div class="empty">' + glyph +
       '<h2>Nothing ' + (f.show === "done" ? "marked done" : "hidden") + ' here yet</h2>' +
@@ -925,8 +955,8 @@ function emptyHtml(total){
 function wireEmpty(){
   $$("#emptyslot [data-act]").forEach(b => b.onclick = async () => {
     const a = b.dataset.act;
-    if (a === "clear") F[section] = blank();
-    if (a === "loosen"){ const f = F[section]; f.minfit = Math.max(0, f.minfit - 20); f.status = []; }
+    if (a === "clear") F[section] = blank("open");
+    if (a === "loosen"){ const f = F[section]; f.minfit = Math.max(0, f.minfit - 20); f.status = []; f.show = "open"; }
     if (a === "week"){ view = "WEEK"; await loadView(); }
     if (a === "open" || a === "done" || a === "hidden") F[section].show = a;
     renderAll();
@@ -967,7 +997,7 @@ $("#switcher").onkeydown = e => {
   $('#switcher .tab[data-sec="' + section + '"]').focus();
 };
 $("#minfit").oninput = function(){ F[section].minfit = +this.value; renderAll(); };
-$("#reset").onclick = () => { F[section] = blank(); renderAll(); };
+$("#reset").onclick = () => { F[section] = blank("open"); renderAll(); };
 
 function sheet(open){
   $("#rail").classList.toggle("open", open);

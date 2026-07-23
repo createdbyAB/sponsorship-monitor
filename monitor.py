@@ -1049,13 +1049,64 @@ def build_phds():
         print("%-12s %d queries -> %d kept" % ("phd/google", len(GOOGLE_PHD_QUERIES), n), file=sys.stderr)
     return out
 
+SEEN_PATH = os.path.join(DATA_DIR, "seen.json")
+SEEN_KEEP_DAYS = 180
+
+def opp_key(row):
+    """Stable identity for one opportunity, matching markKey in the dashboard.
+
+    The query string is dropped so tracking parameters that churn between runs
+    do not make yesterday's row look new today.
+    """
+    url = (row.get("url") or "").split("?")[0]
+    return "%s|%s|%s" % (url, row.get("title") or "", row.get("employer") or "")
+
+def stamp_first_seen(day, today):
+    """Record the first date each opportunity appeared, and stamp every row.
+
+    The scraped boards advertise for weeks, so most of what a run returns was
+    already there yesterday. Rather than dropping repeats, which would bury
+    anything not acted on the day it appeared, every row carries the date it
+    turned up and the dashboard filters on that.
+    """
+    try:
+        with open(SEEN_PATH) as f:
+            seen = json.load(f)
+    except Exception:
+        seen = {}
+
+    fresh = 0
+    for section in ("jobs", "hs", "phd"):
+        for row in day[section]:
+            key = opp_key(row)
+            first = seen.get(key)
+            if not first:
+                first = today
+                seen[key] = today
+                fresh += 1
+            row["firstSeen"] = first
+
+    # Keep the index from growing without bound. An advert older than this is
+    # long closed, and if it ever reappears being called new again is harmless.
+    cutoff = (datetime.date.fromisoformat(today)
+              - datetime.timedelta(days=SEEN_KEEP_DAYS)).isoformat()
+    seen = {k: v for k, v in seen.items() if v >= cutoff}
+
+    with open(SEEN_PATH, "w") as f:
+        json.dump(seen, f, indent=0, sort_keys=True)
+    return fresh
+
 def write(day):
     os.makedirs(DATA_DIR, exist_ok=True)
     today = datetime.date.today().isoformat()
     floors = {"newEntrant": NEW_ENTRANT_FLOOR, "general": GENERAL_FLOOR}
     total = sum(len(day[k]) for k in ("jobs", "hs", "phd"))
+    fresh = stamp_first_seen(day, today)
+    print("New since the last run:", fresh, "of", total, file=sys.stderr)
     payload = {"date": today, "count": total, "floors": floors,
                "counts": {k: len(day[k]) for k in ("jobs", "hs", "phd")},
+               "new": {k: sum(1 for r in day[k] if r.get("firstSeen") == today)
+                       for k in ("jobs", "hs", "phd")},
                "jobs": day["jobs"], "hs": day["hs"], "phd": day["phd"]}
     with open(os.path.join(DATA_DIR, today + ".json"), "w") as f:
         json.dump(payload, f, indent=2)

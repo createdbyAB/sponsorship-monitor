@@ -596,8 +596,13 @@ def classify_phd(funding, intl):
 # Google's robots.txt disallows /search, so the result pages are off limits.
 # The Programmable Search JSON API is the supported way to run a web search, so
 # that is what this uses, and only when both credentials are present.
+# Set once the API refuses us. A key or project problem is the same for every
+# query, so there is no sense making the other seven calls and printing seven
+# identical errors. Cleared on the next run.
+_GOOGLE_OFF = [False]
+
 def google_search(query, limit=10):
-    if not (GOOGLE_API_KEY and GOOGLE_CSE_ID):
+    if not (GOOGLE_API_KEY and GOOGLE_CSE_ID) or _GOOGLE_OFF[0]:
         return []
     q = urllib.parse.urlencode({"key": GOOGLE_API_KEY, "cx": GOOGLE_CSE_ID,
                                 "q": query, "num": min(10, limit)})
@@ -625,10 +630,19 @@ def google_search(query, limit=10):
                     extra.append("reason=" + sub["reason"])
         except Exception:
             pass
-        mask = lambda s: s.replace(GOOGLE_API_KEY, "***").replace(GOOGLE_CSE_ID, "***")
+        def mask(s):
+            # Only redact values long enough to be real secrets, or a short test
+            # value chews holes in the message it is meant to make readable.
+            for secret in (GOOGLE_API_KEY, GOOGLE_CSE_ID):
+                if len(secret) >= 12:
+                    s = s.replace(secret, "***")
+            return s
         print("google error %s: %s | %s" % (e.code, query[:34], mask(reason)[:180]), file=sys.stderr)
         for line in dict.fromkeys(extra):
             print("    %s" % mask(line)[:200], file=sys.stderr)
+        if e.code in (400, 401, 403):
+            _GOOGLE_OFF[0] = True
+            print("    google disabled for the rest of this run", file=sys.stderr)
         return []
     except Exception as e:
         print("google error:", query[:40], e, file=sys.stderr)

@@ -16,7 +16,8 @@ colour, icon and word on its card. Standard library only.
 Run:  python monitor.py         (live)
       python monitor.py --demo  (writes sample data)
 """
-import os, re, csv, io, json, sys, time, html, datetime, difflib, urllib.parse, urllib.request
+import os, re, csv, io, json, sys, time, html, datetime, difflib, http.cookiejar
+import urllib.parse, urllib.request, urllib.error
 
 ADZUNA_ID  = os.environ.get("ADZUNA_ID", "")
 ADZUNA_KEY = os.environ.get("ADZUNA_KEY", "")
@@ -95,8 +96,11 @@ PHD_INTERESTS = [
     (r"life cycle assess|\blca\b|techno-?economic", 8),
     (r"wastewater|water treatment|effluent|pollution", 8),
 ]
+# "\bchem" is deliberately broad: it takes chemical, chemistry, electrochemical
+# and project names like e-ChemIn, all of which are on topic for a chemical
+# engineer, while leaving generic academic posts out.
 PHD_FIELD = re.compile(r"chemical engineer|process engineer|chemical (?:and|&) biological|"
-                       r"chem(?:ical)? eng\b|energy engineer|environmental engineer", re.I)
+                       r"chem(?:ical)? eng\b|energy engineer|environmental engineer|\bchem", re.I)
 
 # Countries worth watching beyond the UK. Used to label a row and to fill the
 # country filter on the dashboard.
@@ -399,6 +403,19 @@ def country_of(text, url="", default="UK"):
         return "USA"
     return default
 
+def phd_relevant(text):
+    """Is this actually in the field, or near one of the research interests?
+
+    A source whose keyword search quietly stops working returns its generic
+    listing instead of an error, which is how "Assistant professor in
+    humanistic sciences" ended up in a chemical engineering tab. Judging every
+    row on its own text means a broken search yields nothing rather than junk.
+    """
+    text = text or ""
+    if PHD_FIELD.search(text):
+        return True
+    return any(re.search(p, text, re.I) for p, _ in PHD_INTERESTS)
+
 def phd_interest_score(text):
     """Fit against the research interests, plus a bonus for the field itself."""
     s = 45
@@ -460,6 +477,31 @@ _E_POST  = re.compile(r'Posted on:\s*(\d{1,2} [A-Za-z]+ \d{4})')
 _E_LOC   = re.compile(r'Number of offers:[^,]*,\s*([^,<]+)')
 _E_DEAD  = re.compile(r'Application Deadline\s*:?\s*(\d{1,2} [A-Za-z]{3,} \d{4})', re.I)
 
+def _euraxess_session():
+    """A cookie-carrying opener, warmed up on the plain search page.
+
+    Without this the site answered every query with the same 187kB default
+    page from a data centre IP, ignoring both the keyword facet and the page
+    number, so six searches collapsed into one set of ten results. It behaved
+    from a laptop, which is what made it easy to miss."""
+    jar = http.cookiejar.CookieJar()
+    op = urllib.request.build_opener(_Redirect, urllib.request.HTTPCookieProcessor(jar))
+    try:
+        _euraxess_get(op, "https://euraxess.ec.europa.eu/jobs/search")
+        time.sleep(0.5)
+    except Exception as e:
+        print("euraxess warm-up failed:", e, file=sys.stderr)
+    return op
+
+def _euraxess_get(opener, url):
+    req = urllib.request.Request(url, headers={
+        "User-Agent": UA,
+        "Accept": "text/html,application/xhtml+xml",
+        "Accept-Language": "en-GB,en;q=0.9",
+    })
+    with opener.open(req, timeout=90) as r:
+        return r.read().decode("utf-8", "replace")
+
 def _longdate(s):
     for fmt in ("%d %B %Y", "%d %b %Y"):
         try:
@@ -470,12 +512,13 @@ def _longdate(s):
 
 def euraxess(keyword, pages=EURAXESS_PAGES):
     out = []
+    warm = _euraxess_session()
     for p in range(pages):
         q = urllib.parse.urlencode({"f[0]": "keywords:" + keyword,
                                     "f[1]": "job_research_profile:" + EURAXESS_R1,
                                     "page": p})
         try:
-            page = fetch("https://euraxess.ec.europa.eu/jobs/search?" + q)
+            page = _euraxess_get(warm, "https://euraxess.ec.europa.eu/jobs/search?" + q)
         except Exception as e:
             print("euraxess error:", keyword, e, file=sys.stderr)
             break
@@ -789,18 +832,26 @@ def build_phds():
           % ("phd/jobs.ac", len(PHD_QUERIES), len(out), min(len(out), PHD_ENRICH)), file=sys.stderr)
 
     # --- EURAXESS: doctoral posts across Europe and its partner portals ------
-    euro = []
+    euro, offtopic = [], 0
     for keyword in EURAXESS_QUERIES:
         for row in euraxess(keyword):
             key = norm(row["title"]) + "|" + norm(row["employer"])
             if key in seen or not row["title"]:
                 continue
+            blurb = row["title"] + " " + row["employer"]
+            if not phd_relevant(blurb):
+                offtopic += 1
+                continue
             if not within_days(row["posted"], PHD_MAX_DAYS):
                 continue
             seen.add(key)
-            row["score"] = phd_interest_score(row["title"] + " " + row["employer"])
+            row["score"] = phd_interest_score(blurb)
             euro.append(row)
         time.sleep(1.0)
+    if offtopic:
+        print("  euraxess dropped %d off-topic rows%s" % (offtopic,
+              " (search looks broken, it is returning its generic listing)"
+              if not euro else ""), file=sys.stderr)
     euro.sort(key=lambda r: r["score"], reverse=True)
     for i, row in enumerate(euro):
         extra = {}

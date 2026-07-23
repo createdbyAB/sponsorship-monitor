@@ -42,7 +42,11 @@ EURAXESS searches by POST, but the redirect reveals that keywords are really a f
 
 A Marie Sklodowska-Curie post is the one case where eligibility can be stated without guessing: MSCA funding is open to any nationality by design, subject to a mobility rule, so those are marked strong and the note says what to check. Other European doctoral posts are usually salaried contracts rather than student stipends, and rarely state nationality rules, so they land as caution with a note saying so.
 
-FindAPhD is not used: it sits behind a Cloudflare challenge that returns a CAPTCHA even for `robots.txt`, and getting past that means defeating bot detection. Nature Careers is parseable and genuinely global, so it is the obvious next source if the Google route is not enough.
+**FindAPhD** is not used: it sits behind a Cloudflare challenge that returns a CAPTCHA even for `robots.txt`.
+
+**Nature Careers** was tried and dropped. Its listing pages parse cleanly, but the `q` parameter on `/naturecareers/jobs/` is silently ignored: "carbon capture", "quantum physics" and "marine biology" all return the same unfiltered list. The endpoint that does search, `/naturecareers/jobs/search`, is disallowed in their `robots.txt`, as is their jobs RSS feed. What is left is an unfiltered board that is mostly postdoc and faculty posts, so it would have cost a pile of requests for a couple of noisy rows a day.
+
+Both are indexed by Google, which is the point of the next section: the search engine reaches the sites the scrapers cannot.
 
 ## Where the data comes from
 
@@ -67,7 +71,32 @@ Whatever a source returns, a row only lands in the H&S tab if its **title** matc
 
 ### Turning on the Google source
 
-It is off unless both secrets exist. Create a [Programmable Search Engine](https://programmablesearchengine.google.com/) set to search the whole web, get an API key from the [Custom Search JSON API](https://developers.google.com/custom-search/v1/overview) (100 queries a day free), then add `GOOGLE_API_KEY` and `GOOGLE_CSE_ID` under *Settings → Secrets and variables → Actions*.
+It is off unless both secrets exist.
+
+1. Create a [Programmable Search Engine](https://programmablesearchengine.google.com/). The create form asks for sites to search, and a site-restricted engine is the better choice here: it reaches the job boards the scrapers cannot, without dragging in the rest of the web. Add the domains below, one per *Add*. The engine ID it gives you is `GOOGLE_CSE_ID`.
+2. Get a key from the [Custom Search JSON API](https://developers.google.com/custom-search/v1/overview). 100 queries a day free; the monitor uses 8. That is `GOOGLE_API_KEY`.
+3. Add both under *Settings → Secrets and variables → Actions*.
+
+Worth adding to the engine, in rough order of usefulness. The first three are exactly the sites that block scraping, so this is how their content gets in:
+
+```
+*.findaphd.com
+*.academicpositions.com
+*.nature.com
+*.phdportal.com
+*.jobrxiv.org
+*.academicjobsonline.org
+*.universityaffairs.ca
+*.higheredjobs.com
+*.timeshighereducation.com
+*.seek.com.au
+*.gradconnection.com.au
+*.scholarshipdb.net
+*.euraxess.ec.europa.eu
+*.jobs.ac.uk
+```
+
+To search the open web instead, create the engine with any single site, then turn on **Search the entire web** in its settings afterwards. That casts wider but returns far more noise, and every web row is marked weak regardless.
 
 A web search result carries a title and a link but no employer, salary or date. The monitor guesses the employer from the page title and, because nothing has confirmed it against the register, marks every one of these rows **weak** with a note saying so. Treat them as leads to look into, not as checked vacancies. If you find them noisy, untick Weak in the Eligibility filter and they disappear.
 

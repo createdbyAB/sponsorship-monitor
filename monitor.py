@@ -136,10 +136,16 @@ GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY", "")
 GOOGLE_CSE_ID  = os.environ.get("GOOGLE_CSE_ID", "")
 GOOGLE_QUERIES = ["health and safety manager visa sponsorship UK",
                   "health and safety advisor jobs UK sponsorship"]
+# These carry the countries the scraped sources cannot reach. Point the search
+# engine at the PhD boards listed in the README and these stay on topic; each
+# query costs one of the 100 free calls a day, so there is plenty of headroom.
 GOOGLE_PHD_QUERIES = [
-    "funded PhD chemical engineering carbon capture international students USA",
-    "fully funded PhD position waste valorisation Canada international",
-    "PhD studentship chemical engineering sustainability fully funded international",
+    "fully funded PhD chemical engineering carbon capture USA international students",
+    "fully funded PhD waste valorisation circular economy Canada international",
+    "PhD scholarship chemical engineering sustainability Australia international",
+    "PhD scholarship carbon capture New Zealand funded international",
+    "funded PhD position CO2 utilisation chemical engineering international",
+    "PhD studentship biomass valorisation fully funded international students",
 ]
 
 NEW_ENTRANT_FLOOR = 33400   # early-career Skilled Worker rate (applies to AB)
@@ -367,13 +373,29 @@ def reed(keyword, pages=REED_PAGES):
 _J_FUNDFOR = re.compile(r"Funding for:\s*([^\n]{0,120}?)\s*(?:Funding amount|Hours|Placed On|Closes)", re.I)
 _J_FUNDAMT = re.compile(r"Funding amount:\s*([^\n]{0,120}?)\s*(?:Hours|Placed On|Closes)", re.I)
 
-def country_of(text):
-    """Best guess at the country from a location string. jobs.ac.uk is a UK
-    site listing mostly UK institutions, so UK is the fallback, not a claim."""
+# Country-code top level domains, for rows whose only clue is a link. Deliberately
+# excludes .edu, which is mostly but not only American.
+_TLD = {"ca": "Canada", "au": "Australia", "nz": "New Zealand", "de": "Germany",
+        "fr": "France", "es": "Spain", "it": "Italy", "nl": "Netherlands",
+        "se": "Sweden", "ch": "Switzerland", "be": "Belgium", "dk": "Denmark",
+        "no": "Norway", "fi": "Finland", "ie": "Ireland", "at": "Austria",
+        "pt": "Portugal", "pl": "Poland", "sg": "Singapore", "jp": "Japan",
+        "uk": "UK", "us": "USA"}
+
+def country_of(text, url="", default="UK"):
+    """Best guess at the country. Place names first, then the domain of the link
+    if there is one. jobs.ac.uk is a UK site listing mostly UK institutions, so
+    UK is a sensible fallback there, but web search results get no such default."""
     for name, pattern in COUNTRY_HINTS:
         if re.search(pattern, text or "", re.I):
             return name
-    return "UK"
+    host = urllib.parse.urlparse(url or "").hostname or ""
+    bits = host.lower().rsplit(".", 2)
+    if len(bits) >= 2 and bits[-1] in _TLD:
+        return _TLD[bits[-1]]
+    if host.endswith(".edu"):
+        return "USA"
+    return default
 
 def phd_interest_score(text):
     """Fit against the research interests, plus a bonus for the field itself."""
@@ -802,7 +824,8 @@ def build_phds():
                 if key in seen:
                     continue
                 seen.add(key)
-                country = country_of(hit["title"] + " " + hit["employer"] + " " + hit["url"])
+                country = country_of(hit["title"] + " " + hit["employer"],
+                                     hit["url"], default="")
                 out.append({
                     "score": min(100, phd_interest_score(hit["title"])), "title": hit["title"],
                     "field": "Research", "employer": hit["employer"] or "institution not named",

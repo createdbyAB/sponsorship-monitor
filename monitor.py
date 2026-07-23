@@ -8,7 +8,7 @@ writes a dated JSON archive that docs/index.html renders as a dashboard.
 Output is split into the three sections the dashboard shows:
     jobs  sponsored roles across the monitored fields
     hs    health and safety roles, which get the salary vs visa floor check
-    phd   funded PhD openings (no source wired up yet, so always empty)
+    phd   funded PhD openings, ranked against the research interests below
 
 Each opportunity carries a status of strong / caution / weak, which drives the
 colour, icon and word on its card. Standard library only.
@@ -140,6 +140,13 @@ COUNTRY_HINTS = [
 # in the GitHub UI and makes every call come back 400.
 GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY", "").strip()
 GOOGLE_CSE_ID  = os.environ.get("GOOGLE_CSE_ID", "").strip()
+
+# The engine id is easy to copy wrong, and Google answers a wrong one with a
+# flat "Request contains an invalid argument" that names nothing. Recover the id
+# from a pasted public URL or a "cx=..." fragment rather than failing all day.
+if "cx=" in GOOGLE_CSE_ID:
+    GOOGLE_CSE_ID = GOOGLE_CSE_ID.split("cx=", 1)[1].split("&", 1)[0].strip()
+GOOGLE_CSE_ID = GOOGLE_CSE_ID.strip("/?& ")
 GOOGLE_QUERIES = ["health and safety manager visa sponsorship UK",
                   "health and safety advisor jobs UK sponsorship"]
 # These carry the countries the scraped sources cannot reach. Point the search

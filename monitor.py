@@ -606,13 +606,29 @@ def google_search(query, limit=10):
     except urllib.error.HTTPError as e:
         # The status alone says nothing useful. Google puts the actual complaint
         # in the body, so surface it, minus anything that could echo the key.
+        reason, extra = "", []
         try:
-            body = json.loads(e.read().decode("utf-8", "replace"))
-            reason = body.get("error", {}).get("message", "")
+            err = json.loads(e.read().decode("utf-8", "replace")).get("error", {})
+            reason = err.get("message", "")
+            # A 403 for a disabled service names the project it was refused for,
+            # which is the only way to tell "not enabled" apart from "enabled on
+            # a different project to the one the key belongs to".
+            for d in err.get("details", []):
+                consumer = (d.get("metadata") or {}).get("consumer")
+                if consumer:
+                    extra.append(consumer)
+                for link in d.get("links", []):
+                    if link.get("url"):
+                        extra.append(link["url"])
+            for sub in err.get("errors", []):
+                if sub.get("reason"):
+                    extra.append("reason=" + sub["reason"])
         except Exception:
-            reason = ""
-        reason = reason.replace(GOOGLE_API_KEY, "***").replace(GOOGLE_CSE_ID, "***")
-        print("google error %s: %s | %s" % (e.code, query[:40], reason[:200]), file=sys.stderr)
+            pass
+        mask = lambda s: s.replace(GOOGLE_API_KEY, "***").replace(GOOGLE_CSE_ID, "***")
+        print("google error %s: %s | %s" % (e.code, query[:34], mask(reason)[:180]), file=sys.stderr)
+        for line in dict.fromkeys(extra):
+            print("    %s" % mask(line)[:200], file=sys.stderr)
         return []
     except Exception as e:
         print("google error:", query[:40], e, file=sys.stderr)

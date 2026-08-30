@@ -61,6 +61,8 @@ The card leads with the hourly rate, and the status colour is the pay tier: gree
 
 CV fit is the **tiebreak**, not the grade: two roles at the same rate, the one that uses your background (customer-facing, admin, data, operations) sorts first and shows a warmer fit tag. Tune `PT_FIT` in `monitor.py` to change what counts as a fit; nothing there filters anything out, it only orders ties and labels the card. Change the city with `PT_LOCATION`, the search terms with `PT_QUERIES`, and the pay-tier thresholds with `PT_GOOD_RATE` / `PT_FAIR_RATE`.
 
+**Shift filter.** For working around a day job, when the hours fall matters. Adzuna has no shift field, so the shift is read from the title and description: evening, weekend, flexible, or an explicit weekday-daytime clash. Most adverts do not say, so those are tagged **unstated** and shown, not dropped. The rail's Shift filter is multi-select and off by default: tick Evenings and Weekends for a strict list (turning it on also drops the explicit Mon-Fri daytime roles), add Flexible and Unstated to widen. The run logs how many of each it found; a typical day tags roughly a fifth and leaves the rest unstated.
+
 ## Where the data comes from
 
 | Source | Used for | How | Needs a key |

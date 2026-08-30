@@ -365,6 +365,7 @@ button{font:inherit;color:inherit;background:none;border:none;padding:0;cursor:p
     <button class="tab" role="tab" data-sec="jobs" aria-selected="true">JOBS</button>
     <button class="tab" role="tab" data-sec="hs" aria-selected="false">H&amp;S</button>
     <button class="tab" role="tab" data-sec="phd" aria-selected="false">PHD</button>
+    <button class="tab" role="tab" data-sec="pt" aria-selected="false">PART-TIME</button>
   </div>
 
   <div class="body">
@@ -379,16 +380,18 @@ button{font:inherit;color:inherit;background:none;border:none;padding:0;cursor:p
       <div class="cap" id="cap-first">Show</div>
       <div class="chips" id="f-show"></div>
 
-      <div class="cap">Eligibility</div>
+      <div class="cap" id="cap-elig">Eligibility</div>
       <div class="chips" id="f-status">
         <button type="button" class="chip strong" data-v="strong" aria-pressed="false">&#10003; Strong</button>
         <button type="button" class="chip caution" data-v="caution" aria-pressed="false">&#9888; Caution</button>
         <button type="button" class="chip weak" data-v="weak" aria-pressed="false">&#10005; Weak</button>
       </div>
 
-      <div class="cap"><label for="minfit">Minimum fit score</label></div>
-      <input class="slider" id="minfit" type="range" min="0" max="95" step="5" value="0">
-      <div class="scaleline"><span>0</span><span class="cur mono" id="minfit-val">any</span><span>100</span></div>
+      <div id="minfit-wrap">
+        <div class="cap"><label for="minfit">Minimum fit score</label></div>
+        <input class="slider" id="minfit" type="range" min="0" max="95" step="5" value="0">
+        <div class="scaleline"><span>0</span><span class="cur mono" id="minfit-val">any</span><span>100</span></div>
+      </div>
 
       <div id="f-money-wrap">
         <div class="cap" id="f-money-cap">Salary</div>
@@ -449,15 +452,21 @@ const money = n => n ? "£" + Number(n).toLocaleString("en-GB") : null;
 const shortMoney = n => n ? "£" + Math.round(n / 1000) + "k" : "salary not stated";
 
 /* ---------- state ---------- */
-const SECTIONS = ["jobs", "hs", "phd"];
-const SECTION_NAME = {jobs:"sponsored jobs", hs:"health and safety", phd:"funded PhDs"};
+const SECTIONS = ["jobs", "hs", "phd", "pt"];
+const SECTION_NAME = {jobs:"sponsored jobs", hs:"health and safety", phd:"funded PhDs",
+                      pt:"part-time Leicester"};
 const STATUS_ORDER = {strong:0, caution:1, weak:2};
 const STATUS_LABEL = {strong:"✓ Strong", caution:"⚠ Caution", weak:"✕ Weak"};
 const MONEY_TIERS = [[40000, "£40k+"], [60000, "£60k+"], [80000, "£80k+"]];
+// Part-time is filtered by hourly rate, not annual salary.
+const RATE_TIERS  = [[11, "£11+"], [13, "£13+"], [15, "£15+"]];
 const SORTS = {
   jobs: [["fit","Fit ↓"], ["new","Newest"], ["salary","Salary ↓"]],
   hs:   [["fit","Fit ↓"], ["new","Newest"], ["salary","Salary ↓"]],
-  phd:  [["deadline","Closing soon"], ["fit","Fit ↓"], ["new","Newest"]]
+  phd:  [["deadline","Closing soon"], ["fit","Fit ↓"], ["new","Newest"]],
+  // "Rate" reuses the score-desc path, since a part-time row's score is its
+  // pay tier; ties fall to CV fit then newest.
+  pt:   [["fit","Rate ↓"], ["new","Newest"]]
 };
 
 let INDEX = {days:[], updated:""};
@@ -475,7 +484,7 @@ let rows = [];
 // empty on a quiet day does the opposite.
 const blank = (show = "new") => ({show, status:[], minfit:0, money:null, field:null, place:null,
                                   recency:null, sort:"fit"});
-const F = {jobs: blank(), hs: blank(), phd: Object.assign(blank(), {sort:"deadline"})};
+const F = {jobs: blank(), hs: blank(), phd: Object.assign(blank(), {sort:"deadline"}), pt: blank()};
 
 /* ---------- done / hidden marks ----------
    Kept in this browser only, since the site is static. Keyed on the advert URL
@@ -543,12 +552,16 @@ function normalise(raw, day){
       intlEligible: item.intlEligible,
       deadline: item.deadline || "",
       stipend: item.stipend || null,
-      country: item.country || ""
+      country: item.country || "",
+      // part-time only
+      hourly: (item.hourly === 0 || item.hourly) ? item.hourly : null,
+      fit: Number(item.fit) || 0
     });
   };
   if (Array.isArray(raw.jobs)) raw.jobs.forEach(j => push(j, HS_RE.test(j.title || "") ? "hs" : "jobs"));
   if (Array.isArray(raw.hs))   raw.hs.forEach(j => push(j, "hs"));
   if (Array.isArray(raw.phd))  raw.phd.forEach(j => push(j, "phd"));
+  if (Array.isArray(raw.pt))   raw.pt.forEach(j => push(j, "pt"));
   if (raw.floors) FLOORS = Object.assign({}, FLOORS, raw.floors);
   return out;
 }
@@ -616,7 +629,9 @@ function applyFilters(list){
     if (f.status.length && f.status.indexOf(r.status) < 0) return false;
     if (f.minfit && r.score < f.minfit) return false;
     if (f.money){
-      const v = section === "phd" ? (r.stipend || 0) : (r.salary || 0);
+      const v = section === "phd" ? (r.stipend || 0)
+              : section === "pt"  ? (r.hourly || 0)
+              : (r.salary || 0);
       if (!v || v < f.money) return false;
     }
     if (f.field && r.field !== f.field) return false;
@@ -643,7 +658,10 @@ function sortRows(list){
   else if (f.sort === "deadline")
     c.sort((a, b) => (a.deadline || "9999").localeCompare(b.deadline || "9999") || byScore(a, b));
   else
-    c.sort((a, b) => byScore(a, b) || (STATUS_ORDER[a.status] - STATUS_ORDER[b.status]));
+    // Score first. For part-time that is the pay tier, so equal-paying roles
+    // fall to CV fit, then status. Harmless elsewhere, where fit is undefined.
+    c.sort((a, b) => byScore(a, b) || ((b.fit || 0) - (a.fit || 0))
+                     || (STATUS_ORDER[a.status] - STATUS_ORDER[b.status]));
   return c;
 }
 
@@ -690,11 +708,16 @@ function renderTiles(){
     '<span class="' + (i >= hist.length - 2 ? "on" : "") + '" style="height:' +
     Math.max(12, Math.round(c / peak * 100)) + '%"></span>').join("");
 
-  const fourth = section === "phd" ? {lab:"Closing soon", n:closing} : {lab:"Needs a check", n:caution};
+  const weak = all.filter(r => r.status === "weak").length;
+  const fourth = section === "phd" ? {lab:"Closing soon", n:closing}
+               : section === "pt"  ? {lab:"Low / unstated", n:weak}
+               : {lab:"Needs a check", n:caution};
+  // On part-time the loud number is how many clear a good hourly rate.
+  const heroLab = section === "pt" ? "Good rate" : "Strong matches";
 
   $("#tiles").innerHTML =
     '<div class="tile hero">' +
-      '<div><div class="lab">Strong matches</div><div class="num">' + strong + '</div></div>' +
+      '<div><div class="lab">' + heroLab + '</div><div class="num">' + strong + '</div></div>' +
       '<div class="spark" aria-hidden="true">' + spark + '</div>' +
     '</div>' +
     '<div class="tile"><div class="num">' + fresh + '</div><div class="lab">New today</div></div>' +
@@ -717,12 +740,25 @@ function renderRail(){
               '<span style="opacity:.55;margin-left:5px">' + s[2] + '</span></button>')
     .join("");
 
-  $$("#f-status .chip").forEach(b => b.setAttribute("aria-pressed", f.status.indexOf(b.dataset.v) >= 0));
+  // On part-time the status colours mean pay tiers, not sponsorship, so the
+  // heading and chip words follow the section. The fit-score slider is hidden
+  // there because the Min rate chips already filter on pay.
+  const ptTier = section === "pt";
+  $("#cap-elig").textContent = ptTier ? "Pay tier" : "Eligibility";
+  const STATUS_WORD = ptTier ? {strong:"✓ Good", caution:"⚠ Fair", weak:"✕ Low"}
+                             : {strong:"✓ Strong", caution:"⚠ Caution", weak:"✕ Weak"};
+  $$("#f-status .chip").forEach(b => {
+    b.setAttribute("aria-pressed", f.status.indexOf(b.dataset.v) >= 0);
+    b.textContent = STATUS_WORD[b.dataset.v];
+  });
+  $("#minfit-wrap").style.display = ptTier ? "none" : "";
   $("#minfit").value = f.minfit;
   $("#minfit-val").textContent = f.minfit ? "≥ " + f.minfit : "any";
 
-  $("#f-money-cap").textContent = section === "phd" ? "Stipend" : "Salary";
-  $("#f-money").innerHTML = MONEY_TIERS.map(t =>
+  $("#f-money-cap").textContent = section === "phd" ? "Stipend"
+                                : section === "pt"  ? "Min rate" : "Salary";
+  const moneyTiers = section === "pt" ? RATE_TIERS : MONEY_TIERS;
+  $("#f-money").innerHTML = moneyTiers.map(t =>
     '<button type="button" class="chip" data-v="' + t[0] + '" aria-pressed="' + (f.money === t[0]) + '">' +
     t[1] + '</button>').join("");
 
@@ -772,9 +808,11 @@ function wireChips(){
 function renderActive(){
   const f = F[section];
   const bits = [];
-  f.status.forEach(s => bits.push([s, STATUS_LABEL[s], () => { f.status = f.status.filter(x => x !== s); }]));
+  const statusWord = section === "pt" ? {strong:"✓ Good", caution:"⚠ Fair", weak:"✕ Low"} : STATUS_LABEL;
+  f.status.forEach(s => bits.push([s, statusWord[s], () => { f.status = f.status.filter(x => x !== s); }]));
   if (f.minfit)  bits.push(["", "fit ≥ " + f.minfit, () => { f.minfit = 0; }]);
-  if (f.money)   bits.push(["", (section === "phd" ? "stipend " : "") + "£" + Math.round(f.money / 1000) + "k+",
+  if (f.money)   bits.push(["", section === "pt" ? "£" + f.money + "/hr+"
+                              : (section === "phd" ? "stipend " : "") + "£" + Math.round(f.money / 1000) + "k+",
                             () => { f.money = null; }]);
   if (f.field)   bits.push(["", f.field, () => { f.field = null; }]);
   if (f.place)   bits.push(["", f.place, () => { f.place = null; }]);
@@ -814,6 +852,24 @@ function cardHtml(r){
       '<span class="mono" style="font-size:10.5px;color:var(--text-55)">' +
         (r.stipend ? esc(money(r.stipend)) + "/yr + fees" : "stipend not stated") + '</span>' +
       '<span class="mono" style="font-size:10.5px;color:var(--caution-tx)">' + when + '</span></div>';
+  } else if (r.section === "pt"){
+    // Fit is the tiebreak, not the grade, so it rides as a quiet tag while the
+    // status chip below carries the pay tier that actually orders the list.
+    const fit = r.fit || 0;
+    const fitTag = fit >= 70 ? '<span class="tag strong">GOOD FIT</span>'
+                 : fit >= 50 ? '<span class="tag caution">FAIR FIT</span>'
+                 : '<span class="tag">BASIC FIT</span>';
+    body = '<div class="tags">' + fitTag + '</div>';
+    const age = ageDays(r);
+    const facts = [
+      r.salary ? "≈" + shortMoney(r.salary) + "/yr FTE" : null,
+      age === null ? null : (age === 0 ? "today" : age + "d")
+    ].filter(Boolean).join(" · ");
+    const label = r.status === "strong" ? "GOOD RATE"
+                : r.status === "caution" ? "FAIR RATE" : "LOW · CHECK";
+    foot = '<div class="cardfoot ruled">' +
+      '<span class="status ' + r.status + '"><span class="dot" aria-hidden="true"></span>' + label + '</span>' +
+      '<span class="facts">' + esc(facts) + '</span></div>';
   } else {
     if (r.section === "hs" && r.salary){
       const floor = FLOORS.general;
@@ -857,14 +913,24 @@ function cardHtml(r){
         '<button type="button" class="act no" data-mark="hidden" data-key="' + esc(key) + '">✕ HIDE</button>' +
       '</div>';
 
+  // Part-time leads with the hourly rate, since pay is the grade there; every
+  // other section leads with the 0-100 fit score.
+  const heroNum = r.section === "pt"
+    ? (r.hourly != null ? "£" + Number(r.hourly).toFixed(2) : "—")
+    : r.score;
+  const heroLab = r.section === "pt" ? "/HR" : "FIT";
+  const heroAria = r.section === "pt"
+    ? (r.hourly != null ? "Estimated rate " + heroNum + " per hour" : "Rate not stated")
+    : "Fit score " + r.score + " out of 100";
+
   return '<article class="card ' + r.status + (mark ? " marked" : "") + '">' +
     '<div class="cardtop"><div style="min-width:0">' +
       '<div class="title"><a class="tlink" href="' + esc(r.url || "#") + '" target="_blank" rel="noopener">' +
         esc(r.title) + '</a></div>' +
       '<div class="where">' + esc(where) +
         (r.source ? '<span class="src">' + esc(r.source) + '</span>' : "") + '</div></div>' +
-      '<div class="fit"><span class="n">' + r.score + '</span><span class="k">FIT</span></div></div>' +
-    '<div class="gauge" role="img" aria-label="Fit score ' + r.score + ' out of 100">' + gauge + '</div>' +
+      '<div class="fit"><span class="n">' + heroNum + '</span><span class="k">' + heroLab + '</span></div></div>' +
+    '<div class="gauge" role="img" aria-label="' + heroAria + '">' + gauge + '</div>' +
     body + foot + note + actions + '</article>';
 }
 
@@ -978,7 +1044,10 @@ const FOOTNOTE = {
         "floor, which is a guide, not the decision.",
   phd:  "A studentship is not a Skilled Worker vacancy, so the sponsor register does not apply here. " +
         "What matters is whether the funding covers fees and a stipend, and whether an international " +
-        "student can hold it. Both come from the advert, so confirm them there."
+        "student can hold it. Both come from the advert, so confirm them there.",
+  pt:   "Part-time roles in Leicester, ranked by pay. The hourly rate is an <em>estimate</em> from the " +
+        "advertised figure, so a genuinely part-time salary can read low. Confirm the rate and the hours " +
+        "on the advert. No sponsor check applies, and term-time student work is capped at 20 hours a week."
 };
 
 function renderAll(){

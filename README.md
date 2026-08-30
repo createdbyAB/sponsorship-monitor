@@ -4,15 +4,16 @@ A daily dashboard of recent UK jobs at employers **licensed to sponsor a Skilled
 
 The interface is the **Control Room** design system: dark mode first, mobile first, with light mode as a first-class swap of the same tokens. Every card leads with the two things worth judging fast, a fit score out of 100 and an eligibility status. Status colour is always paired with an icon and a word, so colour never carries meaning on its own.
 
-## The three sections
+## The four sections
 
-One shell, one card language, three tabs.
+One shell, one card language, four tabs.
 
 | Tab | What it holds | What the card adds |
 | --- | --- | --- |
 | **Jobs** | sponsored roles across the monitored fields | salary, posted age |
 | **H&S** | health and safety roles, routed by job title | salary vs visa floor meter |
 | **PhD** | funded chemical engineering studentships | funding, international eligibility, deadline |
+| **Part-time** | part-time roles in Leicester, no sponsor check | estimated hourly rate, pay tier, CV-fit tag |
 
 ## Funded PhDs
 
@@ -52,12 +53,20 @@ A Marie Sklodowska-Curie post is the one case where eligibility can be stated wi
 
 Both are indexed by Google, which is the point of the next section: the search engine reaches the sites the scrapers cannot.
 
+## Part-time Leicester
+
+A different section with different rules. These are ordinary jobs to earn alongside study, so **there is no sponsor gate**, and the grade is **pay per hour**, not sponsorship. Term-time student work is capped at 20 hours a week, so only roles Adzuna tags part-time are kept.
+
+The card leads with the hourly rate, and the status colour is the pay tier: green above £13.50, amber around the living wage, red below it or unstated. The rate is an **estimate** — Adzuna normalises pay to an annual figure, so dividing by full-time-equivalent hours only holds when the advert was full-time-equivalent; a genuinely part-time salary reads low. The footnote and the weak-tier note both say so, and the row is still shown so nothing is silently dropped.
+
+CV fit is the **tiebreak**, not the grade: two roles at the same rate, the one that uses your background (customer-facing, admin, data, operations) sorts first and shows a warmer fit tag. Tune `PT_FIT` in `monitor.py` to change what counts as a fit; nothing there filters anything out, it only orders ties and labels the card. Change the city with `PT_LOCATION`, the search terms with `PT_QUERIES`, and the pay-tier thresholds with `PT_GOOD_RATE` / `PT_FAIR_RATE`.
+
 ## Where the data comes from
 
 | Source | Used for | How | Needs a key |
 | --- | --- | --- | --- |
 | GOV.UK register of licensed sponsors | the sponsor gate on every row | published CSV | no |
-| Adzuna | jobs and H&S | API, one call per keyword per day | yes, already set |
+| Adzuna | jobs, H&S, and part-time Leicester | API, one call per keyword per day | yes, already set |
 | jobs.ac.uk | H&S at universities, and UK PhDs | scrape of the public search | no |
 | EURAXESS | doctoral posts across Europe | scrape of the public search | no |
 | jobRxiv | doctoral posts worldwide, including North America | its listings JSON endpoint | no |
@@ -150,7 +159,7 @@ Both are reversible with **Undo**, and the **Show** control in the filters switc
 
 Edit the `KEYWORDS` list at the top of `monitor.py` (search term, field). `HS_KEYWORDS` holds the extra Adzuna sweeps aimed at the H&S tab, and `JACUK_QUERIES`, `REED_QUERIES` and `GOOGLE_QUERIES` the searches for the other sources. Salary floors are `NEW_ENTRANT_FLOOR` and `GENERAL_FLOOR`; both are published to the page, so the threshold meter and the card copy follow whatever you set.
 
-**Watch the Adzuna budget.** Every entry in `KEYWORDS` and `HS_KEYWORDS` costs one call per day, currently 15 in total, or about 460 a month. jobs.ac.uk and reed.co.uk cost nothing. Trim `HS_KEYWORDS` first if you need to cut back; the run prints a per-source summary to the log.
+**Watch the Adzuna budget.** Every entry in `KEYWORDS`, `HS_KEYWORDS` and `PT_QUERIES` costs one call per day, currently about 24 in total, or roughly 730 a month. jobs.ac.uk, reed.co.uk, EURAXESS and jobRxiv cost nothing. Trim `PT_QUERIES` or `HS_KEYWORDS` first if you need to cut back; the run prints a per-source summary to the log.
 
 ## The data file
 

@@ -43,6 +43,42 @@ HS_KEYWORDS = [
     "hse manager", "safety officer",
 ]
 
+# --- part-time work in Leicester --------------------------------------------
+# A different section with different rules: no sponsor gate, because these are
+# ordinary jobs to earn alongside study, and the grade is pay per hour, not
+# sponsorship. Term-time student work is capped at 20 hours a week, so only
+# part-time roles are kept. Each query is one Adzuna call per day.
+PT_LOCATION  = "Leicester"
+PT_DISTANCE  = 10        # miles from the city
+PT_MAX_DAYS  = 7         # part-time roles turn over faster; the archive keeps history
+PT_QUERIES = [
+    "customer service", "customer advisor", "call centre", "administrator",
+    "receptionist", "retail assistant", "sales assistant", "data entry",
+    "team member",
+]
+
+# Hourly-rate bands that set the status colour and word. National Living Wage is
+# the floor a real job should clear, so below it, or unstated, is the weak tier.
+PT_GOOD_RATE = 13.50     # green:  a good part-time rate
+PT_FAIR_RATE = 11.50     # amber:  around the living wage
+PT_FTE_HOURS = 2080      # 40h x 52w, used to turn an annual figure into a rate
+
+# CV-fit tiebreak: two roles at the same rate, the one that uses AB's background
+# sorts first and shows a warmer fit tag. Pay is the grade (chosen), so this is
+# secondary. TUNE THESE to your CV: a term matched in the title adds its weight.
+# Higher weight = "more me". Nothing here filters anything out; it only ranks
+# ties and labels the fit, so a low score never hides a well-paid role.
+PT_FIT = [
+    (r"customer (?:service|advisor|adviser|support|experience)|call centre|contact centre", 20),
+    (r"admin|administrat|office|coordinat|co-ordinat|data entry|receptionist|front desk", 16),
+    (r"\bdata\b|analyst|report|dashboard|spreadsheet", 16),
+    (r"operations|logistics|supply|planner|schedul|dispatch", 14),
+    (r"health (?:and|&) safety|\bhse\b|compliance|quality|audit", 12),
+    (r"sales|account|advisor|advis|retail|merchandis", 10),
+    (r"team\s?lead|supervisor|shift lead|duty manager", 10),
+    (r"research|lab|technician|assistant", 8),
+]
+
 # jobs.ac.uk searches. Universities are almost all licensed sponsors, and their
 # adverts run for weeks rather than days, so this window is much wider than the
 # Adzuna one. Two queries saturate the results; more just repeat them.
@@ -179,6 +215,10 @@ GENERAL_FLOOR     = 41700   # roles between the two are flagged
 COUNTRY, MAX_DAYS_OLD = "gb", 2
 DATA_DIR = os.path.join("docs", "data")
 
+# The dashboard tabs, in order. One place to add a section, so the stamp, the
+# counts and the written payload can never drift out of step.
+SECTIONS = ("jobs", "hs", "phd", "pt")
+
 # Routes a title into the health and safety section. Deliberately narrow at the
 # edges: "Health and Social Care" and "Healthcare Architecture" must not match.
 # Keep this in step with HS_RE in docs/index.html, which reads older archives.
@@ -252,11 +292,17 @@ def is_sponsor(company, sponsors):
             return True
     return bool(difflib.get_close_matches(c, sponsors, n=1, cutoff=0.93))
 
-def adzuna(keyword):
-    q = urllib.parse.urlencode({
+def adzuna(keyword, where=None, part_time=False, max_days=MAX_DAYS_OLD):
+    params = {
         "app_id": ADZUNA_ID, "app_key": ADZUNA_KEY, "results_per_page": 50,
-        "what": keyword, "max_days_old": MAX_DAYS_OLD, "sort_by": "date",
-    })
+        "what": keyword, "max_days_old": max_days, "sort_by": "date",
+    }
+    if where:
+        params["where"] = where
+        params["distance"] = PT_DISTANCE
+    if part_time:
+        params["part_time"] = 1     # restrict to part-time contracts
+    q = urllib.parse.urlencode(params)
     try:
         return json.loads(fetch(f"https://api.adzuna.com/v1/api/jobs/{COUNTRY}/search/1?{q}")).get("results", [])
     except Exception as e:
@@ -876,11 +922,13 @@ def build_today():
         print("%-12s %d queries -> %d kept" % ("google", len(GOOGLE_QUERIES), found), file=sys.stderr)
 
     phd = build_phds()
+    pt = build_parttime()
 
     for bucket in (jobs, hs, phd):
         bucket.sort(key=lambda m: m["score"], reverse=True)
-    print("Adzuna calls:", calls, file=sys.stderr)
-    return {"jobs": jobs, "hs": hs, "phd": phd}
+    # pt is already sorted by (pay, fit, newest); leave that order intact.
+    print("Adzuna calls:", calls + len(PT_QUERIES), file=sys.stderr)
+    return {"jobs": jobs, "hs": hs, "phd": phd, "pt": pt}
 
 def build_phds():
     """Funded PhD openings, ranked against the research interests.
@@ -1049,6 +1097,87 @@ def build_phds():
         print("%-12s %d queries -> %d kept" % ("phd/google", len(GOOGLE_PHD_QUERIES), n), file=sys.stderr)
     return out
 
+# ---------------------------------------------------------- part-time Leicester
+def pt_hourly(annual):
+    """Estimate an hourly rate from Adzuna's annual figure.
+
+    Adzuna normalises pay to a yearly number, so this only holds when the advert
+    was full-time-equivalent; a genuinely part-time annual figure understates the
+    rate. It is the best signal available for ranking, so the card labels it an
+    estimate and tells you to confirm on the advert.
+    """
+    if not annual:
+        return None
+    r = annual / PT_FTE_HOURS
+    return round(r, 2) if 5 <= r <= 60 else None      # ignore nonsense conversions
+
+def pt_status(hourly):
+    """Colour, word and note come from the pay tier, since pay is the grade."""
+    if hourly is None:
+        return "weak", ("No pay on the listing, so it cannot be ranked by rate. Check the "
+                        "hourly rate on the advert.")
+    if hourly >= PT_GOOD_RATE:
+        return "strong", ""
+    if hourly >= PT_FAIR_RATE:
+        return "caution", ""
+    return "weak", ("The estimated rate is below the living wage. It may be a part-time figure "
+                    "Adzuna has understated, so confirm the hourly rate on the advert.")
+
+def pt_fit_score(text):
+    """CV-fit tiebreak, 0..100. Not a gate: it only orders equal-paying roles and
+    labels the fit, so a low score never hides a well-paid job."""
+    s, hits = 30, 0
+    for pattern, weight in PT_FIT:
+        if re.search(pattern, text or "", re.I):
+            s += weight
+            hits += 1
+            if hits == 3:
+                break
+    return min(100, s)
+
+def build_parttime():
+    """Part-time roles in Leicester, ranked by estimated hourly rate.
+
+    No sponsor gate: these are ordinary jobs to earn alongside study. Pay is the
+    grade and CV fit is the tiebreak, so nothing is filtered on fit; a role only
+    drops out if it is not part-time or is a duplicate.
+    """
+    out, seen = [], set()
+    for keyword in PT_QUERIES:
+        for job in adzuna(keyword, where=PT_LOCATION, part_time=True, max_days=PT_MAX_DAYS):
+            if job.get("contract_time") not in (None, "part_time"):
+                continue                                # belt and braces on the filter
+            company = (job.get("company") or {}).get("display_name", "")
+            title = re.sub("<.*?>", "", job.get("title") or "")
+            key = norm(title) + "|" + norm(company)
+            if key in seen:
+                continue
+            seen.add(key)
+            annual = job.get("salary_min") or 0
+            hourly = pt_hourly(annual)
+            status, note = pt_status(hourly)
+            fit = pt_fit_score(title + " " + (job.get("category") or {}).get("label", ""))
+            # Pay drives the sort; fit only nudges it, so it cannot outrank a
+            # better-paid role. Unstated pay sinks but is still shown.
+            pay_score = 20 if hourly is None else round(
+                max(0, min(100, (hourly - 8) / (20 - 8) * 100)))
+            out.append({
+                "score": pay_score, "fit": fit, "hourly": hourly,
+                "title": title, "field": (job.get("category") or {}).get("label", "Part-time"),
+                "employer": company,
+                "location": (job.get("location") or {}).get("display_name", ""),
+                "salary": int(annual) if annual else None, "belowGeneral": False,
+                "posted": (job.get("created") or "")[:10], "deadline": "",
+                "url": job.get("redirect_url", ""), "section": "pt",
+                "status": status, "note": note, "source": "adzuna",
+            })
+        time.sleep(0.3)
+    # Rank by pay, then by fit, then newest. Python's stable sort means the
+    # dashboard's "grade" sort keeps this order for equal scores.
+    out.sort(key=lambda r: (r["score"], r["fit"], r["posted"]), reverse=True)
+    print("%-12s %d queries -> %d kept" % ("pt/leics", len(PT_QUERIES), len(out)), file=sys.stderr)
+    return out
+
 SEEN_PATH = os.path.join(DATA_DIR, "seen.json")
 SEEN_KEEP_DAYS = 180
 
@@ -1076,7 +1205,7 @@ def stamp_first_seen(day, today):
         seen = {}
 
     fresh = 0
-    for section in ("jobs", "hs", "phd"):
+    for section in SECTIONS:
         for row in day[section]:
             key = opp_key(row)
             first = seen.get(key)
@@ -1100,14 +1229,14 @@ def write(day):
     os.makedirs(DATA_DIR, exist_ok=True)
     today = datetime.date.today().isoformat()
     floors = {"newEntrant": NEW_ENTRANT_FLOOR, "general": GENERAL_FLOOR}
-    total = sum(len(day[k]) for k in ("jobs", "hs", "phd"))
+    total = sum(len(day[k]) for k in SECTIONS)
     fresh = stamp_first_seen(day, today)
     print("New since the last run:", fresh, "of", total, file=sys.stderr)
     payload = {"date": today, "count": total, "floors": floors,
-               "counts": {k: len(day[k]) for k in ("jobs", "hs", "phd")},
+               "counts": {k: len(day[k]) for k in SECTIONS},
                "new": {k: sum(1 for r in day[k] if r.get("firstSeen") == today)
-                       for k in ("jobs", "hs", "phd")},
-               "jobs": day["jobs"], "hs": day["hs"], "phd": day["phd"]}
+                       for k in SECTIONS}}
+    payload.update({k: day[k] for k in SECTIONS})
     with open(os.path.join(DATA_DIR, today + ".json"), "w") as f:
         json.dump(payload, f, indent=2)
     days = []
@@ -1124,7 +1253,7 @@ def write(day):
                                        .replace(tzinfo=None).isoformat() + "Z",
                    "floors": floors, "days": days}, f, indent=2)
     print("Wrote", total, "opportunities for", today,
-          "(jobs %d, hs %d, phd %d)" % (len(day["jobs"]), len(day["hs"]), len(day["phd"])),
+          "(" + ", ".join("%s %d" % (k, len(day[k])) for k in SECTIONS) + ")",
           file=sys.stderr)
 
 def demo():
@@ -1204,7 +1333,25 @@ def demo():
            funding="full", intlEligible=False, stipend=21805, salary=None, deadline=d(3),
            note=classify_phd("full", False)[1]),
     ]
-    return {"jobs": jobs, "hs": hs, "phd": phd}
+    ptmk = lambda hourly, fit, **kw: mk(
+        score=(20 if hourly is None else round(max(0, min(100, (hourly - 8) / 12 * 100)))),
+        hourly=hourly, fit=fit, section="pt", field="Part-time",
+        status=pt_status(hourly)[0], note=pt_status(hourly)[1],
+        salary=int(hourly * PT_FTE_HOURS) if hourly else None, **kw)
+    pt = [
+        ptmk(15.50, 78, title="Customer Service Advisor", employer="Santander",
+             location="Leicester"),
+        ptmk(14.20, 62, title="Data Entry Administrator", employer="Office Angels",
+             location="Leicester"),
+        ptmk(12.60, 72, title="Contact Centre Advisor (Part-time)", employer="DPD",
+             location="Leicester"),
+        ptmk(11.90, 40, title="Retail Sales Assistant", employer="Currys",
+             location="Leicester"),
+        ptmk(10.80, 34, title="Team Member", employer="Greggs", location="Leicester"),
+        ptmk(None, 58, title="Receptionist / Front of House", employer="Leicester Tigers",
+             location="Leicester"),
+    ]
+    return {"jobs": jobs, "hs": hs, "phd": phd, "pt": pt}
 
 if __name__ == "__main__":
     write(demo() if "--demo" in sys.argv else build_today())

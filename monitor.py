@@ -79,6 +79,46 @@ PT_FIT = [
     (r"research|lab|technician|assistant", 8),
 ]
 
+# When the shifts run, read from the title and the advert's description snippet.
+# There is no shift field in the API, so this is the only signal, and it is
+# often silent: a role that never states its hours is left untagged rather than
+# guessed at, and the dashboard treats that as "hours not stated".
+_PT_EVENING = re.compile(
+    r"\bevenings?\b|\blate\s?shift|\blates\b|twilight|after\s?school|"
+    r"out[\s-]of[\s-]hours|\bnights?\b|night\s?shift|overnight|\bpm\s?shift|"
+    r"\b(?:4|5|6|7|8|9|10)\s?pm|1[67]:\d\d\s*(?:-|to|–)", re.I)
+# Bare "sat"/"sun" only in a day-or-shift context, so "satisfaction" and
+# "Sunderland" do not read as weekend work.
+_PT_WEEKEND = re.compile(
+    r"weekends?|saturdays?|sundays?|sat\s*(?:&|and|/)\s*sun|"
+    r"\bsat\s*(?:&|and|/|nights?|days?|shifts?|mornings?|afternoons?|eves?)|"
+    r"\bsun\s*(?:&|and|/|nights?|days?|shifts?|mornings?|afternoons?|eves?)", re.I)
+_PT_FLEX    = re.compile(
+    r"flexible\s?(?:hours|shifts|working|rota|schedule)|hours to suit|shifts to suit|"
+    r"choose your (?:own )?(?:hours|shifts)|work around your|hours that suit|"
+    r"variable hours|shifts to fit|fit around", re.I)
+# An explicit weekday-daytime pattern is the one thing that clashes with a
+# 08:00-16:00 job, so it is worth flagging. "Monday to Friday" on its own is not
+# enough (those hours could be evenings), so a day-time clock is also required.
+_PT_DAYTIME = re.compile(
+    r"9\s?(?:am)?\s?(?:-|to|–|—)\s?5\s?(?:pm)?|8\s?(?:am)?\s?(?:-|to|–|—)\s?4|"
+    r"office hours|\bday\s?time\b|during the day|9\s?am\s?-\s?5\s?pm|"
+    r"09:00\s*(?:-|to|–)\s*17:00", re.I)
+
+def pt_shifts(text):
+    """Shift tags from the title and description: any of evening, weekend,
+    flexible, daytime. Empty means the advert does not say when the hours are.
+    The daytime clash is only recorded when nothing evening or weekend is also
+    present, so a Mon-Fri role that also offers late shifts is not marked a clash."""
+    t = text or ""
+    tags = []
+    if _PT_EVENING.search(t): tags.append("evening")
+    if _PT_WEEKEND.search(t): tags.append("weekend")
+    if _PT_FLEX.search(t):    tags.append("flexible")
+    if _PT_DAYTIME.search(t) and "evening" not in tags and "weekend" not in tags:
+        tags.append("daytime")
+    return tags
+
 # jobs.ac.uk searches. Universities are almost all licensed sponsors, and their
 # adverts run for weeks rather than days, so this window is much wider than the
 # Adzuna one. Two queries saturate the results; more just repeat them.
@@ -1156,14 +1196,18 @@ def build_parttime():
             annual = job.get("salary_min") or 0
             hourly = pt_hourly(annual)
             status, note = pt_status(hourly)
-            fit = pt_fit_score(title + " " + (job.get("category") or {}).get("label", ""))
+            category = (job.get("category") or {}).get("label", "")
+            # The description snippet is where the hours usually live, if anywhere.
+            description = re.sub("<.*?>", " ", job.get("description") or "")
+            fit = pt_fit_score(title + " " + category)
+            shifts = pt_shifts(title + " " + description)
             # Pay drives the sort; fit only nudges it, so it cannot outrank a
             # better-paid role. Unstated pay sinks but is still shown.
             pay_score = 20 if hourly is None else round(
                 max(0, min(100, (hourly - 8) / (20 - 8) * 100)))
             out.append({
-                "score": pay_score, "fit": fit, "hourly": hourly,
-                "title": title, "field": (job.get("category") or {}).get("label", "Part-time"),
+                "score": pay_score, "fit": fit, "hourly": hourly, "shifts": shifts,
+                "title": title, "field": category or "Part-time",
                 "employer": company,
                 "location": (job.get("location") or {}).get("display_name", ""),
                 "salary": int(annual) if annual else None, "belowGeneral": False,
@@ -1177,7 +1221,13 @@ def build_parttime():
     # dashboard sorts on the rate for the same reason. Unstated rate sinks.
     out.sort(key=lambda r: (r["hourly"] if r["hourly"] is not None else -1,
                             r["fit"], r["posted"]), reverse=True)
-    print("%-12s %d queries -> %d kept" % ("pt/leics", len(PT_QUERIES), len(out)), file=sys.stderr)
+    ev = sum("evening" in r["shifts"] for r in out)
+    we = sum("weekend" in r["shifts"] for r in out)
+    fl = sum("flexible" in r["shifts"] for r in out)
+    dd = sum("daytime" in r["shifts"] for r in out)
+    print("%-12s %d queries -> %d kept (evening %d, weekend %d, flexible %d, daytime %d, unstated %d)"
+          % ("pt/leics", len(PT_QUERIES), len(out), ev, we, fl, dd,
+             sum(not r["shifts"] for r in out)), file=sys.stderr)
     return out
 
 SEEN_PATH = os.path.join(DATA_DIR, "seen.json")
@@ -1335,23 +1385,23 @@ def demo():
            funding="full", intlEligible=False, stipend=21805, salary=None, deadline=d(3),
            note=classify_phd("full", False)[1]),
     ]
-    ptmk = lambda hourly, fit, **kw: mk(
+    ptmk = lambda hourly, fit, shifts, **kw: mk(
         score=(20 if hourly is None else round(max(0, min(100, (hourly - 8) / 12 * 100)))),
-        hourly=hourly, fit=fit, section="pt", field="Part-time",
+        hourly=hourly, fit=fit, shifts=shifts, section="pt", field="Part-time",
         status=pt_status(hourly)[0], note=pt_status(hourly)[1],
         salary=int(hourly * PT_FTE_HOURS) if hourly else None, **kw)
     pt = [
-        ptmk(15.50, 78, title="Customer Service Advisor", employer="Santander",
+        ptmk(15.50, 78, ["evening", "weekend"], title="Customer Service Advisor (Evenings & Weekends)",
+             employer="Santander", location="Leicester"),
+        ptmk(14.20, 62, ["flexible"], title="Data Entry Administrator", employer="Office Angels",
              location="Leicester"),
-        ptmk(14.20, 62, title="Data Entry Administrator", employer="Office Angels",
+        ptmk(12.60, 72, ["weekend"], title="Contact Centre Advisor (Weekend)", employer="DPD",
              location="Leicester"),
-        ptmk(12.60, 72, title="Contact Centre Advisor (Part-time)", employer="DPD",
+        ptmk(11.90, 40, ["daytime"], title="Retail Sales Assistant (Mon-Fri 9-5)", employer="Currys",
              location="Leicester"),
-        ptmk(11.90, 40, title="Retail Sales Assistant", employer="Currys",
-             location="Leicester"),
-        ptmk(10.80, 34, title="Team Member", employer="Greggs", location="Leicester"),
-        ptmk(None, 58, title="Receptionist / Front of House", employer="Leicester Tigers",
-             location="Leicester"),
+        ptmk(10.80, 34, [], title="Team Member", employer="Greggs", location="Leicester"),
+        ptmk(None, 58, ["evening"], title="Receptionist / Front of House (Late shifts)",
+             employer="Leicester Tigers", location="Leicester"),
     ]
     return {"jobs": jobs, "hs": hs, "phd": phd, "pt": pt}
 

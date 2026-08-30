@@ -393,6 +393,16 @@ button{font:inherit;color:inherit;background:none;border:none;padding:0;cursor:p
         <div class="scaleline"><span>0</span><span class="cur mono" id="minfit-val">any</span><span>100</span></div>
       </div>
 
+      <div id="f-shift-wrap" style="display:none">
+        <div class="cap">Shift</div>
+        <div class="chips" id="f-shift">
+          <button type="button" class="chip" data-v="evening" aria-pressed="false">Evenings</button>
+          <button type="button" class="chip" data-v="weekend" aria-pressed="false">Weekends</button>
+          <button type="button" class="chip" data-v="flexible" aria-pressed="false">Flexible</button>
+          <button type="button" class="chip" data-v="unstated" aria-pressed="false">Unstated</button>
+        </div>
+      </div>
+
       <div id="f-money-wrap">
         <div class="cap" id="f-money-cap">Salary</div>
         <div class="chips" id="f-money"></div>
@@ -457,6 +467,8 @@ const SECTION_NAME = {jobs:"sponsored jobs", hs:"health and safety", phd:"funded
                       pt:"part-time Leicester"};
 const STATUS_ORDER = {strong:0, caution:1, weak:2};
 const STATUS_LABEL = {strong:"✓ Strong", caution:"⚠ Caution", weak:"✕ Weak"};
+const SHIFT_LABEL  = {evening:"Evenings", weekend:"Weekends", flexible:"Flexible",
+                      unstated:"Unstated", daytime:"Mon–Fri days"};
 const MONEY_TIERS = [[40000, "£40k+"], [60000, "£60k+"], [80000, "£80k+"]];
 // Part-time is filtered by hourly rate, not annual salary.
 const RATE_TIERS  = [[11, "£11+"], [13, "£13+"], [15, "£15+"]];
@@ -483,7 +495,7 @@ let rows = [];
 // Reset or Clear all wants to see more, and sending them to a view that can be
 // empty on a quiet day does the opposite.
 const blank = (show = "new") => ({show, status:[], minfit:0, money:null, field:null, place:null,
-                                  recency:null, sort:"fit"});
+                                  recency:null, shifts:[], sort:"fit"});
 const F = {jobs: blank(), hs: blank(), phd: Object.assign(blank(), {sort:"deadline"}), pt: blank()};
 
 /* ---------- done / hidden marks ----------
@@ -555,7 +567,8 @@ function normalise(raw, day){
       country: item.country || "",
       // part-time only
       hourly: (item.hourly === 0 || item.hourly) ? item.hourly : null,
-      fit: Number(item.fit) || 0
+      fit: Number(item.fit) || 0,
+      shifts: Array.isArray(item.shifts) ? item.shifts : []
     });
   };
   if (Array.isArray(raw.jobs)) raw.jobs.forEach(j => push(j, HS_RE.test(j.title || "") ? "hs" : "jobs"));
@@ -643,6 +656,15 @@ function applyFilters(list){
       const a = ageDays(r);
       if (a === null || a > Number(f.recency)) return false;
     }
+    if (section === "pt" && f.shifts.length){
+      const tags = r.shifts || [];
+      const positive = tags.filter(t => t !== "daytime");   // evening / weekend / flexible
+      const matchPositive = positive.some(t => f.shifts.indexOf(t) >= 0);
+      const wantsUnstated = f.shifts.indexOf("unstated") >= 0;
+      // A daytime-only row (its only tag is the clash) never matches, so turning
+      // any shift filter on drops the explicit Mon-Fri 9-5 roles.
+      if (!(matchPositive || (wantsUnstated && tags.length === 0))) return false;
+    }
     return true;
   });
 }
@@ -675,7 +697,8 @@ function sortRows(list){
 function activeCount(){
   const f = F[section];
   return f.status.length + (f.minfit ? 1 : 0) + (f.money ? 1 : 0) +
-         (f.field ? 1 : 0) + (f.place ? 1 : 0) + (f.recency ? 1 : 0);
+         (f.field ? 1 : 0) + (f.place ? 1 : 0) + (f.recency ? 1 : 0) +
+         (f.shifts ? f.shifts.length : 0);
 }
 
 /* ============================================================
@@ -762,6 +785,10 @@ function renderRail(){
   $("#minfit").value = f.minfit;
   $("#minfit-val").textContent = f.minfit ? "≥ " + f.minfit : "any";
 
+  // Shift filter is part-time only.
+  $("#f-shift-wrap").style.display = ptTier ? "" : "none";
+  $$("#f-shift .chip").forEach(b => b.setAttribute("aria-pressed", f.shifts.indexOf(b.dataset.v) >= 0));
+
   $("#f-money-cap").textContent = section === "phd" ? "Stipend"
                                 : section === "pt"  ? "Min rate" : "Salary";
   const moneyTiers = section === "pt" ? RATE_TIERS : MONEY_TIERS;
@@ -805,6 +832,11 @@ function wireChips(){
     if (i < 0) s.push(b.dataset.v); else s.splice(i, 1);
     renderAll();
   });
+  $$("#f-shift .chip").forEach(b => b.onclick = () => {
+    const s = f().shifts, i = s.indexOf(b.dataset.v);
+    if (i < 0) s.push(b.dataset.v); else s.splice(i, 1);
+    renderAll();
+  });
   $$("#f-money .chip").forEach(b => b.onclick = () => toggle("money", Number(b.dataset.v)));
   $$("#f-field .chip").forEach(b => b.onclick = () => toggle("field", b.dataset.v));
   $$("#f-place .chip").forEach(b => b.onclick = () => toggle("place", b.dataset.v));
@@ -824,6 +856,8 @@ function renderActive(){
   if (f.field)   bits.push(["", f.field, () => { f.field = null; }]);
   if (f.place)   bits.push(["", f.place, () => { f.place = null; }]);
   if (f.recency) bits.push(["", f.recency === "1" ? "24 hrs" : "7 days", () => { f.recency = null; }]);
+  (f.shifts || []).forEach(s => bits.push(["", SHIFT_LABEL[s] || s,
+                                           () => { f.shifts = f.shifts.filter(x => x !== s); }]));
 
   $("#active").innerHTML = bits.map((b, i) =>
     '<button type="button" class="fchip ' + b[0] + '" data-i="' + i + '">' + esc(b[1]) +
@@ -866,7 +900,14 @@ function cardHtml(r){
     const fitTag = fit >= 70 ? '<span class="tag strong">GOOD FIT</span>'
                  : fit >= 50 ? '<span class="tag caution">FAIR FIT</span>'
                  : '<span class="tag">BASIC FIT</span>';
-    body = '<div class="tags">' + fitTag + '</div>';
+    // Shift tags lead, since that is the constraint being filtered. Evening and
+    // weekend are the wanted ones (green), a Mon-Fri daytime clash is muted red.
+    const shiftTag = s => s === "daytime"
+      ? '<span class="tag weak">MON–FRI DAYS</span>'
+      : '<span class="tag ' + (s === "flexible" ? "" : "strong") + '">' +
+        ({evening:"EVENINGS", weekend:"WEEKENDS", flexible:"FLEXIBLE"}[s] || s) + '</span>';
+    const shiftTags = (r.shifts || []).map(shiftTag).join("");
+    body = '<div class="tags">' + shiftTags + fitTag + '</div>';
     const age = ageDays(r);
     const facts = [
       r.salary ? "≈" + shortMoney(r.salary) + "/yr FTE" : null,
@@ -1053,8 +1094,9 @@ const FOOTNOTE = {
         "What matters is whether the funding covers fees and a stipend, and whether an international " +
         "student can hold it. Both come from the advert, so confirm them there.",
   pt:   "Part-time roles in Leicester, ranked by pay. The hourly rate is an <em>estimate</em> from the " +
-        "advertised figure, so a genuinely part-time salary can read low. Confirm the rate and the hours " +
-        "on the advert. No sponsor check applies, and term-time student work is capped at 20 hours a week."
+        "advertised figure, so a genuinely part-time salary can read low. The Shift filter reads the advert " +
+        "text, which often does not say when the hours are; those show as <em>unstated</em> rather than being " +
+        "dropped, so tick Unstated to include them. Confirm the rate and the hours on the advert."
 };
 
 function renderAll(){

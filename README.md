@@ -55,7 +55,9 @@ Both are indexed by Google, which is the point of the next section: the search e
 
 ## Part-time Leicester
 
-A different section with different rules. These are ordinary jobs to earn alongside study, so **there is no sponsor gate**, and the grade is **pay per hour**, not sponsorship. Term-time student work is capped at 20 hours a week, so only roles Adzuna tags part-time are kept.
+A different section with different rules. These are ordinary jobs to earn alongside a full-time role, so **there is no sponsor gate**, and the grade is **pay per hour**, not sponsorship.
+
+It holds two kinds of role. **Part-time** roles are kept whatever their hours. **Full-time** roles are kept only when the advert offers evening, weekend or flexible hours (a second, smaller Adzuna sweep, `PT_FT_QUERIES`); an untagged full-time role is presumed 9-to-5 and dropped, since it would clash with a day job. Full-time keepers are tagged `FULL-TIME` on the card, and their hourly estimate is more trustworthy than a part-time one, since their annual figure really is full-time-equivalent. Hybrid (home working) on its own does not qualify: it changes where, not when.
 
 The card leads with the hourly rate, and the status colour is the pay tier: green above £13.50, amber around the living wage, red below it or unstated. The rate is an **estimate** — Adzuna normalises pay to an annual figure, so dividing by full-time-equivalent hours only holds when the advert was full-time-equivalent; a genuinely part-time salary reads low. The footnote and the weak-tier note both say so, and the row is still shown so nothing is silently dropped.
 
@@ -161,7 +163,7 @@ Both are reversible with **Undo**, and the **Show** control in the filters switc
 
 Edit the `KEYWORDS` list at the top of `monitor.py` (search term, field). `HS_KEYWORDS` holds the extra Adzuna sweeps aimed at the H&S tab, and `JACUK_QUERIES`, `REED_QUERIES` and `GOOGLE_QUERIES` the searches for the other sources. Salary floors are `NEW_ENTRANT_FLOOR` and `GENERAL_FLOOR`; both are published to the page, so the threshold meter and the card copy follow whatever you set.
 
-**Watch the Adzuna budget.** Every entry in `KEYWORDS`, `HS_KEYWORDS` and `PT_QUERIES` costs one call per day, currently about 24 in total, or roughly 730 a month. jobs.ac.uk, reed.co.uk, EURAXESS and jobRxiv cost nothing. Trim `PT_QUERIES` or `HS_KEYWORDS` first if you need to cut back; the run prints a per-source summary to the log.
+**Watch the Adzuna budget.** Every entry in `KEYWORDS`, `HS_KEYWORDS`, `PT_QUERIES` and `PT_FT_QUERIES` costs one call per day, currently about 29 in total, or roughly 880 a month. jobs.ac.uk, reed.co.uk, EURAXESS and jobRxiv cost nothing. Trim `PT_FT_QUERIES` or `HS_KEYWORDS` first if you need to cut back; the run prints a per-source summary to the log.
 
 ## The data file
 

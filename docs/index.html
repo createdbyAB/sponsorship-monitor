@@ -568,7 +568,8 @@ function normalise(raw, day){
       // part-time only
       hourly: (item.hourly === 0 || item.hourly) ? item.hourly : null,
       fit: Number(item.fit) || 0,
-      shifts: Array.isArray(item.shifts) ? item.shifts : []
+      shifts: Array.isArray(item.shifts) ? item.shifts : [],
+      contract: item.contract || "part_time"
     });
   };
   if (Array.isArray(raw.jobs)) raw.jobs.forEach(j => push(j, HS_RE.test(j.title || "") ? "hs" : "jobs"));
@@ -907,7 +908,10 @@ function cardHtml(r){
       : '<span class="tag ' + (s === "flexible" ? "" : "strong") + '">' +
         ({evening:"EVENINGS", weekend:"WEEKENDS", flexible:"FLEXIBLE"}[s] || s) + '</span>';
     const shiftTags = (r.shifts || []).map(shiftTag).join("");
-    body = '<div class="tags">' + shiftTags + fitTag + '</div>';
+    // A full-time role only reaches this tab because it offers evening/weekend
+    // or flexible hours; the tag makes clear it is not a part-time contract.
+    const ftTag = r.contract === "full_time" ? '<span class="tag">FULL-TIME</span>' : "";
+    body = '<div class="tags">' + ftTag + shiftTags + fitTag + '</div>';
     const age = ageDays(r);
     const facts = [
       r.salary ? "≈" + shortMoney(r.salary) + "/yr FTE" : null,
@@ -1093,10 +1097,12 @@ const FOOTNOTE = {
   phd:  "A studentship is not a Skilled Worker vacancy, so the sponsor register does not apply here. " +
         "What matters is whether the funding covers fees and a stipend, and whether an international " +
         "student can hold it. Both come from the advert, so confirm them there.",
-  pt:   "Part-time roles in Leicester, ranked by pay. The hourly rate is an <em>estimate</em> from the " +
-        "advertised figure, so a genuinely part-time salary can read low. The Shift filter reads the advert " +
-        "text, which often does not say when the hours are; those show as <em>unstated</em> rather than being " +
-        "dropped, so tick Unstated to include them. Confirm the rate and the hours on the advert."
+  pt:   "Work around a day job in Leicester, ranked by pay. Part-time roles plus full-time roles that " +
+        "offer evening, weekend or flexible hours (tagged <em>FULL-TIME</em>); a full-time role with no such " +
+        "signal is left out as a 9-to-5 clash. The hourly rate is an <em>estimate</em> from the advertised " +
+        "figure, so a genuinely part-time salary can read low. The Shift filter reads the advert text, which " +
+        "often does not say when the hours are; those show as <em>unstated</em>, so tick Unstated to include " +
+        "them. Confirm the rate and the hours on the advert."
 };
 
 function renderAll(){

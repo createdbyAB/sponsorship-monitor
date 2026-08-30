@@ -57,6 +57,15 @@ PT_QUERIES = [
     "team member",
 ]
 
+# A second, smaller sweep for full-time roles that can be worked around a day
+# job. A full-time role is only kept if the advert signals evening, weekend or
+# flexible hours; an untagged one is presumed 9-to-5 and dropped. These are the
+# roles that most often run evening or weekend shifts. Each is one more call.
+PT_FT_QUERIES = [
+    "customer service", "call centre", "retail assistant", "team member",
+    "care assistant",
+]
+
 # Hourly-rate bands that set the status colour and word. National Living Wage is
 # the floor a real job should clear, so below it, or unstated, is the weak tier.
 PT_GOOD_RATE = 13.50     # green:  a good part-time rate
@@ -332,7 +341,7 @@ def is_sponsor(company, sponsors):
             return True
     return bool(difflib.get_close_matches(c, sponsors, n=1, cutoff=0.93))
 
-def adzuna(keyword, where=None, part_time=False, max_days=MAX_DAYS_OLD):
+def adzuna(keyword, where=None, part_time=False, full_time=False, max_days=MAX_DAYS_OLD):
     params = {
         "app_id": ADZUNA_ID, "app_key": ADZUNA_KEY, "results_per_page": 50,
         "what": keyword, "max_days_old": max_days, "sort_by": "date",
@@ -342,6 +351,8 @@ def adzuna(keyword, where=None, part_time=False, max_days=MAX_DAYS_OLD):
         params["distance"] = PT_DISTANCE
     if part_time:
         params["part_time"] = 1     # restrict to part-time contracts
+    if full_time:
+        params["full_time"] = 1     # restrict to full-time contracts
     q = urllib.parse.urlencode(params)
     try:
         return json.loads(fetch(f"https://api.adzuna.com/v1/api/jobs/{COUNTRY}/search/1?{q}")).get("results", [])
@@ -967,7 +978,7 @@ def build_today():
     for bucket in (jobs, hs, phd):
         bucket.sort(key=lambda m: m["score"], reverse=True)
     # pt is already sorted by (pay, fit, newest); leave that order intact.
-    print("Adzuna calls:", calls + len(PT_QUERIES), file=sys.stderr)
+    print("Adzuna calls:", calls + len(PT_QUERIES) + len(PT_FT_QUERIES), file=sys.stderr)
     return {"jobs": jobs, "hs": hs, "phd": phd, "pt": pt}
 
 def build_phds():
@@ -1176,46 +1187,68 @@ def pt_fit_score(text):
     return min(100, s)
 
 def build_parttime():
-    """Part-time roles in Leicester, ranked by estimated hourly rate.
+    """Work around a day job in Leicester, ranked by estimated hourly rate.
 
-    No sponsor gate: these are ordinary jobs to earn alongside study. Pay is the
-    grade and CV fit is the tiebreak, so nothing is filtered on fit; a role only
-    drops out if it is not part-time or is a duplicate.
+    No sponsor gate: these are ordinary jobs to earn alongside a full-time role.
+    Pay is the grade and CV fit is the tiebreak. Part-time roles are kept whatever
+    their hours; full-time roles are kept only when the advert shows evening,
+    weekend or flexible hours, since an untagged full-time role is a 9-to-5 clash.
     """
     out, seen = [], set()
+
+    def add(job, contract, require_shift):
+        company = (job.get("company") or {}).get("display_name", "")
+        title = re.sub("<.*?>", "", job.get("title") or "")
+        key = norm(title) + "|" + norm(company)
+        if key in seen:
+            return
+        category = (job.get("category") or {}).get("label", "")
+        # The description snippet is where the hours usually live, if anywhere.
+        description = re.sub("<.*?>", " ", job.get("description") or "")
+        shifts = pt_shifts(title + " " + description)
+        works_around = [s for s in shifts if s in ("evening", "weekend", "flexible")]
+        # A full-time role earns its place only by proving it fits around 8-4.
+        if require_shift and not works_around:
+            return
+        seen.add(key)
+        annual = job.get("salary_min") or 0
+        hourly = pt_hourly(annual)
+        status, note = pt_status(hourly)
+        fit = pt_fit_score(title + " " + category)
+        pay_score = 20 if hourly is None else round(
+            max(0, min(100, (hourly - 8) / (20 - 8) * 100)))
+        out.append({
+            "score": pay_score, "fit": fit, "hourly": hourly, "shifts": shifts,
+            "contract": contract,
+            "title": title, "field": category or "Part-time",
+            "employer": company,
+            "location": (job.get("location") or {}).get("display_name", ""),
+            "salary": int(annual) if annual else None, "belowGeneral": False,
+            "posted": (job.get("created") or "")[:10], "deadline": "",
+            "url": job.get("redirect_url", ""), "section": "pt",
+            "status": status, "note": note, "source": "adzuna",
+        })
+
+    # Part-time sweep: keep everything it returns.
     for keyword in PT_QUERIES:
         for job in adzuna(keyword, where=PT_LOCATION, part_time=True, max_days=PT_MAX_DAYS):
             if job.get("contract_time") not in (None, "part_time"):
                 continue                                # belt and braces on the filter
-            company = (job.get("company") or {}).get("display_name", "")
-            title = re.sub("<.*?>", "", job.get("title") or "")
-            key = norm(title) + "|" + norm(company)
-            if key in seen:
-                continue
-            seen.add(key)
-            annual = job.get("salary_min") or 0
-            hourly = pt_hourly(annual)
-            status, note = pt_status(hourly)
-            category = (job.get("category") or {}).get("label", "")
-            # The description snippet is where the hours usually live, if anywhere.
-            description = re.sub("<.*?>", " ", job.get("description") or "")
-            fit = pt_fit_score(title + " " + category)
-            shifts = pt_shifts(title + " " + description)
-            # Pay drives the sort; fit only nudges it, so it cannot outrank a
-            # better-paid role. Unstated pay sinks but is still shown.
-            pay_score = 20 if hourly is None else round(
-                max(0, min(100, (hourly - 8) / (20 - 8) * 100)))
-            out.append({
-                "score": pay_score, "fit": fit, "hourly": hourly, "shifts": shifts,
-                "title": title, "field": category or "Part-time",
-                "employer": company,
-                "location": (job.get("location") or {}).get("display_name", ""),
-                "salary": int(annual) if annual else None, "belowGeneral": False,
-                "posted": (job.get("created") or "")[:10], "deadline": "",
-                "url": job.get("redirect_url", ""), "section": "pt",
-                "status": status, "note": note, "source": "adzuna",
-            })
+            add(job, "part_time", require_shift=False)
         time.sleep(0.3)
+
+    # Full-time sweep: keep only roles that offer evening, weekend or flexible
+    # hours. A part-time result here was already covered by the sweep above.
+    ft_kept = 0
+    before = len(out)
+    for keyword in PT_FT_QUERIES:
+        for job in adzuna(keyword, where=PT_LOCATION, full_time=True, max_days=PT_MAX_DAYS):
+            if job.get("contract_time") == "part_time":
+                continue
+            add(job, "full_time", require_shift=True)
+        time.sleep(0.3)
+    ft_kept = len(out) - before
+
     # Rank by the exact hourly rate, then fit, then newest. The 0-100 score
     # saturates above £20, so sorting on it would let fit override pay; the
     # dashboard sorts on the rate for the same reason. Unstated rate sinks.
@@ -1224,9 +1257,10 @@ def build_parttime():
     ev = sum("evening" in r["shifts"] for r in out)
     we = sum("weekend" in r["shifts"] for r in out)
     fl = sum("flexible" in r["shifts"] for r in out)
-    dd = sum("daytime" in r["shifts"] for r in out)
-    print("%-12s %d queries -> %d kept (evening %d, weekend %d, flexible %d, daytime %d, unstated %d)"
-          % ("pt/leics", len(PT_QUERIES), len(out), ev, we, fl, dd,
+    print("%-12s %d+%d queries -> %d kept (%d part-time, %d full-time flex; "
+          "evening %d, weekend %d, flexible %d, unstated %d)"
+          % ("pt/leics", len(PT_QUERIES), len(PT_FT_QUERIES), len(out),
+             len(out) - ft_kept, ft_kept, ev, we, fl,
              sum(not r["shifts"] for r in out)), file=sys.stderr)
     return out
 
@@ -1385,15 +1419,21 @@ def demo():
            funding="full", intlEligible=False, stipend=21805, salary=None, deadline=d(3),
            note=classify_phd("full", False)[1]),
     ]
-    ptmk = lambda hourly, fit, shifts, **kw: mk(
+    ptmk = lambda hourly, fit, shifts, contract="part_time", **kw: mk(
         score=(20 if hourly is None else round(max(0, min(100, (hourly - 8) / 12 * 100)))),
-        hourly=hourly, fit=fit, shifts=shifts, section="pt", field="Part-time",
+        hourly=hourly, fit=fit, shifts=shifts, contract=contract, section="pt", field="Part-time",
         status=pt_status(hourly)[0], note=pt_status(hourly)[1],
         salary=int(hourly * PT_FTE_HOURS) if hourly else None, **kw)
     pt = [
+        ptmk(16.30, 68, ["evening", "flexible"], contract="full_time",
+             title="Customer Service Team Leader (Flexible shifts)", employer="Hastings Direct",
+             location="Leicester"),
         ptmk(15.50, 78, ["evening", "weekend"], title="Customer Service Advisor (Evenings & Weekends)",
              employer="Santander", location="Leicester"),
         ptmk(14.20, 62, ["flexible"], title="Data Entry Administrator", employer="Office Angels",
+             location="Leicester"),
+        ptmk(13.75, 46, ["weekend"], contract="full_time",
+             title="Care Assistant (Weekend shifts available)", employer="Barchester Healthcare",
              location="Leicester"),
         ptmk(12.60, 72, ["weekend"], title="Contact Centre Advisor (Weekend)", employer="DPD",
              location="Leicester"),

@@ -1172,9 +1172,11 @@ def build_parttime():
                 "status": status, "note": note, "source": "adzuna",
             })
         time.sleep(0.3)
-    # Rank by pay, then by fit, then newest. Python's stable sort means the
-    # dashboard's "grade" sort keeps this order for equal scores.
-    out.sort(key=lambda r: (r["score"], r["fit"], r["posted"]), reverse=True)
+    # Rank by the exact hourly rate, then fit, then newest. The 0-100 score
+    # saturates above £20, so sorting on it would let fit override pay; the
+    # dashboard sorts on the rate for the same reason. Unstated rate sinks.
+    out.sort(key=lambda r: (r["hourly"] if r["hourly"] is not None else -1,
+                            r["fit"], r["posted"]), reverse=True)
     print("%-12s %d queries -> %d kept" % ("pt/leics", len(PT_QUERIES), len(out)), file=sys.stderr)
     return out
 

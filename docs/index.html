@@ -657,9 +657,16 @@ function sortRows(list){
     c.sort((a, b) => ((b.salary || b.stipend || 0) - (a.salary || a.stipend || 0)) || byScore(a, b));
   else if (f.sort === "deadline")
     c.sort((a, b) => (a.deadline || "9999").localeCompare(b.deadline || "9999") || byScore(a, b));
+  else if (section === "pt")
+    // Rank by the exact hourly rate, not the 0-100 pay tier, so £25 always
+    // beats £20 (the tier saturates and would let fit override pay). Unstated
+    // rate sinks; equal rates fall to CV fit, then status.
+    c.sort((a, b) => ((b.hourly == null ? -1 : b.hourly) - (a.hourly == null ? -1 : a.hourly))
+                     || ((b.fit || 0) - (a.fit || 0))
+                     || (STATUS_ORDER[a.status] - STATUS_ORDER[b.status]));
   else
-    // Score first. For part-time that is the pay tier, so equal-paying roles
-    // fall to CV fit, then status. Harmless elsewhere, where fit is undefined.
+    // Score first. Equal scores fall to CV fit, then status. Harmless where
+    // fit is undefined.
     c.sort((a, b) => byScore(a, b) || ((b.fit || 0) - (a.fit || 0))
                      || (STATUS_ORDER[a.status] - STATUS_ORDER[b.status]));
   return c;

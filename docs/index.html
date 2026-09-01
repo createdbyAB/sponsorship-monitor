@@ -797,8 +797,14 @@ function renderRail(){
     '<button type="button" class="chip" data-v="' + t[0] + '" aria-pressed="' + (f.money === t[0]) + '">' +
     t[1] + '</button>').join("");
 
-  const fields = Array.from(new Set(all.map(r => r.field).filter(Boolean))).sort();
-  $("#f-field-wrap").style.display = fields.length > 1 ? "" : "none";
+  // The suitability table can produce many fine-grained fields on the jobs tab,
+  // so show the most common ones by count rather than a long alphabetical wall,
+  // and always keep the one that is currently selected.
+  const fieldCount = {};
+  all.forEach(r => { if (r.field) fieldCount[r.field] = (fieldCount[r.field] || 0) + 1; });
+  let fields = Object.keys(fieldCount).sort((a, b) => fieldCount[b] - fieldCount[a]).slice(0, 10);
+  if (f.field && fields.indexOf(f.field) < 0) fields.push(f.field);
+  $("#f-field-wrap").style.display = Object.keys(fieldCount).length > 1 ? "" : "none";
   $("#f-field").innerHTML = fields.map(v =>
     '<button type="button" class="chip" data-v="' + esc(v) + '" aria-pressed="' + (f.field === v) + '">' +
     esc(v) + '</button>').join("");
@@ -1089,8 +1095,10 @@ function wireEmpty(){
 // The caveat that matters differs by section. A sponsor licence has nothing to
 // do with a studentship, so saying it on the PhD tab would just be noise.
 const FOOTNOTE = {
-  jobs: "A licensed sponsor <em>can</em> sponsor a Skilled Worker visa. It does not mean a given " +
-        "role is a sponsored vacancy. Always confirm sponsorship and salary on the advert before you apply.",
+  jobs: "Roles at licensed sponsors across your fields, ranked by fit to your CV: chemical and process " +
+        "engineering, health and safety and design score highest, then data and operations, then adjacent " +
+        "fields. A licensed sponsor <em>can</em> sponsor a Skilled Worker visa; it does not mean a given role " +
+        "is a sponsored vacancy, so always confirm sponsorship and salary on the advert before you apply.",
   hs:   "A licensed sponsor <em>can</em> sponsor a Skilled Worker visa. It does not mean a given " +
         "role is a sponsored vacancy. The meter compares the advertised salary against the general " +
         "floor, which is a guide, not the decision.",

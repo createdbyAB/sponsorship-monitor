@@ -25,23 +25,121 @@ ADZUNA_KEY = os.environ.get("ADZUNA_KEY", "")
 UA = ("sponsorship-monitor (personal daily job alert; "
       "+https://github.com/createdbyAB/sponsorship-monitor)")
 
-# (search term, field) -- edit this list to change what gets monitored
+# ============================================================================
+# The jobs sweep. Two intakes: targeted KEYWORDS for the priority fields, and a
+# broad Adzuna category sweep (JOB_CATEGORIES) for the widest net. Everything is
+# gated on the licensed-sponsor register and ranked by JOBS_FIT, the suitability
+# table. Health & safety roles route to the H&S tab by title, so H&S terms live
+# here now rather than in a separate sweep. Each keyword and each category is one
+# Adzuna call per day. To retune: reorder JOBS_FIT (top = most suitable), or add
+# a keyword/category. This taxonomy was designed for AB's CV (chemical/process
+# engineering, health & safety and design weighted highest).
+# ============================================================================
+# (search term, field)
 KEYWORDS = [
-    ("interaction designer", "Design"), ("product designer", "Design"),
-    ("ux designer", "Design"), ("ui designer", "Design"),
-    ("service designer", "Design"), ("graphic designer", "Design"),
-    ("data analyst", "Data"), ("operations manager", "Operations"),
-    ("area manager", "Operations"), ("health and safety", "Operations"),
-    ("process engineer", "Engineering"),
+    ('chemical engineer', 'Chemical / process engineering'),
+    ('process engineer', 'Chemical / process engineering'),
+    ('carbon capture', 'Chemical / process engineering'),
+    ('decarbonisation', 'Chemical / process engineering'),
+    ('process safety engineer', 'Chemical / process engineering'),
+    ('formulation scientist', 'Chemical / process engineering'),
+    ('process chemist', 'Chemical / process engineering'),
+    ('health and safety', 'Health & safety'),
+    ('hse advisor', 'Health & safety'),
+    ('hse manager', 'Health & safety'),
+    ('nebosh', 'Health & safety'),
+    ('sheq advisor', 'Health & safety'),
+    ('ehs manager', 'Health & safety'),
+    ('ux designer', 'Design'),
+    ('product designer', 'Design'),
+    ('ux researcher', 'Design'),
+    ('service designer', 'Design'),
+    ('design systems', 'Design'),
+    ('data analyst', 'Data & operations'),
 ]
 
-# Extra Adzuna sweeps aimed squarely at the health and safety tab. Anything they
-# return is still routed by title, so a loose term cannot pollute the section.
-# Each entry costs one Adzuna call per day, so keep the list short.
-HS_KEYWORDS = [
-    "health and safety advisor", "health and safety manager",
-    "hse manager", "safety officer",
+# Adzuna category slugs swept whole for the widest net. Each is one call/day.
+JOB_CATEGORIES = [
+    ('engineering-jobs', 'Chemical / process engineering'),
+    ('manufacturing-jobs', 'Chemical / process engineering'),
+    ('energy-oil-gas-jobs', 'Chemical / process engineering'),
+    ('scientific-qa-jobs', 'Chemical / process engineering'),
+    ('trade-construction-jobs', 'Health & safety'),
+    ('consultancy-jobs', 'Health & safety'),
+    ('creative-design-jobs', 'Design'),
+    ('it-jobs', 'Design'),
+    ('pr-advertising-marketing-jobs', 'Design'),
+    ('logistics-warehouse-jobs', 'Data & operations'),
+    ('accounting-finance-jobs', 'Adjacent breadth'),
+    ('graduate-jobs', 'Adjacent breadth'),
 ]
+
+# CV-suitability table, most-me first. The first pattern a job title matches sets
+# its fit weight (0-25) and field label, so the three priority fields at the top
+# win the ranking. Weight feeds the 0-100 score; a role matching nothing scores
+# low but still appears.
+_JOBS_FIT_RAW = [
+    ('chemical engineer|process engineer|chemical engineering|process engineering|petrochemical engineer|chemical (&|and) process', 25, 'Chemical / process engineering'),
+    ('\\b(ux|ui|user experience|user interface)\\b', 25, 'UX / UI design'),
+    ('carbon capture|ccus|\\bccs\\b|decarbon(is|iz)ation|decarbonising|decarbonizing|net[\\s-]?zero', 24, 'Carbon capture / decarbonisation'),
+    ('process safety|\\bhazop\\b|loss prevention|process hazard|\\bcomah\\b', 24, 'Process safety'),
+    ('health\\s*(and|&|/)\\s*safety', 24, 'Health & safety'),
+    ('\\b(product|interaction|service|experience|digital\\s+product)\\s+design(er)?\\b', 24, 'Product / interaction / service design'),
+    ('\\b(hse|sheq|ehs|qhse|hseq)\\b', 23, 'HSE / SHEQ / EHS'),
+    ('\\b(ux|user|design|product|service)\\s+research(er)?\\b', 23, 'UX / design research'),
+    ('\\b(nebosh|iosh)\\b', 22, 'NEBOSH / IOSH'),
+    ('\\b(design\\s+system|design\\s+ops|design\\s+lead|lead\\s+designer|design\\s+manager|head\\s+of\\s+design|design\\s+director|principal\\s+designer|senior\\s+designer|design\\s+principal)\\b', 22, 'Design systems / leadership'),
+    ('sustainability (engineer|consultant|manager|advisor)|environmental (engineer|consultant|scientist)|circular economy|waste valorisation|resource efficiency', 21, 'Sustainability / environmental engineering'),
+    ('safety\\s+(advis|officer|manager|co-?ordinator|coordinator|consultant|inspector|lead|specialist|superviso|superintendent|engineer|professional)', 21, 'Safety practitioner'),
+    ('energy (engineer|consultant|manager)|renewable energy|renewables engineer|energy efficiency|power systems engineer|hydrogen (engineer|process|production|technolog)', 20, 'Energy / renewables engineering'),
+    ('manufacturing engineer|production engineer|process improvement engineer|continuous improvement engineer|manufacturing technologist|lean (manufacturing )?engineer', 20, 'Manufacturing / production engineering'),
+    ('\\bshe\\s+(advis|officer|manager|co-?ordinator|coordinator|lead|specialist)', 20, 'SHE advisor'),
+    ('environmental\\s+health', 20, 'Environmental health'),
+    ('formulation (scientist|chemist)|process chemist|r&d (engineer|scientist|chemist)|development chemist|process development (engineer|scientist)', 19, 'R&D / process chemistry'),
+    ('occupational\\s+(health|safety)', 19, 'Occupational H&S'),
+    ('\\b(graphic|visual|digital|web|brand|motion|multimedia|communication|packaging)\\s+designer\\b', 19, 'Graphic / visual / digital design'),
+    ('commissioning engineer|process plant|chemical plant|refinery|pipeline engineer|piping engineer|plant (process )?engineer', 18, 'Commissioning / plant engineering'),
+    ('graduate (process|chemical|manufacturing|production|energy|environmental|sustainability) engineer|\\bengd\\b', 18, 'Graduate / EngD engineering entry'),
+    ('fire\\s+(safety|risk|warden)', 18, 'Fire safety'),
+    ('(hse|health\\s*(and|&)\\s*safety|safety)\\s+compliance', 18, 'H&S compliance'),
+    ('\\bdesigner\\b|creative\\s*(&|and|/)\\s*design', 18, 'Design (general)'),
+    ('\\b(data)\\s+(scientist|science)\\b', 14, 'Data science'),
+    ('\\b(data|reporting|insight[s]?|bi|business intelligence|mi|management information)\\s+analyst\\b', 14, 'Data/BI analyst'),
+    ('\\b(supply\\s*chain|logistics|procurement)\\s+(manager|analyst|lead|coordinator|planner|specialist)\\b', 13, 'Supply chain / logistics'),
+    ('\\bbusiness\\s+analyst\\b', 12, 'Business analyst'),
+    ('\\bdata\\s+engineer\\b', 12, 'Data engineering'),
+    ('\\boperations\\s+(manager|analyst|lead|coordinator|director)\\b', 12, 'Operations management'),
+    ('\\b(project|programme|program)\\s+(manager|management|coordinator|lead|officer)\\b', 11, 'Project / programme management'),
+    ('\\b(planning|demand|inventory|fulfilment|fulfillment|warehouse\\s+operations)\\s+(analyst|manager|planner|lead)\\b', 10, 'Planning / demand'),
+    ('\\b(area|regional|general|site|service\\s+delivery)\\s+manager\\b', 9, 'Area / operations manager'),
+    ('\\b(analytics|analytical|reporting|insight[s]?)\\b', 9, 'Analytics / reporting'),
+    ('\\b(laboratory|lab technician|scientist|quality (control|assurance)|\\bqa\\b|\\bqc\\b|analytical chemist|microbiolog|research (assistant|associate|technician)|formulation scientist)\\b', 8, 'Scientific / QA / lab'),
+    ('\\b(software (developer|engineer)|web developer|full[ -]?stack|front[ -]?end|back[ -]?end|devops|it support|service desk|systems? (analyst|administrator|engineer)|network engineer|database administrator|cloud engineer|qa engineer|test (analyst|engineer)|programmer)\\b', 7, 'IT / software'),
+    ('\\b(accountant|accounts (assistant|payable|receivable)|management accountant|financial (analyst|accountant|controller)|finance (analyst|assistant|officer|manager)|audit(or)?|tax (analyst|associate|assistant)|actuar(y|ial)|treasury)\\b', 6, 'Finance / accounting'),
+    ('\\b(graduate (scheme|programme|program|trainee|analyst|engineer|developer|consultant|role|opportunit)|graduate development)\\b', 6, 'Graduate scheme'),
+    ('\\b(lecturer|senior lecturer|professor|teaching fellow|\\btutor\\b|\\bteacher\\b|academic|postdoc(toral)?|research fellow|education officer)\\b', 5, 'Teaching / academia'),
+    ('\\b(human resources|\\bhr\\b|people (advisor|partner|officer|team)|talent acquisition|recruit(er|ment)|learning and development|\\bl&d\\b|reward analyst)\\b', 4, 'HR / people'),
+    ('\\b(marketing|brand (manager|executive|assistant)|public relations|\\bpr\\b|communications (officer|manager|executive|assistant)|content (marketing|executive|creator)|social media|\\bseo\\b|digital marketing|copywriter)\\b', 4, 'Marketing / PR'),
+    ('\\b(customer (service|support|success|experience|care)|client (service|support|success)|call centre|contact centre|service desk (advisor|analyst))\\b', 3, 'Customer service'),
+    ('\\b(administrator|administrative assistant|office (manager|administrator|coordinator|assistant)|executive assistant|personal assistant|receptionist|data entry|\\bclerk\\b|secretary|business support)\\b', 3, 'Admin / office'),
+]
+JOBS_FIT = [(re.compile(r, re.I), w, l) for r, w, l in _JOBS_FIT_RAW]
+
+# Titles to drop even from a sponsor: off-target roles the broad sweep pulls in.
+_JUNK = re.compile(
+    '\\b(sales|account)\\s+(executive|advisor|adviser|assistant|consultant|representative|rep|manager|associate|director)\\b|\\bbusiness development\\b|\\btelesales\\b|\\bfield sales\\b|\\bestate agent\\b|\\bcar salesman\\b|\\brecruitment consultant\\b|\\b(showroom|retail|telesales)\\s+(design|consultant)\\b|' +
+    '\\bsales\\s+engineer\\b|' +
+    '\\b(broadcast|audio[\\s-]?visual|media production|music production|video production|film production)\\b|' +
+    '\\b(hgv|lgv|7\\.5t|class\\s*[12]|c\\+e|van|delivery)\\s*driver\\b|\\b(driver|courier|forklift|labourer|picker|packer|assembler|cleaner|housekeep\\w*)\\b|\\b(production|factory|line|warehouse|fulfil?lment)\\s+(operative|operator|assistant|worker|picker|packer)\\b|\\bmachine operator\\b|' +
+    '\\b(quantity surveyor|structural engineer|civil engineer|site manager|highways engineer|geotechnical|building services engineer|architectural technologist)\\b|\\b(structural|mechanical|electrical|piping|hvac|civil|building\\s*services|drainage|highway)\\s+design\\w*\\b|\\bproject\\s+(engineer|surveyor|quantity)\\b|\\bcad\\s*(designer|technician|drafter|draught\\w*)\\b|' +
+    '\\b(retail|store|shop|floor|duty|bar|restaurant|catering|kitchen|pub|cafe)\\s+(manager|assistant)\\b|\\bassistant manager\\b|\\b(retail|sales)\\s+assistant\\b|\\b(barista|waiter|waitress|chef|kitchen porter)\\b|\\bstock\\s+(assistant|controller|room)\\b|' +
+    '\\b(care\\s+(worker|assistant)|carer|support worker|healthcare assistant|nurse|nursing|social worker|teaching assistant|lifeguard|safeguarding)\\b|\\boccupational\\s+health\\s+(nurse|physician|doctor|technician|assistant)\\b|' +
+    '\\bsafety\\s+steward\\b|\\b(community|neighbou?rhood|road)\\s+safety\\b|\\b(trust\\s*(and|&)\\s*safety|online\\s+safety|content\\s+safety)\\b|\\bsecurity officer\\b|' +
+    '\\b(nail|hair(dress\\w*|stylist)?|barber|make[\\s-]?up|beauty|tattoo|aesthetician)\\b|\\b(floral|florist)\\b|\\b(fashion|garment|textile|apparel|footwear|dressmak\\w*|tailor|milliner|pattern\\s*cutter)\\b|\\b(jewell?ery|jewelry)\\b|' +
+    '\\b(kitchen|bathroom|bedroom|conservatory|blinds?|curtain|furniture|cabinet|window)\\b|\\b(interior|set|stage|costume|garden|landscape|exhibition|sound|audio|lighting)\\s+design\\w*\\b|' +
+    '\\b(managing director|vice president|chief\\s+(executive|financial|technology|operating|information|marketing|commercial)\\s+officer|c[efot]o|cio)\\b|\\b(apprentice(ship)?|intern(ship)?|industrial placement|placement year|work experience|graduate placement|summer placement)\\b|' +
+    '\\b(mortgage|insurance|financial|wealth)\\s+(advisor|adviser|consultant|broker|planner)\\b|\\bparaplanner\\b|' +
+    '\\bpart[\\s-]?time\\b', re.I)
 
 # --- part-time work in Leicester --------------------------------------------
 # A different section with different rules: no sponsor gate, because these are
@@ -341,11 +439,16 @@ def is_sponsor(company, sponsors):
             return True
     return bool(difflib.get_close_matches(c, sponsors, n=1, cutoff=0.93))
 
-def adzuna(keyword, where=None, part_time=False, full_time=False, max_days=MAX_DAYS_OLD):
+def adzuna(keyword=None, where=None, part_time=False, full_time=False, max_days=MAX_DAYS_OLD,
+           category=None):
     params = {
         "app_id": ADZUNA_ID, "app_key": ADZUNA_KEY, "results_per_page": 50,
-        "what": keyword, "max_days_old": max_days, "sort_by": "date",
+        "max_days_old": max_days, "sort_by": "date",
     }
+    if keyword:
+        params["what"] = keyword
+    if category:
+        params["category"] = category   # slug, e.g. engineering-jobs; sweeps a whole field
     if where:
         params["where"] = where
         params["distance"] = PT_DISTANCE
@@ -357,7 +460,7 @@ def adzuna(keyword, where=None, part_time=False, full_time=False, max_days=MAX_D
     try:
         return json.loads(fetch(f"https://api.adzuna.com/v1/api/jobs/{COUNTRY}/search/1?{q}")).get("results", [])
     except Exception as e:
-        print("Adzuna error:", keyword, e, file=sys.stderr)
+        print("Adzuna error:", keyword or category, e, file=sys.stderr)
         return []
 
 # ---------------------------------------------------------------- jobs.ac.uk
@@ -827,14 +930,22 @@ def google_search(query, limit=10):
         })
     return out
 
-def score(job, field, keyword):
-    title = (job.get("title") or "").lower()
-    s = 55
-    if keyword in title: s += 20
-    elif any(w in title for w in keyword.split()): s += 8
-    pay = job.get("salary_min") or 0
-    s += 12 if pay >= GENERAL_FLOOR else (4 if pay >= NEW_ENTRANT_FLOOR else 0)
-    if field == "Design" and "designer" in title: s += 8
+def job_fit(text):
+    """The best-matching CV field for a job: its suitability weight (0-25) and
+    label. JOBS_FIT is ordered most-suitable first, so the first match wins.
+    A weight of 0 means the role fits none of the tracked fields."""
+    for rx, weight, label in JOBS_FIT:
+        if rx.search(text or ""):
+            return weight, label
+    return 0, ""
+
+def score(title, category="", pay=0):
+    """0-100 rating driven by CV suitability, lifted a little by salary. A
+    top-priority role clears 90; an off-field but sponsorable role sits in the
+    40s and still appears, just far down the list."""
+    weight, _ = job_fit(title + " " + category)
+    s = 40 + weight * 2
+    s += 10 if pay >= GENERAL_FLOOR else (5 if pay >= NEW_ENTRANT_FLOOR else 0)
     return max(0, min(100, s))
 
 def classify(pay, agency=False, on_register=True):
@@ -899,28 +1010,41 @@ def build_today():
         seen.add(key)
         return True
 
-    # --- Adzuna: the monitored fields, routed into jobs or H&S by title -------
-    for keyword, field in KEYWORDS + [(k, "Operations") for k in HS_KEYWORDS]:
-        hs_only = keyword in HS_KEYWORDS
+    # --- Adzuna jobs: targeted keywords + a broad category sweep --------------
+    # One row builder for both intakes. The junk filter drops off-target titles a
+    # broad sweep drags in, the register gates on the employer, the fit label from
+    # the suitability table overrides the sweep's field hint, and H&S titles route
+    # to their own tab. The rating is CV suitability, not the search term.
+    def add_job(job, field_hint):
+        company = (job.get("company") or {}).get("display_name", "")
+        title = re.sub("<.*?>", "", job.get("title") or "")
+        if _JUNK.search(title):
+            return
+        pay = job.get("salary_min") or 0
+        if pay and pay < NEW_ENTRANT_FLOOR:
+            return
+        if not take(title, company):
+            return
+        category = (job.get("category") or {}).get("label", "")
+        weight, fit_label = job_fit(title + " " + category)
+        field = fit_label or field_hint
+        is_hs = bool(_HS.search(title))
+        section = "hs" if is_hs else "jobs"
+        (hs if is_hs else jobs).append(make_row(
+            title, company, (job.get("location") or {}).get("display_name", ""),
+            pay, (job.get("created") or "")[:10], job.get("redirect_url", ""),
+            field, section, "adzuna", score(title, category, pay)))
+
+    for keyword, field in KEYWORDS:
         calls += 1
         for job in adzuna(keyword):
-            company = (job.get("company") or {}).get("display_name", "")
-            title = re.sub("<.*?>", "", job.get("title") or "")
-            is_hs = bool(_HS.search(title))
-            # The H&S sweeps exist to fill one tab. If a term drifts, drop the
-            # result rather than letting it land in the general jobs list.
-            if hs_only and not is_hs:
-                continue
-            pay = job.get("salary_min") or 0
-            if pay and pay < NEW_ENTRANT_FLOOR:
-                continue
-            if not take(title, company):
-                continue
-            section = "hs" if is_hs else "jobs"
-            (hs if is_hs else jobs).append(make_row(
-                title, company, (job.get("location") or {}).get("display_name", ""),
-                pay, (job.get("created") or "")[:10], job.get("redirect_url", ""),
-                field, section, "adzuna", score(job, field, keyword)))
+            add_job(job, field)
+    for slug, field in JOB_CATEGORIES:
+        calls += 1
+        for job in adzuna(category=slug):
+            add_job(job, field)
+    print("jobs sweep: %d keywords + %d categories -> %d jobs, %d H&S"
+          % (len(KEYWORDS), len(JOB_CATEGORIES), len(jobs), len(hs)), file=sys.stderr)
 
     # --- scraped boards: same shape, same gate, different window -------------
     def board(name, getter, queries, max_days):
@@ -939,8 +1063,8 @@ def build_today():
                     continue
                 hs.append(make_row(
                     title, job["employer"], job["location"], pay, job["posted"],
-                    job["url"], "Operations", "hs", name,
-                    score({"title": title, "salary_min": pay}, "Operations", keyword),
+                    job["url"], "Health & safety", "hs", name,
+                    score(title, "", pay),
                     deadline=job["deadline"], agency=job.get("agency", False)))
                 found += 1
             time.sleep(1.0)
@@ -966,7 +1090,7 @@ def build_today():
                 seen.add(key)
                 hs.append(make_row(
                     title, hit["employer"] or "employer not named", "", 0, "",
-                    hit["url"], "Operations", "hs", "google", 55,
+                    hit["url"], "Health & safety", "hs", "google", 55,
                     on_register=on_register))
                 found += 1
             time.sleep(1.0)

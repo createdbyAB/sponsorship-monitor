@@ -10,10 +10,18 @@ One shell, one card language, four tabs.
 
 | Tab | What it holds | What the card adds |
 | --- | --- | --- |
-| **Jobs** | sponsored roles across the monitored fields | salary, posted age |
+| **Jobs** | sponsored roles across many fields, ranked by CV fit | salary, posted age |
 | **H&S** | health and safety roles, routed by job title | salary vs visa floor meter |
 | **PhD** | funded chemical engineering studentships | funding, international eligibility, deadline |
 | **Part-time** | part-time roles in Leicester, no sponsor check | estimated hourly rate, pay tier, CV-fit tag |
+
+## Sponsored jobs
+
+Roles at licensed sponsors, cast as wide as the CV can reach and ranked by how well each fits it. Two intakes feed it: a set of targeted `KEYWORDS` for the strongest fields, and a sweep of whole Adzuna `JOB_CATEGORIES` for the widest net (engineering, IT, science, finance, and so on). Everything is gated on the GOV.UK licensed-sponsor register, and a title-matched health and safety role routes to the H&S tab.
+
+**The 0-100 score is CV suitability, not the search term.** `JOBS_FIT` is an ordered table of patterns; the first one a title matches sets the score and the field label. Chemical/process engineering and UX top it at 25, health and safety and product design just below, then sustainability, energy and manufacturing engineering, then data and operations in the middle, and adjacent fields (IT, finance, HR, marketing, admin) low. A sponsorable role that matches nothing still shows, it just sits near the bottom. `_JUNK` drops the off-target titles a broad category sweep drags in: sales, drivers and operatives, construction/civil engineering, retail and hospitality, care and clinical, beauty and fashion, kitchen and interior design, C-suite, and anything part-time.
+
+The status colour is still the sponsorship signal (a licence held, not a guarantee); the score is the new suitability read. So the loud number now answers "how much is this me", and the colour answers "can they sponsor".
 
 ## Funded PhDs
 
@@ -161,9 +169,9 @@ Both are reversible with **Undo**, and the **Show** control in the filters switc
 
 ## Change what it watches
 
-Edit the `KEYWORDS` list at the top of `monitor.py` (search term, field). `HS_KEYWORDS` holds the extra Adzuna sweeps aimed at the H&S tab, and `JACUK_QUERIES`, `REED_QUERIES` and `GOOGLE_QUERIES` the searches for the other sources. Salary floors are `NEW_ENTRANT_FLOOR` and `GENERAL_FLOOR`; both are published to the page, so the threshold meter and the card copy follow whatever you set.
+The jobs sweep is `KEYWORDS` (targeted terms for the priority fields) plus `JOB_CATEGORIES` (whole Adzuna categories, for the widest net), both at the top of `monitor.py`. To change the ranking, reorder `JOBS_FIT` — the first pattern a title matches sets its fit weight and field, so the fields at the top win. `_JUNK` drops off-target titles the broad sweep drags in. The other sections have their own query lists (`JACUK_QUERIES`, `REED_QUERIES`, `PT_QUERIES`, `GOOGLE_QUERIES`). Salary floors are `NEW_ENTRANT_FLOOR` and `GENERAL_FLOOR`.
 
-**Watch the Adzuna budget.** Every entry in `KEYWORDS`, `HS_KEYWORDS`, `PT_QUERIES` and `PT_FT_QUERIES` costs one call per day, currently about 29 in total, or roughly 880 a month. jobs.ac.uk, reed.co.uk, EURAXESS and jobRxiv cost nothing. Trim `PT_FT_QUERIES` or `HS_KEYWORDS` first if you need to cut back; the run prints a per-source summary to the log.
+**Watch the Adzuna budget.** Every entry in `KEYWORDS`, `JOB_CATEGORIES`, `PT_QUERIES` and `PT_FT_QUERIES` costs one call per day, currently about 45 in total, or roughly 1,350 a month. jobs.ac.uk, reed.co.uk, EURAXESS and jobRxiv cost nothing. Trim `JOB_CATEGORIES` (the adjacent-field ones first) if you need to cut back; the run prints a per-source summary to the log.
 
 ## The data file
 

@@ -131,7 +131,7 @@ _JUNK = re.compile(
     '\\bsales\\s+engineer\\b|' +
     '\\b(broadcast|audio[\\s-]?visual|media production|music production|video production|film production)\\b|' +
     '\\b(hgv|lgv|7\\.5t|class\\s*[12]|c\\+e|van|delivery)\\s*driver\\b|\\b(driver|courier|forklift|labourer|picker|packer|assembler|cleaner|housekeep\\w*)\\b|\\b(production|factory|line|warehouse|fulfil?lment)\\s+(operative|operator|assistant|worker|picker|packer)\\b|\\bmachine operator\\b|' +
-    '\\b(quantity surveyor|structural engineer|civil engineer|site manager|highways engineer|geotechnical|building services engineer|architectural technologist)\\b|\\b(structural|mechanical|electrical|piping|hvac|civil|building\\s*services|drainage|highway)\\s+design\\w*\\b|\\bproject\\s+(engineer|surveyor|quantity)\\b|\\bcad\\s*(designer|technician|drafter|draught\\w*)\\b|' +
+    '\\b(quantity surveyor|structural engineer|civil engineer|site manager|highways engineer|geotechnical|building services engineer|architectural technologist)\\b|\\b(structural|mechanical|electrical|\\bmep\\b|m&e|piping|hvac|civil|building\\s*services|drainage|highway)\\s+design\\w*\\b|\\bproject\\s+(engineer|surveyor|quantity)\\b|\\bcad\\s*(designer|technician|drafter|draught\\w*)\\b|' +
     '\\b(retail|store|shop|floor|duty|bar|restaurant|catering|kitchen|pub|cafe)\\s+(manager|assistant)\\b|\\bassistant manager\\b|\\b(retail|sales)\\s+assistant\\b|\\b(barista|waiter|waitress|chef|kitchen porter)\\b|\\bstock\\s+(assistant|controller|room)\\b|' +
     '\\b(care\\s+(worker|assistant)|carer|support worker|healthcare assistant|nurse|nursing|social worker|teaching assistant|lifeguard|safeguarding)\\b|\\boccupational\\s+health\\s+(nurse|physician|doctor|technician|assistant)\\b|' +
     '\\bsafety\\s+steward\\b|\\b(community|neighbou?rhood|road)\\s+safety\\b|\\b(trust\\s*(and|&)\\s*safety|online\\s+safety|content\\s+safety)\\b|\\bsecurity officer\\b|' +
@@ -1027,7 +1027,10 @@ def build_today():
             return
         category = (job.get("category") or {}).get("label", "")
         weight, fit_label = job_fit(title + " " + category)
-        field = fit_label or field_hint
+        # A matched role gets its fit field; an unmatched one takes Adzuna's own
+        # category label, which is honest about what it is, rather than the sweep
+        # hint (which would stamp, say, a billing analyst as chemical engineering).
+        field = fit_label or category or field_hint
         is_hs = bool(_HS.search(title))
         section = "hs" if is_hs else "jobs"
         (hs if is_hs else jobs).append(make_row(

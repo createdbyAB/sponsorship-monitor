@@ -164,6 +164,23 @@ PT_FT_QUERIES = [
     "care assistant",
 ]
 
+# --- NHS Jobs (jobs.nhs.uk) --------------------------------------------------
+# A public scrape of NHS Jobs, across the board: clinical and non-clinical. NHS
+# Jobs has no visa filter, so the sponsorship signal is read from each advert's
+# "Certificate of Sponsorship" statement (welcome / unable / unstated). Reading
+# it needs a detail fetch, so the cheap listing gate (an NHS body, or on the
+# register) runs first and only a suitability-ranked shortlist is confirmed.
+NHS_QUERIES = [
+    "nurse", "doctor", "biomedical scientist", "pharmacist", "radiographer",
+    "administrator", "data analyst", "finance", "project manager",
+    "engineer", "estates", "health and safety",
+]
+NHS_PAGES  = 1       # 10 results per page; the archive accumulates across days
+NHS_FLOOR  = 23000   # Health and Care Worker visa floor; below this, sponsorship
+                     # is generally not possible, so drop clearly sub-threshold roles
+NHS_ENRICH = 60      # detail pages fetched per run, best fit first, to confirm
+                     # the sponsorship statement and read the closing date
+
 # Hourly-rate bands that set the status colour and word. National Living Wage is
 # the floor a real job should clear, so below it, or unstated, is the weak tier.
 PT_GOOD_RATE = 13.50     # green:  a good part-time rate
@@ -364,7 +381,7 @@ DATA_DIR = os.path.join("docs", "data")
 
 # The dashboard tabs, in order. One place to add a section, so the stamp, the
 # counts and the written payload can never drift out of step.
-SECTIONS = ("jobs", "hs", "phd", "pt")
+SECTIONS = ("jobs", "hs", "phd", "pt", "nhs")
 
 # Routes a title into the health and safety section. Deliberately narrow at the
 # edges: "Health and Social Care" and "Healthcare Architecture" must not match.
@@ -1101,12 +1118,13 @@ def build_today():
 
     phd = build_phds()
     pt = build_parttime()
+    nhs = build_nhs(sponsors)
 
     for bucket in (jobs, hs, phd):
         bucket.sort(key=lambda m: m["score"], reverse=True)
-    # pt is already sorted by (pay, fit, newest); leave that order intact.
+    # pt and nhs are already sorted by their own key; leave that order intact.
     print("Adzuna calls:", calls + len(PT_QUERIES) + len(PT_FT_QUERIES), file=sys.stderr)
-    return {"jobs": jobs, "hs": hs, "phd": phd, "pt": pt}
+    return {"jobs": jobs, "hs": hs, "phd": phd, "pt": pt, "nhs": nhs}
 
 def build_phds():
     """Funded PhD openings, ranked against the research interests.
@@ -1391,6 +1409,151 @@ def build_parttime():
              sum(not r["shifts"] for r in out)), file=sys.stderr)
     return out
 
+# ------------------------------------------------------------------ NHS Jobs
+# jobs.nhs.uk has no robots.txt (the SPA serves its shell for that path), so
+# there are no crawl rules; the scrape stays polite with a descriptive user
+# agent and a pause between requests. Search results are server-rendered.
+_NHS_ITEM = re.compile(r'<li class="nhsuk-list-panel search-result.*?'
+                       r'(?=<li class="nhsuk-list-panel search-result|</ul>)', re.S)
+_NHS_LINK = re.compile(r'<a href="(/candidate/jobadvert/[^"?]+)[^"]*"[^>]*'
+                       r'data-test="search-result-job-title"[^>]*>\s*(.*?)\s*</a>', re.S)
+_NHS_LOC  = re.compile(r'data-test="search-result-location">\s*<h3[^>]*>\s*(.*?)\s*'
+                       r'<div class="location-font-size">\s*(.*?)\s*</div>', re.S)
+_NHS_SAL  = re.compile(r'data-test="search-result-salary"[^>]*>\s*(.*?)\s*</', re.S)
+# Certificate of Sponsorship statements, as NHS Jobs templates them.
+_NHS_WELCOME = re.compile(r"sponsorship to work in the uk are welcome", re.I)
+_NHS_UNABLE  = re.compile(
+    r"unable to (?:offer|provide|support|sponsor)[^.]{0,40}(?:sponsor|visa|certificate)|"
+    r"(?:cannot|can not|not able to|do(?:es)? not) (?:offer|provide)[^.]{0,30}sponsor|"
+    r"not (?:eligible|able) for sponsorship|no sponsorship (?:available|offered)", re.I)
+_NHS_CLOSES  = re.compile(r"closing date\s*(?:is)?\s*:?\s*(\d{1,2}\s+[A-Za-z]+\s+\d{4})", re.I)
+
+def is_nhs_body(employer):
+    return "nhs" in (employer or "").lower()
+
+def nhs_jobs(keyword, pages=NHS_PAGES):
+    out = []
+    for p in range(1, pages + 1):
+        q = urllib.parse.urlencode({"keyword": keyword, "page": p, "language": "en"})
+        try:
+            page = fetch("https://www.jobs.nhs.uk/candidate/search/results?" + q)
+        except Exception as e:
+            print("nhs error:", keyword, e, file=sys.stderr)
+            break
+        items = _NHS_ITEM.findall(page)
+        if not items:
+            break
+        for b in items:
+            link = _NHS_LINK.search(b)
+            if not link:
+                continue
+            loc, sal = _NHS_LOC.search(b), _NHS_SAL.search(b)
+            out.append({
+                "title": _text(link.group(2)),
+                "employer": _text(loc.group(1)) if loc else "",
+                "location": _text(loc.group(2)) if loc else "",
+                "salary": _first_pounds(sal.group(1)) if sal else None,
+                "url": "https://www.jobs.nhs.uk" + link.group(1),
+            })
+        if len(items) < 10:
+            break
+        time.sleep(0.6)
+    return out
+
+def nhs_detail(url):
+    """The advert's sponsorship statement and closing date. This is the only
+    place the sponsorship question is actually answered, so it is worth one
+    request for the roles most worth confirming."""
+    try:
+        page = fetch(url)
+    except Exception as e:
+        print("nhs detail error:", url, e, file=sys.stderr)
+        return {}
+    t = _text(page)
+    spons = "welcome" if _NHS_WELCOME.search(t) else ("unable" if _NHS_UNABLE.search(t) else "unstated")
+    m = _NHS_CLOSES.search(t)
+    deadline = _daymon_full(m.group(1)) if m else ""
+    return {"sponsorship": spons, "deadline": deadline}
+
+def _daymon_full(s):
+    """'14 September 2026' -> ISO date."""
+    for fmt in ("%d %B %Y", "%d %b %Y"):
+        try:
+            return datetime.datetime.strptime(s.strip(), fmt).date().isoformat()
+        except (ValueError, AttributeError):
+            continue
+    return ""
+
+def classify_nhs(sponsorship, nhs_body):
+    """Status and note from the sponsorship statement. 'unable' never reaches
+    here (those rows are dropped). The register/NHS-body signal only ever earns a
+    caution, since it says the employer can sponsor, not that this role will."""
+    if sponsorship == "welcome":
+        return "strong", ("The advert welcomes Skilled Worker sponsorship, so this role is open to it. "
+                          "Still confirm the details on the advert before you apply.")
+    if nhs_body:
+        return "caution", ("An NHS employer, which will hold a sponsor licence, but the advert does not "
+                           "say whether this role is offered with sponsorship. Confirm on the advert.")
+    return "caution", ("A licensed sponsor, but the advert does not state sponsorship for this role. "
+                       "Confirm on the advert before you apply.")
+
+def build_nhs(sponsors):
+    """NHS Jobs across the board, ranked by CV fit, gated by sponsorship.
+
+    An NHS body or a registered sponsor gets a cheap listing-level pass; the
+    advert's own sponsorship statement is the real signal, so the best-fit
+    shortlist is fetched to confirm it. A role the advert says it cannot sponsor
+    is dropped; one that welcomes it is strong; the rest are caution.
+    """
+    found, seen = [], set()
+    for keyword in NHS_QUERIES:
+        for row in nhs_jobs(keyword):
+            key = norm(row["title"]) + "|" + norm(row["employer"])
+            if key in seen:
+                continue
+            pay = row["salary"] or 0
+            if pay and pay < NHS_FLOOR:
+                continue                        # clearly below any visa threshold
+            nhs_body = is_nhs_body(row["employer"])
+            if not (nhs_body or is_sponsor(row["employer"], sponsors)):
+                continue                        # no sponsorship signal at all
+            seen.add(key)
+            row["nhs_body"] = nhs_body
+            row["score"] = score(row["title"], "", pay)
+            found.append(row)
+        time.sleep(0.4)
+
+    # Confirm the sponsorship statement for the best-fit shortlist; the rest keep
+    # the cheap "can sponsor" caution. An 'unable' advert is dropped outright.
+    found.sort(key=lambda r: r["score"], reverse=True)
+    out = []
+    for i, row in enumerate(found):
+        spons, deadline = "unstated", ""
+        if i < NHS_ENRICH:
+            extra = nhs_detail(row["url"])
+            time.sleep(0.5)
+            spons = extra.get("sponsorship", "unstated")
+            deadline = extra.get("deadline", "")
+            if spons == "unable":
+                continue                        # advert says it cannot sponsor
+        status, note = classify_nhs(spons, row["nhs_body"])
+        # A confirmed welcome lifts the score, so sponsorable roles surface first.
+        sc = min(100, row["score"] + (12 if spons == "welcome" else 0))
+        out.append({
+            "score": sc, "title": row["title"], "field": "NHS",
+            "employer": row["employer"], "location": row["location"],
+            "salary": row["salary"], "belowGeneral": bool(row["salary"] and row["salary"] < GENERAL_FLOOR),
+            "posted": "", "deadline": deadline, "url": row["url"], "section": "nhs",
+            "status": status, "note": note, "source": "jobs.nhs.uk",
+            "sponsorship": spons,
+        })
+    out.sort(key=lambda r: r["score"], reverse=True)
+    welcomed = sum(1 for r in out if r["sponsorship"] == "welcome")
+    print("%-12s %d queries -> %d kept (%d welcomed, %d unstated; %d enriched)"
+          % ("nhs", len(NHS_QUERIES), len(out), welcomed, len(out) - welcomed,
+             min(len(found), NHS_ENRICH)), file=sys.stderr)
+    return out
+
 SEEN_PATH = os.path.join(DATA_DIR, "seen.json")
 SEEN_KEEP_DAYS = 180
 
@@ -1570,7 +1733,23 @@ def demo():
         ptmk(None, 58, ["evening"], title="Receptionist / Front of House (Late shifts)",
              employer="Leicester Tigers", location="Leicester"),
     ]
-    return {"jobs": jobs, "hs": hs, "phd": phd, "pt": pt}
+    def nhsmk(score, spons, **kw):
+        status, note = classify_nhs(spons, "nhs" in kw.get("employer", "").lower())
+        return mk(score=score, section="nhs", field="NHS", source="jobs.nhs.uk",
+                  sponsorship=spons, status=status, note=note, **kw)
+    nhs = [
+        nhsmk(96, "welcome", title="Data Analyst", employer="Cambridge University Hospitals NHS Foundation Trust",
+              location="Cambridge", salary=39959, deadline=d(18)),
+        nhsmk(84, "welcome", title="Health and Safety Advisor", employer="West London NHS Trust",
+              location="London", salary=44000, deadline=d(9)),
+        nhsmk(70, "unstated", title="Estates Officer (Mechanical)", employer="South Tees Hospitals NHS Foundation Trust",
+              location="Middlesbrough", salary=37000, deadline=d(25)),
+        nhsmk(58, "unstated", title="Clinical Data Scientist", employer="Serco Health",
+              location="Manchester", salary=46000, deadline=d(12)),
+        nhsmk(45, "unstated", title="Administrator", employer="Berkshire Healthcare NHS Foundation Trust",
+              location="Reading", salary=25760, deadline=d(6)),
+    ]
+    return {"jobs": jobs, "hs": hs, "phd": phd, "pt": pt, "nhs": nhs}
 
 if __name__ == "__main__":
     write(demo() if "--demo" in sys.argv else build_today())

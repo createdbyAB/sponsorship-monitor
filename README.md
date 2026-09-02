@@ -4,9 +4,9 @@ A daily dashboard of recent UK jobs at employers **licensed to sponsor a Skilled
 
 The interface is the **Control Room** design system: dark mode first, mobile first, with light mode as a first-class swap of the same tokens. Every card leads with the two things worth judging fast, a fit score out of 100 and an eligibility status. Status colour is always paired with an icon and a word, so colour never carries meaning on its own.
 
-## The four sections
+## The five sections
 
-One shell, one card language, four tabs.
+One shell, one card language, five tabs.
 
 | Tab | What it holds | What the card adds |
 | --- | --- | --- |
@@ -14,6 +14,7 @@ One shell, one card language, four tabs.
 | **H&S** | health and safety roles, routed by job title | salary vs visa floor meter |
 | **PhD** | funded chemical engineering studentships | funding, international eligibility, deadline |
 | **Part-time** | part-time roles in Leicester, no sponsor check | estimated hourly rate, pay tier, CV-fit tag |
+| **NHS** | NHS Jobs roles, clinical and non-clinical, open to sponsorship | the advert's own sponsorship line, closing date |
 
 ## Sponsored jobs
 
@@ -73,19 +74,35 @@ CV fit is the **tiebreak**, not the grade: two roles at the same rate, the one t
 
 **Shift filter.** For working around a day job, when the hours fall matters. Adzuna has no shift field, so the shift is read from the title and description: evening, weekend, flexible, or an explicit weekday-daytime clash. Most adverts do not say, so those are tagged **unstated** and shown, not dropped. The rail's Shift filter is multi-select and off by default: tick Evenings and Weekends for a strict list (turning it on also drops the explicit Mon-Fri daytime roles), add Flexible and Unstated to widen. The run logs how many of each it found; a typical day tags roughly a fifth and leaves the rest unstated.
 
+## NHS Jobs
+
+Roles from the official NHS Jobs site (`jobs.nhs.uk`), across the board — clinical *and* non-clinical, not just health and safety. The NHS is one of the country's largest visa sponsors, and this tab is the whole board rather than one field: data, estates, engineering, finance, admin, science and clinical roles all sit together, ranked by the same CV-fit score as the Jobs tab.
+
+**The grade is the advert's own words, not a guess.** Unlike Adzuna, an NHS advert usually states its sponsorship position outright — the "Certificate of Sponsorship" line. The pipeline reads it and grades each role:
+
+- **Welcomed** (green, `WELCOMED ✓`) — the advert explicitly says applicants needing sponsorship are welcome. This is an actual yes, not an inference.
+- **Can sponsor** (amber, `CAN SPONSOR`) — the advert did not say either way, but the employer is either an NHS body or on the GOV.UK sponsor register, so it *can* sponsor even though this advert is silent. A non-NHS employer that reaches this tab through the register is tagged `LICENSED SPONSOR` so it does not look out of place next to the trusts.
+
+Adverts that **explicitly rule sponsorship out** are dropped, so you never see a role you cannot take.
+
+**How it stays cheap.** NHS search returns hundreds of hits, and reading every advert's detail page would be slow. So it runs as a two-stage funnel: a cheap listing gate first (NHS-named employer *or* on the register, plus a salary floor), then it fetches detail pages only for the top `NHS_ENRICH` roles by fit to read the sponsorship line and closing date. The rest are shown as "can sponsor" on the listing signal alone. Tune the search with `NHS_QUERIES`, the depth with `NHS_PAGES`, the floor with `NHS_FLOOR`, and the enrichment cap with `NHS_ENRICH`.
+
+New postings are the point of the tab — the daily run stamps each role's first-seen date, so anything posted since the last run shows under **New**. No API key is needed; the site has no `robots.txt` and the scrape is polite (descriptive user agent, a pause between requests).
+
 ## Where the data comes from
 
 | Source | Used for | How | Needs a key |
 | --- | --- | --- | --- |
 | GOV.UK register of licensed sponsors | the sponsor gate on every row | published CSV | no |
 | Adzuna | jobs, H&S, and part-time Leicester | API, one call per keyword per day | yes, already set |
+| jobs.nhs.uk | NHS roles across the board, open to sponsorship | scrape of the public search + per-advert sponsorship line | no |
 | jobs.ac.uk | H&S at universities, and UK PhDs | scrape of the public search | no |
 | EURAXESS | doctoral posts across Europe | scrape of the public search | no |
 | jobRxiv | doctoral posts worldwide, including North America | its listings JSON endpoint | no |
 | reed.co.uk | H&S across the whole UK market | the page's own JSON payload | no |
 | Google Programmable Search | H&S and PhD leads from the open web, including the US and Canada | JSON API | optional |
 
-Every source is polite: a descriptive user agent, a pause between requests, and only paths the site's `robots.txt` allows. If a site changes shape the parser returns nothing and the run carries on with the others, so a break shows up as a thinner H&S tab rather than a failed workflow.
+Every source is polite: a descriptive user agent, a pause between requests, and only paths the site's `robots.txt` allows. If a site changes shape the parser returns nothing and the run carries on with the others, so a break shows up as a thinner tab rather than a failed workflow.
 
 Whatever a source returns, a row only lands in the H&S tab if its **title** matches the H&S pattern, so a loose search term cannot leak into the wrong section. Adverts on these boards run for weeks rather than days, so each source has its own window (`JACUK_MAX_DAYS`, `REED_MAX_DAYS`).
 
@@ -171,7 +188,7 @@ Both are reversible with **Undo**, and the **Show** control in the filters switc
 
 The jobs sweep is `KEYWORDS` (targeted terms for the priority fields) plus `JOB_CATEGORIES` (whole Adzuna categories, for the widest net), both at the top of `monitor.py`. To change the ranking, reorder `JOBS_FIT` — the first pattern a title matches sets its fit weight and field, so the fields at the top win. `_JUNK` drops off-target titles the broad sweep drags in. The other sections have their own query lists (`JACUK_QUERIES`, `REED_QUERIES`, `PT_QUERIES`, `GOOGLE_QUERIES`). Salary floors are `NEW_ENTRANT_FLOOR` and `GENERAL_FLOOR`.
 
-**Watch the Adzuna budget.** Every entry in `KEYWORDS`, `JOB_CATEGORIES`, `PT_QUERIES` and `PT_FT_QUERIES` costs one call per day, currently about 45 in total, or roughly 1,350 a month. jobs.ac.uk, reed.co.uk, EURAXESS and jobRxiv cost nothing. Trim `JOB_CATEGORIES` (the adjacent-field ones first) if you need to cut back; the run prints a per-source summary to the log.
+**Watch the Adzuna budget.** Every entry in `KEYWORDS`, `JOB_CATEGORIES`, `PT_QUERIES` and `PT_FT_QUERIES` costs one call per day, currently about 45 in total, or roughly 1,350 a month. jobs.nhs.uk, jobs.ac.uk, reed.co.uk, EURAXESS and jobRxiv cost nothing (no API, just polite scraping). The NHS tab makes its own requests — one search per `NHS_QUERIES` term plus up to `NHS_ENRICH` detail-page fetches — but none of those count against the Adzuna quota. Trim `JOB_CATEGORIES` (the adjacent-field ones first) if you need to cut back; the run prints a per-source summary to the log.
 
 ## The data file
 

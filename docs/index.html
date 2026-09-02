@@ -366,6 +366,7 @@ button{font:inherit;color:inherit;background:none;border:none;padding:0;cursor:p
     <button class="tab" role="tab" data-sec="hs" aria-selected="false">H&amp;S</button>
     <button class="tab" role="tab" data-sec="phd" aria-selected="false">PHD</button>
     <button class="tab" role="tab" data-sec="pt" aria-selected="false">PART-TIME</button>
+    <button class="tab" role="tab" data-sec="nhs" aria-selected="false">NHS</button>
   </div>
 
   <div class="body">
@@ -462,9 +463,9 @@ const money = n => n ? "£" + Number(n).toLocaleString("en-GB") : null;
 const shortMoney = n => n ? "£" + Math.round(n / 1000) + "k" : "salary not stated";
 
 /* ---------- state ---------- */
-const SECTIONS = ["jobs", "hs", "phd", "pt"];
+const SECTIONS = ["jobs", "hs", "phd", "pt", "nhs"];
 const SECTION_NAME = {jobs:"sponsored jobs", hs:"health and safety", phd:"funded PhDs",
-                      pt:"part-time Leicester"};
+                      pt:"part-time Leicester", nhs:"NHS jobs"};
 const STATUS_ORDER = {strong:0, caution:1, weak:2};
 const STATUS_LABEL = {strong:"✓ Strong", caution:"⚠ Caution", weak:"✕ Weak"};
 const SHIFT_LABEL  = {evening:"Evenings", weekend:"Weekends", flexible:"Flexible",
@@ -478,7 +479,8 @@ const SORTS = {
   phd:  [["deadline","Closing soon"], ["fit","Fit ↓"], ["new","Newest"]],
   // "Rate" reuses the score-desc path, since a part-time row's score is its
   // pay tier; ties fall to CV fit then newest.
-  pt:   [["fit","Rate ↓"], ["new","Newest"]]
+  pt:   [["fit","Rate ↓"], ["new","Newest"]],
+  nhs:  [["fit","Fit ↓"], ["deadline","Closing soon"], ["new","Newest"], ["salary","Salary ↓"]]
 };
 
 let INDEX = {days:[], updated:""};
@@ -496,7 +498,8 @@ let rows = [];
 // empty on a quiet day does the opposite.
 const blank = (show = "new") => ({show, status:[], minfit:0, money:null, field:null, place:null,
                                   recency:null, shifts:[], sort:"fit"});
-const F = {jobs: blank(), hs: blank(), phd: Object.assign(blank(), {sort:"deadline"}), pt: blank()};
+const F = {jobs: blank(), hs: blank(), phd: Object.assign(blank(), {sort:"deadline"}), pt: blank(),
+           nhs: blank()};
 
 /* ---------- done / hidden marks ----------
    Kept in this browser only, since the site is static. Keyed on the advert URL
@@ -569,13 +572,16 @@ function normalise(raw, day){
       hourly: (item.hourly === 0 || item.hourly) ? item.hourly : null,
       fit: Number(item.fit) || 0,
       shifts: Array.isArray(item.shifts) ? item.shifts : [],
-      contract: item.contract || "part_time"
+      contract: item.contract || "part_time",
+      // NHS only: per-advert Certificate of Sponsorship statement
+      sponsorship: item.sponsorship || ""
     });
   };
   if (Array.isArray(raw.jobs)) raw.jobs.forEach(j => push(j, HS_RE.test(j.title || "") ? "hs" : "jobs"));
   if (Array.isArray(raw.hs))   raw.hs.forEach(j => push(j, "hs"));
   if (Array.isArray(raw.phd))  raw.phd.forEach(j => push(j, "phd"));
   if (Array.isArray(raw.pt))   raw.pt.forEach(j => push(j, "pt"));
+  if (Array.isArray(raw.nhs))  raw.nhs.forEach(j => push(j, "nhs"));
   if (raw.floors) FLOORS = Object.assign({}, FLOORS, raw.floors);
   return out;
 }
@@ -928,6 +934,30 @@ function cardHtml(r){
     foot = '<div class="cardfoot ruled">' +
       '<span class="status ' + r.status + '"><span class="dot" aria-hidden="true"></span>' + label + '</span>' +
       '<span class="facts">' + esc(facts) + '</span></div>';
+  } else if (r.section === "nhs"){
+    // The grade here is the advert's own Certificate of Sponsorship line, read
+    // from the detail page. "welcome" is an explicit yes; anything else reached
+    // this tab only because the employer holds a sponsor licence (NHS body or on
+    // the register), so it can sponsor but has not said so on this advert.
+    const welcomed = r.sponsorship === "welcome";
+    const tags = [welcomed
+      ? '<span class="tag strong">WELCOMES SPONSORSHIP</span>'
+      : '<span class="tag">SPONSORSHIP NOT STATED</span>'];
+    // A non-NHS employer is here because it is on the licensed-sponsor register;
+    // flag that so it does not look out of place next to the trusts.
+    if (!/nhs/i.test(r.employer || "")) tags.push('<span class="tag">LICENSED SPONSOR</span>');
+    body = '<div class="tags">' + tags.join("") + '</div>';
+    const age = ageDays(r);
+    const dl = daysToDeadline(r);
+    const facts = [
+      shortMoney(r.salary),
+      (dl !== null && dl >= 0) ? "closes " + dl + "d"
+        : (age === null ? null : (age === 0 ? "today" : age + "d"))
+    ].filter(Boolean).join(" · ");
+    const label = welcomed ? "WELCOMED ✓" : "CAN SPONSOR";
+    foot = '<div class="cardfoot ruled">' +
+      '<span class="status ' + r.status + '"><span class="dot" aria-hidden="true"></span>' + label + '</span>' +
+      '<span class="facts">' + esc(facts) + '</span></div>';
   } else {
     if (r.section === "hs" && r.salary){
       const floor = FLOORS.general;
@@ -1110,7 +1140,12 @@ const FOOTNOTE = {
         "signal is left out as a 9-to-5 clash. The hourly rate is an <em>estimate</em> from the advertised " +
         "figure, so a genuinely part-time salary can read low. The Shift filter reads the advert text, which " +
         "often does not say when the hours are; those show as <em>unstated</em>, so tick Unstated to include " +
-        "them. Confirm the rate and the hours on the advert."
+        "them. Confirm the rate and the hours on the advert.",
+  nhs:  "Roles from <em>jobs.nhs.uk</em> across the NHS — clinical and non-clinical alike, not just health and " +
+        "safety. Every card is either an NHS body or a licensed sponsor. <em>Welcomed</em> means the advert " +
+        "itself states applicants needing sponsorship are welcome; <em>Can sponsor</em> means the employer holds " +
+        "a licence but this advert did not say either way, so the visa question is still open — confirm on the " +
+        "advert. Adverts that explicitly rule sponsorship out are dropped. New postings appear under <em>New</em>."
 };
 
 function renderAll(){

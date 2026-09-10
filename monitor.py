@@ -1021,6 +1021,20 @@ def soc_reason(code, band_top):
             return "below floor £%d" % req
     return "shortage list" if code in TSL else "higher skilled"
 
+def soc_fields(title, band_top, nhs=False):
+    """(soc, sponsorable, reason) for a title, judged on the top of the band.
+
+    jobs/hs fail closed: a title that maps to no code is treated as not
+    sponsorable, since the licence is the only other signal there. The NHS tab
+    is different -- each advert states its own sponsorship position -- so an
+    unmapped NHS title is not rejected on the code alone; it is flagged for a
+    look at the advert. Only a code we can affirmatively call closed (or below
+    its floor) greys an NHS row."""
+    code = infer_soc(title)
+    if code is None and nhs:
+        return "", True, "code not inferred — check the advert"
+    return (code or ""), sponsorable(code, band_top), soc_reason(code, band_top)
+
 def make_row(title, employer, location, pay, posted, url, field, section,
              source, base_score, deadline="", on_register=True, agency=False,
              salary_max=None):
@@ -1030,16 +1044,15 @@ def make_row(title, employer, location, pay, posted, url, field, section,
     # the top of the advertised band (falls back to the single figure). No figure
     # passes, so nothing is dropped for lacking a salary. Failing rows stay in the
     # output, flagged, so the exclusion is visible rather than silent.
-    code = infer_soc(title)
     band_top = salary_max or (int(pay) if pay else None)
+    code, spons, reason = soc_fields(title, band_top)
     return {
         "score": base_score, "title": title, "field": field, "employer": employer,
         "location": location, "salary": int(pay) if pay else None,
         "belowGeneral": bool(pay and pay < GENERAL_FLOOR),
         "posted": posted, "deadline": deadline, "url": url,
         "section": section, "status": status, "note": note, "source": source,
-        "soc": code, "sponsorable": sponsorable(code, band_top),
-        "soc_reason": soc_reason(code, band_top),
+        "soc": code, "sponsorable": spons, "soc_reason": reason,
     }
 
 def within_days(posted, limit):
@@ -1580,6 +1593,11 @@ def build_nhs(sponsors):
         status, note = classify_nhs(spons, row["nhs_body"])
         # A confirmed welcome lifts the score, so sponsorable roles surface first.
         sc = min(100, row["score"] + (12 if spons == "welcome" else 0))
+        # Occupation-code gate, NHS variant: the advert's own CoS statement is the
+        # primary signal here, so an unmapped clinical title is flagged, not
+        # rejected -- only a code we can call closed (e.g. 3582) greys the row.
+        # A welcome the code has closed is exactly the case worth surfacing.
+        code, code_ok, reason = soc_fields(row["title"], row["salary"] or None, nhs=True)
         out.append({
             "score": sc, "title": row["title"], "field": "NHS",
             "employer": row["employer"], "location": row["location"],
@@ -1587,6 +1605,7 @@ def build_nhs(sponsors):
             "posted": "", "deadline": deadline, "url": row["url"], "section": "nhs",
             "status": status, "note": note, "source": "jobs.nhs.uk",
             "sponsorship": spons,
+            "soc": code, "sponsorable": code_ok, "soc_reason": reason,
         })
     out.sort(key=lambda r: r["score"], reverse=True)
     welcomed = sum(1 for r in out if r["sponsorship"] == "welcome")
@@ -1784,8 +1803,10 @@ def demo():
     ]
     def nhsmk(score, spons, **kw):
         status, note = classify_nhs(spons, "nhs" in kw.get("employer", "").lower())
+        code, ok, reason = soc_fields(kw.get("title", ""), kw.get("salary") or None, nhs=True)
         return mk(score=score, section="nhs", field="NHS", source="jobs.nhs.uk",
-                  sponsorship=spons, status=status, note=note, **kw)
+                  sponsorship=spons, status=status, note=note,
+                  soc=code, sponsorable=ok, soc_reason=reason, **kw)
     nhs = [
         nhsmk(96, "welcome", title="Data Analyst", employer="Cambridge University Hospitals NHS Foundation Trust",
               location="Cambridge", salary=39959, deadline=d(18)),

@@ -1029,9 +1029,13 @@ function cardHtml(r){
   // code greys the card but keeps it visible, with the reason on hover.
   const gated = r.sponsorable !== null;
   const demoted = r.sponsorable === false ? " demoted" : "";
+  // "Not eligible" when the code rules it out; "Eligible" when a known code clears;
+  // otherwise the code was not inferred (NHS defers to the advert) — no verdict claimed.
+  const socTip = !r.sponsorable ? "Not eligible — " + (r.socReason || "")
+               : r.soc          ? "Eligible — " + (r.socReason || "")
+               : (r.socReason || "");
   const socBadge = gated
-    ? '<span class="soc' + (r.sponsorable ? "" : " closed") + '" title="' +
-        esc((r.sponsorable ? "Eligible — " : "Not eligible — ") + (r.socReason || "")) + '">' +
+    ? '<span class="soc' + (r.sponsorable ? "" : " closed") + '" title="' + esc(socTip) + '">' +
         esc(r.soc || "SOC ?") + '</span>'
     : "";
 
@@ -1169,7 +1173,10 @@ const FOOTNOTE = {
         "safety. Every card is either an NHS body or a licensed sponsor. <em>Welcomed</em> means the advert " +
         "itself states applicants needing sponsorship are welcome; <em>Can sponsor</em> means the employer holds " +
         "a licence but this advert did not say either way, so the visa question is still open — confirm on the " +
-        "advert. Adverts that explicitly rule sponsorship out are dropped. New postings appear under <em>New</em>."
+        "advert. Adverts that explicitly rule sponsorship out are dropped. New postings appear under <em>New</em>. " +
+        "The occupation-code check applies here too: a role whose SOC code is closed since July 2025 (health and " +
+        "safety, 3582) is greyed out even when the advert welcomes sponsorship. Clinical titles the check cannot " +
+        "place show a <em>SOC ?</em> badge and are left for you to confirm, not greyed."
 };
 
 function renderAll(){

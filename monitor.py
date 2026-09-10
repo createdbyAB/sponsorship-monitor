@@ -19,6 +19,11 @@ Run:  python monitor.py         (live)
 import os, re, csv, io, json, sys, time, html, datetime, difflib, http.cookiejar
 import urllib.parse, urllib.request, urllib.error
 
+# Occupation-code eligibility gate (Skilled Worker, July 2025 rule). Employer
+# licence is necessary but no longer sufficient; the SOC code must also be on
+# the eligible-occupations or Temporary Shortage List. Pure, local module.
+from soc import infer_soc, sponsorable, required_salary, HIGHER, TSL, DEAD
+
 ADZUNA_ID  = os.environ.get("ADZUNA_ID", "")
 ADZUNA_KEY = os.environ.get("ADZUNA_KEY", "")
 
@@ -36,6 +41,12 @@ UA = ("sponsorship-monitor (personal daily job alert; "
 # engineering, health & safety and design weighted highest).
 # ============================================================================
 # (search term, field)
+# Safety-titled terms (SOC 3582 / 3581) were removed on 2026-09-10: since the
+# July 2025 rule those codes are closed to a first CoS, so actively searching for
+# them only surfaces roles AB cannot be sponsored into. The occupation-code gate
+# (soc.py) still lets any that arrive via the category sweep or the H&S scrapers
+# show through, greyed out with the reason. What replaced them are terms that map
+# to Higher-Skilled or Temporary-Shortage-List codes.
 KEYWORDS = [
     ('chemical engineer', 'Chemical / process engineering'),
     ('process engineer', 'Chemical / process engineering'),
@@ -44,18 +55,22 @@ KEYWORDS = [
     ('process safety engineer', 'Chemical / process engineering'),
     ('formulation scientist', 'Chemical / process engineering'),
     ('process chemist', 'Chemical / process engineering'),
-    ('health and safety', 'Health & safety'),
-    ('hse advisor', 'Health & safety'),
-    ('hse manager', 'Health & safety'),
-    ('nebosh', 'Health & safety'),
-    ('sheq advisor', 'Health & safety'),
-    ('ehs manager', 'Health & safety'),
+    ('process technician', 'Chemical / process engineering'),
+    ('project engineer', 'Chemical / process engineering'),
+    ('laboratory technician', 'Science / lab'),
+    ('research assistant', 'Research'),
+    ('qa analyst', 'Quality / QA'),
+    ('quality assurance', 'Quality / QA'),
+    ('sustainability officer', 'Sustainability / environmental'),
+    ('compliance officer', 'Compliance / regulatory'),
+    ('regulatory affairs', 'Compliance / regulatory'),
     ('ux designer', 'Design'),
     ('product designer', 'Design'),
     ('ux researcher', 'Design'),
     ('service designer', 'Design'),
     ('design systems', 'Design'),
     ('data analyst', 'Data & operations'),
+    ('business analyst', 'Data & operations'),
 ]
 
 # Adzuna category slugs swept whole for the widest net. Each is one call/day.
@@ -991,15 +1006,40 @@ def classify(pay, agency=False, on_register=True):
         "No salary stated, or the advert gives too wide a band to trust. The employer holds "
         "a licence, so confirm the pay and the sponsorship on the advert before you apply.")
 
+def soc_reason(code, band_top):
+    """Short human reason a row is (or is not) sponsorable on the occupation
+    code. Kept in step with soc.sponsorable so the badge and the boolean agree."""
+    if code is None:
+        return "code unknown"
+    if code in DEAD:
+        return "code closed: " + code
+    if code not in HIGHER and code not in TSL:
+        return "code unknown"
+    if band_top is not None:
+        req = required_salary(code)
+        if req is not None and band_top < req:
+            return "below floor £%d" % req
+    return "shortage list" if code in TSL else "higher skilled"
+
 def make_row(title, employer, location, pay, posted, url, field, section,
-             source, base_score, deadline="", on_register=True, agency=False):
+             source, base_score, deadline="", on_register=True, agency=False,
+             salary_max=None):
     status, note = classify(pay, agency or looks_like_agency(employer), on_register)
+    # Occupation-code gate. The employer licence is checked upstream; this adds
+    # whether the SOC code AB would be sponsored under is open at all, judged on
+    # the top of the advertised band (falls back to the single figure). No figure
+    # passes, so nothing is dropped for lacking a salary. Failing rows stay in the
+    # output, flagged, so the exclusion is visible rather than silent.
+    code = infer_soc(title)
+    band_top = salary_max or (int(pay) if pay else None)
     return {
         "score": base_score, "title": title, "field": field, "employer": employer,
         "location": location, "salary": int(pay) if pay else None,
         "belowGeneral": bool(pay and pay < GENERAL_FLOOR),
         "posted": posted, "deadline": deadline, "url": url,
         "section": section, "status": status, "note": note, "source": source,
+        "soc": code, "sponsorable": sponsorable(code, band_top),
+        "soc_reason": soc_reason(code, band_top),
     }
 
 def within_days(posted, limit):
@@ -1053,7 +1093,8 @@ def build_today():
         (hs if is_hs else jobs).append(make_row(
             title, company, (job.get("location") or {}).get("display_name", ""),
             pay, (job.get("created") or "")[:10], job.get("redirect_url", ""),
-            field, section, "adzuna", score(title, category, pay)))
+            field, section, "adzuna", score(title, category, pay),
+            salary_max=job.get("salary_max")))
 
     for keyword, field in KEYWORDS:
         calls += 1
@@ -1637,19 +1678,27 @@ def demo():
     n = [0]
     def mk(**kw):
         n[0] += 1
-        return dict({"field": "Design", "posted": datetime.date.today().isoformat(),
-                     "url": "https://example.com/advert/%d" % n[0], "note": "",
-                     "belowGeneral": False, "deadline": "", "source": "adzuna"}, **kw)
+        row = dict({"field": "Design", "posted": datetime.date.today().isoformat(),
+                    "url": "https://example.com/advert/%d" % n[0], "note": "",
+                    "belowGeneral": False, "deadline": "", "source": "adzuna"}, **kw)
+        # jobs/hs rows carry the occupation-code gate, exactly like the live path.
+        if row.get("section") in ("jobs", "hs"):
+            code = infer_soc(row.get("title", ""))
+            band = row.get("salary")
+            row.setdefault("soc", code)
+            row.setdefault("sponsorable", sponsorable(code, band))
+            row.setdefault("soc_reason", soc_reason(code, band))
+        return row
     jobs = [
-        mk(score=92, title="Senior Software Engineer", employer="Monzo Bank", location="London, UK",
-           salary=65000, section="jobs", status="strong", field="Engineering"),
-        mk(score=89, title="Platform Engineer", employer="Wise", location="London, UK",
-           salary=72000, section="jobs", status="strong", field="Engineering"),
-        mk(score=74, title="Backend Engineer, Payments", employer="Starling Bank", location="Cardiff",
-           salary=38000, belowGeneral=True, section="jobs", status="caution", field="Engineering",
+        mk(score=92, title="Senior Process Engineer", employer="Johnson Matthey", location="London, UK",
+           salary=65000, section="jobs", status="strong", field="Chemical / process engineering"),
+        mk(score=89, title="Product Designer", employer="Wise", location="London, UK",
+           salary=72000, section="jobs", status="strong", field="Design"),
+        mk(score=74, title="Data Analyst", employer="Starling Bank", location="Cardiff",
+           salary=38000, belowGeneral=True, section="jobs", status="caution", field="Data & operations",
            note=classify(38000)[1]),
-        mk(score=68, title="Service Designer", employer="Capgemini", location="Birmingham",
-           salary=None, section="jobs", status="caution", note=classify(0)[1]),
+        mk(score=68, title="Business Analyst", employer="Capgemini", location="Birmingham",
+           salary=None, section="jobs", status="caution", field="Data & operations", note=classify(0)[1]),
     ]
     hs = [
         mk(score=88, title="Health and Safety Manager", employer="Skanska", location="Birmingham",
@@ -1751,5 +1800,23 @@ def demo():
     ]
     return {"jobs": jobs, "hs": hs, "phd": phd, "pt": pt, "nhs": nhs}
 
+def filter_sponsorable(day):
+    """Drop rows the occupation-code gate rejects. Only touches rows that carry a
+    `sponsorable` flag (jobs/hs); PhD, part-time and NHS rows have no Skilled
+    Worker code test and pass through untouched. Off by default, so the archive
+    normally keeps the excluded rows visible with their reason."""
+    kept = 0
+    for section, rows in day.items():
+        if not isinstance(rows, list):
+            continue
+        keep = [r for r in rows if r.get("sponsorable", True)]
+        kept += len(rows) - len(keep)
+        day[section] = keep
+    print("--sponsorable-only dropped", kept, "rows", file=sys.stderr)
+    return day
+
 if __name__ == "__main__":
-    write(demo() if "--demo" in sys.argv else build_today())
+    day = demo() if "--demo" in sys.argv else build_today()
+    if "--sponsorable-only" in sys.argv:
+        day = filter_sponsorable(day)
+    write(day)

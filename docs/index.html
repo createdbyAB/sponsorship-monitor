@@ -1156,10 +1156,16 @@ const FOOTNOTE = {
   jobs: "Roles at licensed sponsors across your fields, ranked by fit to your CV: chemical and process " +
         "engineering, health and safety and design score highest, then data and operations, then adjacent " +
         "fields. A licensed sponsor <em>can</em> sponsor a Skilled Worker visa; it does not mean a given role " +
-        "is a sponsored vacancy, so always confirm sponsorship and salary on the advert before you apply.",
+        "is a sponsored vacancy, so always confirm sponsorship and salary on the advert before you apply. " +
+        "The small code next to the employer is the occupation code the title implies. Since July 2025 a " +
+        "first visa also needs that code to be open, so a role whose code is closed (or whose pay is under " +
+        "the code's floor) is greyed out with the reason on hover. <em>SOC ?</em> means the title did not " +
+        "match a known code: not a rejection, just something to check on the advert.",
   hs:   "A licensed sponsor <em>can</em> sponsor a Skilled Worker visa. It does not mean a given " +
         "role is a sponsored vacancy. The meter compares the advertised salary against the general " +
-        "floor, which is a guide, not the decision.",
+        "floor, which is a guide, not the decision. Most of this tab is greyed out for a reason: since " +
+        "July 2025 the health and safety occupation code (3582) is closed to a first Skilled Worker " +
+        "visa, so these roles are shown for awareness, not as leads.",
   phd:  "A studentship is not a Skilled Worker vacancy, so the sponsor register does not apply here. " +
         "What matters is whether the funding covers fees and a stipend, and whether an international " +
         "student can hold it. Both come from the advert, so confirm them there.",

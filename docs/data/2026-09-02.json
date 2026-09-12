@@ -33,7 +33,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "2125",
+      "sponsorable": true,
+      "soc_reason": "higher skilled"
     },
     {
       "score": 100,
@@ -50,7 +53,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "2125",
+      "sponsorable": true,
+      "soc_reason": "higher skilled"
     },
     {
       "score": 100,
@@ -67,7 +73,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "2125",
+      "sponsorable": true,
+      "soc_reason": "higher skilled"
     },
     {
       "score": 100,
@@ -84,7 +93,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "2141",
+      "sponsorable": true,
+      "soc_reason": "higher skilled"
     },
     {
       "score": 100,
@@ -101,7 +113,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "2141",
+      "sponsorable": true,
+      "soc_reason": "higher skilled"
     },
     {
       "score": 98,
@@ -118,7 +133,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-01"
+      "firstSeen": "2026-09-01",
+      "soc": "2141",
+      "sponsorable": true,
+      "soc_reason": "higher skilled"
     },
     {
       "score": 98,
@@ -135,7 +153,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "2141",
+      "sponsorable": true,
+      "soc_reason": "higher skilled"
     },
     {
       "score": 96,
@@ -152,7 +173,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 96,
@@ -169,7 +193,10 @@
       "status": "caution",
       "note": "Advertised by an agency. The agency holds a licence, but it does not name the employer who would actually sponsor you, so ask them before you apply.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 94,
@@ -186,7 +213,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 90,
@@ -203,7 +233,10 @@
       "status": "caution",
       "note": "No salary stated, or the advert gives too wide a band to trust. The employer holds a licence, so confirm the pay and the sponsorship on the advert before you apply.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "2125",
+      "sponsorable": true,
+      "soc_reason": "higher skilled"
     },
     {
       "score": 90,
@@ -220,7 +253,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "3582",
+      "sponsorable": false,
+      "soc_reason": "code closed: 3582"
     },
     {
       "score": 90,
@@ -237,7 +273,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "3582",
+      "sponsorable": false,
+      "soc_reason": "code closed: 3582"
     },
     {
       "score": 90,
@@ -254,7 +293,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 86,
@@ -271,7 +313,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 86,
@@ -288,7 +333,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-08-31"
+      "firstSeen": "2026-08-31",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 86,
@@ -305,7 +353,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 86,
@@ -322,7 +373,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 81,
@@ -339,7 +393,10 @@
       "status": "caution",
       "note": "Pay is under the general floor of \u00a341,700. It can still work on the new entrant rate, but confirm the salary and the sponsorship on the advert.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 81,
@@ -356,7 +413,10 @@
       "status": "caution",
       "note": "Pay is under the general floor of \u00a341,700. It can still work on the new entrant rate, but confirm the salary and the sponsorship on the advert.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "2440",
+      "sponsorable": true,
+      "soc_reason": "higher skilled"
     },
     {
       "score": 81,
@@ -373,7 +433,10 @@
       "status": "caution",
       "note": "Pay is under the general floor of \u00a341,700. It can still work on the new entrant rate, but confirm the salary and the sponsorship on the advert.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 81,
@@ -390,7 +453,10 @@
       "status": "caution",
       "note": "Pay is under the general floor of \u00a341,700. It can still work on the new entrant rate, but confirm the salary and the sponsorship on the advert.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 78,
@@ -407,7 +473,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 78,
@@ -424,7 +493,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "3544",
+      "sponsorable": true,
+      "soc_reason": "shortage list"
     },
     {
       "score": 78,
@@ -441,7 +513,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "3544",
+      "sponsorable": true,
+      "soc_reason": "shortage list"
     },
     {
       "score": 78,
@@ -458,7 +533,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "3544",
+      "sponsorable": true,
+      "soc_reason": "shortage list"
     },
     {
       "score": 76,
@@ -475,7 +553,10 @@
       "status": "caution",
       "note": "No salary stated, or the advert gives too wide a band to trust. The employer holds a licence, so confirm the pay and the sponsorship on the advert before you apply.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 74,
@@ -492,7 +573,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 74,
@@ -509,7 +593,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "2133",
+      "sponsorable": true,
+      "soc_reason": "higher skilled"
     },
     {
       "score": 74,
@@ -526,7 +613,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 74,
@@ -543,7 +633,10 @@
       "status": "caution",
       "note": "Advertised by an agency. The agency holds a licence, but it does not name the employer who would actually sponsor you, so ask them before you apply.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 72,
@@ -560,7 +653,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-01"
+      "firstSeen": "2026-09-01",
+      "soc": "2440",
+      "sponsorable": true,
+      "soc_reason": "higher skilled"
     },
     {
       "score": 72,
@@ -577,7 +673,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-01"
+      "firstSeen": "2026-09-01",
+      "soc": "2440",
+      "sponsorable": true,
+      "soc_reason": "higher skilled"
     },
     {
       "score": 72,
@@ -594,7 +693,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "2440",
+      "sponsorable": true,
+      "soc_reason": "higher skilled"
     },
     {
       "score": 72,
@@ -611,7 +713,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 72,
@@ -628,7 +733,10 @@
       "status": "caution",
       "note": "Advertised by an agency. The agency holds a licence, but it does not name the employer who would actually sponsor you, so ask them before you apply.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "2440",
+      "sponsorable": true,
+      "soc_reason": "higher skilled"
     },
     {
       "score": 72,
@@ -645,7 +753,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "2440",
+      "sponsorable": true,
+      "soc_reason": "higher skilled"
     },
     {
       "score": 72,
@@ -662,7 +773,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "2440",
+      "sponsorable": true,
+      "soc_reason": "higher skilled"
     },
     {
       "score": 72,
@@ -679,7 +793,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "2440",
+      "sponsorable": true,
+      "soc_reason": "higher skilled"
     },
     {
       "score": 72,
@@ -696,7 +813,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "2440",
+      "sponsorable": true,
+      "soc_reason": "higher skilled"
     },
     {
       "score": 69,
@@ -713,7 +833,10 @@
       "status": "caution",
       "note": "Pay is under the general floor of \u00a341,700. It can still work on the new entrant rate, but confirm the salary and the sponsorship on the advert.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 68,
@@ -730,7 +853,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -747,7 +873,10 @@
       "status": "caution",
       "note": "Pay is under the general floor of \u00a341,700. It can still work on the new entrant rate, but confirm the salary and the sponsorship on the advert.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "2440",
+      "sponsorable": true,
+      "soc_reason": "higher skilled"
     },
     {
       "score": 66,
@@ -764,7 +893,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 66,
@@ -781,7 +913,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "3111",
+      "sponsorable": true,
+      "soc_reason": "shortage list"
     },
     {
       "score": 66,
@@ -798,7 +933,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "3111",
+      "sponsorable": true,
+      "soc_reason": "shortage list"
     },
     {
       "score": 66,
@@ -815,7 +953,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 66,
@@ -832,7 +973,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 66,
@@ -849,7 +993,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 66,
@@ -866,7 +1013,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "2482",
+      "sponsorable": true,
+      "soc_reason": "higher skilled"
     },
     {
       "score": 66,
@@ -883,7 +1033,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 66,
@@ -900,7 +1053,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 66,
@@ -917,7 +1073,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 66,
@@ -934,7 +1093,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "3111",
+      "sponsorable": true,
+      "soc_reason": "shortage list"
     },
     {
       "score": 64,
@@ -951,7 +1113,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 64,
@@ -968,7 +1133,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 64,
@@ -985,7 +1153,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 64,
@@ -1002,7 +1173,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 64,
@@ -1019,7 +1193,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-01"
+      "firstSeen": "2026-09-01",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 64,
@@ -1036,7 +1213,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 64,
@@ -1053,7 +1233,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 64,
@@ -1070,7 +1253,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 64,
@@ -1087,7 +1273,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 64,
@@ -1104,7 +1293,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 64,
@@ -1121,7 +1313,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 62,
@@ -1138,7 +1333,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 62,
@@ -1155,7 +1353,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 61,
@@ -1172,7 +1373,10 @@
       "status": "caution",
       "note": "Pay is under the general floor of \u00a341,700. It can still work on the new entrant rate, but confirm the salary and the sponsorship on the advert.",
       "source": "adzuna",
-      "firstSeen": "2026-09-01"
+      "firstSeen": "2026-09-01",
+      "soc": "2162",
+      "sponsorable": true,
+      "soc_reason": "higher skilled"
     },
     {
       "score": 61,
@@ -1189,7 +1393,10 @@
       "status": "caution",
       "note": "Pay is under the general floor of \u00a341,700. It can still work on the new entrant rate, but confirm the salary and the sponsorship on the advert.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 61,
@@ -1206,7 +1413,10 @@
       "status": "caution",
       "note": "Pay is under the general floor of \u00a341,700. It can still work on the new entrant rate, but confirm the salary and the sponsorship on the advert.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 61,
@@ -1223,7 +1433,10 @@
       "status": "caution",
       "note": "Pay is under the general floor of \u00a341,700. It can still work on the new entrant rate, but confirm the salary and the sponsorship on the advert.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "2162",
+      "sponsorable": true,
+      "soc_reason": "higher skilled"
     },
     {
       "score": 61,
@@ -1240,7 +1453,10 @@
       "status": "caution",
       "note": "Pay is under the general floor of \u00a341,700. It can still work on the new entrant rate, but confirm the salary and the sponsorship on the advert.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 61,
@@ -1257,7 +1473,10 @@
       "status": "caution",
       "note": "Pay is under the general floor of \u00a341,700. It can still work on the new entrant rate, but confirm the salary and the sponsorship on the advert.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 61,
@@ -1274,7 +1493,10 @@
       "status": "caution",
       "note": "Pay is under the general floor of \u00a341,700. It can still work on the new entrant rate, but confirm the salary and the sponsorship on the advert.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "2162",
+      "sponsorable": true,
+      "soc_reason": "higher skilled"
     },
     {
       "score": 61,
@@ -1291,7 +1513,10 @@
       "status": "caution",
       "note": "Pay is under the general floor of \u00a341,700. It can still work on the new entrant rate, but confirm the salary and the sponsorship on the advert.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "2162",
+      "sponsorable": true,
+      "soc_reason": "higher skilled"
     },
     {
       "score": 61,
@@ -1308,7 +1533,10 @@
       "status": "caution",
       "note": "Pay is under the general floor of \u00a341,700. It can still work on the new entrant rate, but confirm the salary and the sponsorship on the advert.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 61,
@@ -1325,7 +1553,10 @@
       "status": "caution",
       "note": "Pay is under the general floor of \u00a341,700. It can still work on the new entrant rate, but confirm the salary and the sponsorship on the advert.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "2162",
+      "sponsorable": true,
+      "soc_reason": "higher skilled"
     },
     {
       "score": 61,
@@ -1342,7 +1573,10 @@
       "status": "caution",
       "note": "Pay is under the general floor of \u00a341,700. It can still work on the new entrant rate, but confirm the salary and the sponsorship on the advert.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "2162",
+      "sponsorable": true,
+      "soc_reason": "higher skilled"
     },
     {
       "score": 59,
@@ -1359,7 +1593,10 @@
       "status": "caution",
       "note": "Pay is under the general floor of \u00a341,700. It can still work on the new entrant rate, but confirm the salary and the sponsorship on the advert.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 59,
@@ -1376,7 +1613,10 @@
       "status": "caution",
       "note": "Pay is under the general floor of \u00a341,700. It can still work on the new entrant rate, but confirm the salary and the sponsorship on the advert.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "2133",
+      "sponsorable": true,
+      "soc_reason": "higher skilled"
     },
     {
       "score": 59,
@@ -1393,7 +1633,10 @@
       "status": "caution",
       "note": "Pay is under the general floor of \u00a341,700. It can still work on the new entrant rate, but confirm the salary and the sponsorship on the advert.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 58,
@@ -1410,7 +1653,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 58,
@@ -1427,7 +1673,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 58,
@@ -1444,7 +1693,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 58,
@@ -1461,7 +1713,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 58,
@@ -1478,7 +1733,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 58,
@@ -1495,7 +1753,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 58,
@@ -1512,7 +1773,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 58,
@@ -1529,7 +1793,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 58,
@@ -1546,7 +1813,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 58,
@@ -1563,7 +1833,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 58,
@@ -1580,7 +1853,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 57,
@@ -1597,7 +1873,10 @@
       "status": "caution",
       "note": "Pay is under the general floor of \u00a341,700. It can still work on the new entrant rate, but confirm the salary and the sponsorship on the advert.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 57,
@@ -1614,7 +1893,10 @@
       "status": "caution",
       "note": "Pay is under the general floor of \u00a341,700. It can still work on the new entrant rate, but confirm the salary and the sponsorship on the advert.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 57,
@@ -1631,7 +1913,10 @@
       "status": "caution",
       "note": "Pay is under the general floor of \u00a341,700. It can still work on the new entrant rate, but confirm the salary and the sponsorship on the advert.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 57,
@@ -1648,7 +1933,10 @@
       "status": "caution",
       "note": "Pay is under the general floor of \u00a341,700. It can still work on the new entrant rate, but confirm the salary and the sponsorship on the advert.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 56,
@@ -1665,7 +1953,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 54,
@@ -1682,7 +1973,10 @@
       "status": "caution",
       "note": "No salary stated, or the advert gives too wide a band to trust. The employer holds a licence, so confirm the pay and the sponsorship on the advert before you apply.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 53,
@@ -1699,7 +1993,10 @@
       "status": "caution",
       "note": "Pay is under the general floor of \u00a341,700. It can still work on the new entrant rate, but confirm the salary and the sponsorship on the advert.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 53,
@@ -1716,7 +2013,10 @@
       "status": "caution",
       "note": "Pay is under the general floor of \u00a341,700. It can still work on the new entrant rate, but confirm the salary and the sponsorship on the advert.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 53,
@@ -1733,7 +2033,10 @@
       "status": "caution",
       "note": "Pay is under the general floor of \u00a341,700. It can still work on the new entrant rate, but confirm the salary and the sponsorship on the advert.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 53,
@@ -1750,7 +2053,10 @@
       "status": "caution",
       "note": "Pay is under the general floor of \u00a341,700. It can still work on the new entrant rate, but confirm the salary and the sponsorship on the advert.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -1767,7 +2073,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -1784,7 +2093,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -1801,7 +2113,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -1818,7 +2133,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -1835,7 +2153,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -1852,7 +2173,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -1869,7 +2193,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -1886,7 +2213,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -1903,7 +2233,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-01"
+      "firstSeen": "2026-09-01",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -1920,7 +2253,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -1937,7 +2273,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -1954,7 +2293,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -1971,7 +2313,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -1988,7 +2333,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -2005,7 +2353,10 @@
       "status": "caution",
       "note": "Advertised by an agency. The agency holds a licence, but it does not name the employer who would actually sponsor you, so ask them before you apply.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -2022,7 +2373,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -2039,7 +2393,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -2056,7 +2413,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -2073,7 +2433,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -2090,7 +2453,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -2107,7 +2473,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "2152",
+      "sponsorable": true,
+      "soc_reason": "higher skilled"
     },
     {
       "score": 50,
@@ -2124,7 +2493,10 @@
       "status": "caution",
       "note": "Advertised by an agency. The agency holds a licence, but it does not name the employer who would actually sponsor you, so ask them before you apply.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -2141,7 +2513,10 @@
       "status": "caution",
       "note": "Advertised by an agency. The agency holds a licence, but it does not name the employer who would actually sponsor you, so ask them before you apply.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -2158,7 +2533,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -2175,7 +2553,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -2192,7 +2573,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -2209,7 +2593,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -2226,7 +2613,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-01"
+      "firstSeen": "2026-09-01",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -2243,7 +2633,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -2260,7 +2653,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -2277,7 +2673,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -2294,7 +2693,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -2311,7 +2713,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -2328,7 +2733,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -2345,7 +2753,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -2362,7 +2773,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -2379,7 +2793,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -2396,7 +2813,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-01"
+      "firstSeen": "2026-09-01",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -2413,7 +2833,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -2430,7 +2853,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -2447,7 +2873,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -2464,7 +2893,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -2481,7 +2913,10 @@
       "status": "caution",
       "note": "Advertised by an agency. The agency holds a licence, but it does not name the employer who would actually sponsor you, so ask them before you apply.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -2498,7 +2933,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -2515,7 +2953,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -2532,7 +2973,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -2549,7 +2993,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -2566,7 +3013,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -2583,7 +3033,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -2600,7 +3053,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -2617,7 +3073,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -2634,7 +3093,10 @@
       "status": "caution",
       "note": "Advertised by an agency. The agency holds a licence, but it does not name the employer who would actually sponsor you, so ask them before you apply.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -2651,7 +3113,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -2668,7 +3133,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -2685,7 +3153,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -2702,7 +3173,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -2719,7 +3193,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -2736,7 +3213,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -2753,7 +3233,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -2770,7 +3253,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -2787,7 +3273,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -2804,7 +3293,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "3116",
+      "sponsorable": true,
+      "soc_reason": "shortage list"
     },
     {
       "score": 50,
@@ -2821,7 +3313,10 @@
       "status": "caution",
       "note": "Advertised by an agency. The agency holds a licence, but it does not name the employer who would actually sponsor you, so ask them before you apply.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -2838,7 +3333,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -2855,7 +3353,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -2872,7 +3373,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -2889,7 +3393,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -2906,7 +3413,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -2923,7 +3433,10 @@
       "status": "caution",
       "note": "Advertised by an agency. The agency holds a licence, but it does not name the employer who would actually sponsor you, so ask them before you apply.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -2940,7 +3453,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -2957,7 +3473,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -2974,7 +3493,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -2991,7 +3513,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -3008,7 +3533,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -3025,7 +3553,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -3042,7 +3573,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -3059,7 +3593,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -3076,7 +3613,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -3093,7 +3633,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -3110,7 +3653,10 @@
       "status": "caution",
       "note": "Advertised by an agency. The agency holds a licence, but it does not name the employer who would actually sponsor you, so ask them before you apply.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -3127,7 +3673,10 @@
       "status": "caution",
       "note": "Advertised by an agency. The agency holds a licence, but it does not name the employer who would actually sponsor you, so ask them before you apply.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -3144,7 +3693,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -3161,7 +3713,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "2152",
+      "sponsorable": true,
+      "soc_reason": "higher skilled"
     },
     {
       "score": 45,
@@ -3178,7 +3733,10 @@
       "status": "caution",
       "note": "Pay is under the general floor of \u00a341,700. It can still work on the new entrant rate, but confirm the salary and the sponsorship on the advert.",
       "source": "adzuna",
-      "firstSeen": "2026-09-01"
+      "firstSeen": "2026-09-01",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 45,
@@ -3195,7 +3753,10 @@
       "status": "caution",
       "note": "Pay is under the general floor of \u00a341,700. It can still work on the new entrant rate, but confirm the salary and the sponsorship on the advert.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 45,
@@ -3212,7 +3773,10 @@
       "status": "caution",
       "note": "Pay is under the general floor of \u00a341,700. It can still work on the new entrant rate, but confirm the salary and the sponsorship on the advert.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 45,
@@ -3229,7 +3793,10 @@
       "status": "caution",
       "note": "Pay is under the general floor of \u00a341,700. It can still work on the new entrant rate, but confirm the salary and the sponsorship on the advert.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 45,
@@ -3246,7 +3813,10 @@
       "status": "caution",
       "note": "Pay is under the general floor of \u00a341,700. It can still work on the new entrant rate, but confirm the salary and the sponsorship on the advert.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 45,
@@ -3263,7 +3833,10 @@
       "status": "caution",
       "note": "Pay is under the general floor of \u00a341,700. It can still work on the new entrant rate, but confirm the salary and the sponsorship on the advert.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 45,
@@ -3280,7 +3853,10 @@
       "status": "caution",
       "note": "Pay is under the general floor of \u00a341,700. It can still work on the new entrant rate, but confirm the salary and the sponsorship on the advert.",
       "source": "adzuna",
-      "firstSeen": "2026-09-01"
+      "firstSeen": "2026-09-01",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 45,
@@ -3297,7 +3873,10 @@
       "status": "caution",
       "note": "Pay is under the general floor of \u00a341,700. It can still work on the new entrant rate, but confirm the salary and the sponsorship on the advert.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 45,
@@ -3314,7 +3893,10 @@
       "status": "caution",
       "note": "Pay is under the general floor of \u00a341,700. It can still work on the new entrant rate, but confirm the salary and the sponsorship on the advert.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 45,
@@ -3331,7 +3913,10 @@
       "status": "caution",
       "note": "Pay is under the general floor of \u00a341,700. It can still work on the new entrant rate, but confirm the salary and the sponsorship on the advert.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 45,
@@ -3348,7 +3933,10 @@
       "status": "caution",
       "note": "Pay is under the general floor of \u00a341,700. It can still work on the new entrant rate, but confirm the salary and the sponsorship on the advert.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 45,
@@ -3365,7 +3953,10 @@
       "status": "caution",
       "note": "Pay is under the general floor of \u00a341,700. It can still work on the new entrant rate, but confirm the salary and the sponsorship on the advert.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 45,
@@ -3382,7 +3973,10 @@
       "status": "caution",
       "note": "Pay is under the general floor of \u00a341,700. It can still work on the new entrant rate, but confirm the salary and the sponsorship on the advert.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 45,
@@ -3399,7 +3993,10 @@
       "status": "caution",
       "note": "Pay is under the general floor of \u00a341,700. It can still work on the new entrant rate, but confirm the salary and the sponsorship on the advert.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 45,
@@ -3416,7 +4013,10 @@
       "status": "caution",
       "note": "Pay is under the general floor of \u00a341,700. It can still work on the new entrant rate, but confirm the salary and the sponsorship on the advert.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 45,
@@ -3433,7 +4033,10 @@
       "status": "caution",
       "note": "Pay is under the general floor of \u00a341,700. It can still work on the new entrant rate, but confirm the salary and the sponsorship on the advert.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 45,
@@ -3450,7 +4053,10 @@
       "status": "caution",
       "note": "Pay is under the general floor of \u00a341,700. It can still work on the new entrant rate, but confirm the salary and the sponsorship on the advert.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 45,
@@ -3467,7 +4073,10 @@
       "status": "caution",
       "note": "Advertised by an agency. The agency holds a licence, but it does not name the employer who would actually sponsor you, so ask them before you apply.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "3116",
+      "sponsorable": true,
+      "soc_reason": "shortage list"
     },
     {
       "score": 45,
@@ -3484,7 +4093,10 @@
       "status": "caution",
       "note": "Pay is under the general floor of \u00a341,700. It can still work on the new entrant rate, but confirm the salary and the sponsorship on the advert.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 45,
@@ -3501,7 +4113,10 @@
       "status": "caution",
       "note": "Pay is under the general floor of \u00a341,700. It can still work on the new entrant rate, but confirm the salary and the sponsorship on the advert.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 45,
@@ -3518,7 +4133,10 @@
       "status": "caution",
       "note": "Pay is under the general floor of \u00a341,700. It can still work on the new entrant rate, but confirm the salary and the sponsorship on the advert.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 40,
@@ -3535,7 +4153,10 @@
       "status": "caution",
       "note": "Advertised by an agency. The agency holds a licence, but it does not name the employer who would actually sponsor you, so ask them before you apply.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     }
   ],
   "hs": [
@@ -3554,7 +4175,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "3582",
+      "sponsorable": false,
+      "soc_reason": "code closed: 3582"
     },
     {
       "score": 98,
@@ -3571,7 +4195,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "3582",
+      "sponsorable": false,
+      "soc_reason": "code closed: 3582"
     },
     {
       "score": 98,
@@ -3588,7 +4215,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "3582",
+      "sponsorable": false,
+      "soc_reason": "code closed: 3582"
     },
     {
       "score": 98,
@@ -3605,7 +4235,10 @@
       "status": "strong",
       "note": "",
       "source": "jobs.ac.uk",
-      "firstSeen": "2026-08-25"
+      "firstSeen": "2026-08-25",
+      "soc": "3582",
+      "sponsorable": false,
+      "soc_reason": "code closed: 3582"
     },
     {
       "score": 98,
@@ -3622,7 +4255,10 @@
       "status": "strong",
       "note": "",
       "source": "jobs.ac.uk",
-      "firstSeen": "2026-08-15"
+      "firstSeen": "2026-08-15",
+      "soc": "3582",
+      "sponsorable": false,
+      "soc_reason": "code closed: 3582"
     },
     {
       "score": 98,
@@ -3639,7 +4275,10 @@
       "status": "strong",
       "note": "",
       "source": "reed.co.uk",
-      "firstSeen": "2026-08-12"
+      "firstSeen": "2026-08-12",
+      "soc": "3582",
+      "sponsorable": false,
+      "soc_reason": "code closed: 3582"
     },
     {
       "score": 98,
@@ -3656,7 +4295,10 @@
       "status": "strong",
       "note": "",
       "source": "reed.co.uk",
-      "firstSeen": "2026-08-22"
+      "firstSeen": "2026-08-22",
+      "soc": "3582",
+      "sponsorable": false,
+      "soc_reason": "code closed: 3582"
     },
     {
       "score": 98,
@@ -3673,7 +4315,10 @@
       "status": "caution",
       "note": "Advertised by an agency. The agency holds a licence, but it does not name the employer who would actually sponsor you, so ask them before you apply.",
       "source": "reed.co.uk",
-      "firstSeen": "2026-07-29"
+      "firstSeen": "2026-07-29",
+      "soc": "3582",
+      "sponsorable": false,
+      "soc_reason": "code closed: 3582"
     },
     {
       "score": 98,
@@ -3690,7 +4335,10 @@
       "status": "caution",
       "note": "Advertised by an agency. The agency holds a licence, but it does not name the employer who would actually sponsor you, so ask them before you apply.",
       "source": "reed.co.uk",
-      "firstSeen": "2026-08-12"
+      "firstSeen": "2026-08-12",
+      "soc": "3582",
+      "sponsorable": false,
+      "soc_reason": "code closed: 3582"
     },
     {
       "score": 98,
@@ -3707,7 +4355,10 @@
       "status": "strong",
       "note": "",
       "source": "reed.co.uk",
-      "firstSeen": "2026-08-14"
+      "firstSeen": "2026-08-14",
+      "soc": "3582",
+      "sponsorable": false,
+      "soc_reason": "code closed: 3582"
     },
     {
       "score": 96,
@@ -3724,7 +4375,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-01"
+      "firstSeen": "2026-09-01",
+      "soc": "3582",
+      "sponsorable": false,
+      "soc_reason": "code closed: 3582"
     },
     {
       "score": 96,
@@ -3741,7 +4395,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "3582",
+      "sponsorable": false,
+      "soc_reason": "code closed: 3582"
     },
     {
       "score": 96,
@@ -3758,7 +4415,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "3582",
+      "sponsorable": false,
+      "soc_reason": "code closed: 3582"
     },
     {
       "score": 96,
@@ -3775,7 +4435,10 @@
       "status": "caution",
       "note": "Advertised by an agency. The agency holds a licence, but it does not name the employer who would actually sponsor you, so ask them before you apply.",
       "source": "reed.co.uk",
-      "firstSeen": "2026-08-20"
+      "firstSeen": "2026-08-20",
+      "soc": "3582",
+      "sponsorable": false,
+      "soc_reason": "code closed: 3582"
     },
     {
       "score": 93,
@@ -3792,7 +4455,10 @@
       "status": "caution",
       "note": "Pay is under the general floor of \u00a341,700. It can still work on the new entrant rate, but confirm the salary and the sponsorship on the advert.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "3582",
+      "sponsorable": false,
+      "soc_reason": "code closed: 3582"
     },
     {
       "score": 93,
@@ -3809,7 +4475,10 @@
       "status": "caution",
       "note": "Pay is under the general floor of \u00a341,700. It can still work on the new entrant rate, but confirm the salary and the sponsorship on the advert.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "3582",
+      "sponsorable": false,
+      "soc_reason": "code closed: 3582"
     },
     {
       "score": 93,
@@ -3826,7 +4495,10 @@
       "status": "caution",
       "note": "Pay is under the general floor of \u00a341,700. It can still work on the new entrant rate, but confirm the salary and the sponsorship on the advert.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "3582",
+      "sponsorable": false,
+      "soc_reason": "code closed: 3582"
     },
     {
       "score": 93,
@@ -3843,7 +4515,10 @@
       "status": "caution",
       "note": "Pay is under the general floor of \u00a341,700. It can still work on the new entrant rate, but confirm the salary and the sponsorship on the advert.",
       "source": "reed.co.uk",
-      "firstSeen": "2026-08-31"
+      "firstSeen": "2026-08-31",
+      "soc": "3582",
+      "sponsorable": false,
+      "soc_reason": "code closed: 3582"
     },
     {
       "score": 93,
@@ -3860,7 +4535,10 @@
       "status": "caution",
       "note": "Pay is under the general floor of \u00a341,700. It can still work on the new entrant rate, but confirm the salary and the sponsorship on the advert.",
       "source": "reed.co.uk",
-      "firstSeen": "2026-08-18"
+      "firstSeen": "2026-08-18",
+      "soc": "3582",
+      "sponsorable": false,
+      "soc_reason": "code closed: 3582"
     },
     {
       "score": 93,
@@ -3877,7 +4555,10 @@
       "status": "caution",
       "note": "Pay is under the general floor of \u00a341,700. It can still work on the new entrant rate, but confirm the salary and the sponsorship on the advert.",
       "source": "reed.co.uk",
-      "firstSeen": "2026-08-27"
+      "firstSeen": "2026-08-27",
+      "soc": "3582",
+      "sponsorable": false,
+      "soc_reason": "code closed: 3582"
     },
     {
       "score": 93,
@@ -3894,7 +4575,10 @@
       "status": "caution",
       "note": "Pay is under the general floor of \u00a341,700. It can still work on the new entrant rate, but confirm the salary and the sponsorship on the advert.",
       "source": "reed.co.uk",
-      "firstSeen": "2026-08-27"
+      "firstSeen": "2026-08-27",
+      "soc": "3582",
+      "sponsorable": false,
+      "soc_reason": "code closed: 3582"
     },
     {
       "score": 93,
@@ -3911,7 +4595,10 @@
       "status": "caution",
       "note": "Pay is under the general floor of \u00a341,700. It can still work on the new entrant rate, but confirm the salary and the sponsorship on the advert.",
       "source": "reed.co.uk",
-      "firstSeen": "2026-08-05"
+      "firstSeen": "2026-08-05",
+      "soc": "3582",
+      "sponsorable": false,
+      "soc_reason": "code closed: 3582"
     },
     {
       "score": 93,
@@ -3928,7 +4615,10 @@
       "status": "caution",
       "note": "Pay is under the general floor of \u00a341,700. It can still work on the new entrant rate, but confirm the salary and the sponsorship on the advert.",
       "source": "reed.co.uk",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "3582",
+      "sponsorable": false,
+      "soc_reason": "code closed: 3582"
     },
     {
       "score": 93,
@@ -3945,7 +4635,10 @@
       "status": "caution",
       "note": "Advertised by an agency. The agency holds a licence, but it does not name the employer who would actually sponsor you, so ask them before you apply.",
       "source": "reed.co.uk",
-      "firstSeen": "2026-08-27"
+      "firstSeen": "2026-08-27",
+      "soc": "3582",
+      "sponsorable": false,
+      "soc_reason": "code closed: 3582"
     },
     {
       "score": 93,
@@ -3962,7 +4655,10 @@
       "status": "caution",
       "note": "Advertised by an agency. The agency holds a licence, but it does not name the employer who would actually sponsor you, so ask them before you apply.",
       "source": "reed.co.uk",
-      "firstSeen": "2026-08-18"
+      "firstSeen": "2026-08-18",
+      "soc": "3582",
+      "sponsorable": false,
+      "soc_reason": "code closed: 3582"
     },
     {
       "score": 93,
@@ -3979,7 +4675,10 @@
       "status": "caution",
       "note": "Advertised by an agency. The agency holds a licence, but it does not name the employer who would actually sponsor you, so ask them before you apply.",
       "source": "reed.co.uk",
-      "firstSeen": "2026-08-30"
+      "firstSeen": "2026-08-30",
+      "soc": "3582",
+      "sponsorable": false,
+      "soc_reason": "code closed: 3582"
     },
     {
       "score": 93,
@@ -3996,7 +4695,10 @@
       "status": "caution",
       "note": "Advertised by an agency. The agency holds a licence, but it does not name the employer who would actually sponsor you, so ask them before you apply.",
       "source": "reed.co.uk",
-      "firstSeen": "2026-09-01"
+      "firstSeen": "2026-09-01",
+      "soc": "3582",
+      "sponsorable": false,
+      "soc_reason": "code closed: 3582"
     },
     {
       "score": 93,
@@ -4013,7 +4715,10 @@
       "status": "caution",
       "note": "Advertised by an agency. The agency holds a licence, but it does not name the employer who would actually sponsor you, so ask them before you apply.",
       "source": "reed.co.uk",
-      "firstSeen": "2026-09-01"
+      "firstSeen": "2026-09-01",
+      "soc": "3582",
+      "sponsorable": false,
+      "soc_reason": "code closed: 3582"
     },
     {
       "score": 93,
@@ -4030,7 +4735,10 @@
       "status": "caution",
       "note": "Advertised by an agency. The agency holds a licence, but it does not name the employer who would actually sponsor you, so ask them before you apply.",
       "source": "reed.co.uk",
-      "firstSeen": "2026-09-01"
+      "firstSeen": "2026-09-01",
+      "soc": "3582",
+      "sponsorable": false,
+      "soc_reason": "code closed: 3582"
     },
     {
       "score": 92,
@@ -4047,7 +4755,10 @@
       "status": "strong",
       "note": "",
       "source": "jobs.ac.uk",
-      "firstSeen": "2026-08-21"
+      "firstSeen": "2026-08-21",
+      "soc": "3582",
+      "sponsorable": false,
+      "soc_reason": "code closed: 3582"
     },
     {
       "score": 92,
@@ -4064,7 +4775,10 @@
       "status": "strong",
       "note": "",
       "source": "jobs.ac.uk",
-      "firstSeen": "2026-08-05"
+      "firstSeen": "2026-08-05",
+      "soc": "3582",
+      "sponsorable": false,
+      "soc_reason": "code closed: 3582"
     },
     {
       "score": 92,
@@ -4081,7 +4795,10 @@
       "status": "strong",
       "note": "",
       "source": "reed.co.uk",
-      "firstSeen": "2026-08-27"
+      "firstSeen": "2026-08-27",
+      "soc": "3582",
+      "sponsorable": false,
+      "soc_reason": "code closed: 3582"
     },
     {
       "score": 91,
@@ -4098,7 +4815,10 @@
       "status": "caution",
       "note": "Pay is under the general floor of \u00a341,700. It can still work on the new entrant rate, but confirm the salary and the sponsorship on the advert.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "3582",
+      "sponsorable": false,
+      "soc_reason": "code closed: 3582"
     },
     {
       "score": 91,
@@ -4115,7 +4835,10 @@
       "status": "caution",
       "note": "Pay is under the general floor of \u00a341,700. It can still work on the new entrant rate, but confirm the salary and the sponsorship on the advert.",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "3582",
+      "sponsorable": false,
+      "soc_reason": "code closed: 3582"
     },
     {
       "score": 87,
@@ -4132,7 +4855,10 @@
       "status": "caution",
       "note": "Pay is under the general floor of \u00a341,700. It can still work on the new entrant rate, but confirm the salary and the sponsorship on the advert.",
       "source": "jobs.ac.uk",
-      "firstSeen": "2026-08-26"
+      "firstSeen": "2026-08-26",
+      "soc": "3582",
+      "sponsorable": false,
+      "soc_reason": "code closed: 3582"
     },
     {
       "score": 87,
@@ -4149,7 +4875,10 @@
       "status": "caution",
       "note": "Advertised by an agency. The agency holds a licence, but it does not name the employer who would actually sponsor you, so ask them before you apply.",
       "source": "reed.co.uk",
-      "firstSeen": "2026-08-20"
+      "firstSeen": "2026-08-20",
+      "soc": "3582",
+      "sponsorable": false,
+      "soc_reason": "code closed: 3582"
     },
     {
       "score": 86,
@@ -4166,7 +4895,10 @@
       "status": "caution",
       "note": "No salary stated, or the advert gives too wide a band to trust. The employer holds a licence, so confirm the pay and the sponsorship on the advert before you apply.",
       "source": "reed.co.uk",
-      "firstSeen": "2026-08-29"
+      "firstSeen": "2026-08-29",
+      "soc": "3582",
+      "sponsorable": false,
+      "soc_reason": "code closed: 3582"
     },
     {
       "score": 66,
@@ -4183,7 +4915,10 @@
       "status": "strong",
       "note": "",
       "source": "adzuna",
-      "firstSeen": "2026-09-02"
+      "firstSeen": "2026-09-02",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 50,
@@ -4200,7 +4935,10 @@
       "status": "strong",
       "note": "",
       "source": "jobs.ac.uk",
-      "firstSeen": "2026-08-15"
+      "firstSeen": "2026-08-15",
+      "soc": "3582",
+      "sponsorable": false,
+      "soc_reason": "code closed: 3582"
     },
     {
       "score": 50,
@@ -4217,7 +4955,10 @@
       "status": "caution",
       "note": "Advertised by an agency. The agency holds a licence, but it does not name the employer who would actually sponsor you, so ask them before you apply.",
       "source": "reed.co.uk",
-      "firstSeen": "2026-08-12"
+      "firstSeen": "2026-08-12",
+      "soc": "3582",
+      "sponsorable": false,
+      "soc_reason": "code closed: 3582"
     }
   ],
   "phd": [

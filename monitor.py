@@ -13,8 +13,11 @@ Output is split into the three sections the dashboard shows:
 Each opportunity carries a status of strong / caution / weak, which drives the
 colour, icon and word on its card. Standard library only.
 
-Run:  python monitor.py         (live)
-      python monitor.py --demo  (writes sample data)
+Run:  python monitor.py                     (live)
+      python monitor.py --demo              (writes sample data)
+      python monitor.py --sponsorable-only  (live, drop rows the SOC gate rejects)
+      python monitor.py --backfill          (re-tag every archived day with the
+                                             occupation-code gate; no network)
 """
 import os, re, csv, io, json, sys, time, html, datetime, difflib, http.cookiejar
 import urllib.parse, urllib.request, urllib.error
@@ -1823,7 +1826,7 @@ def demo():
 
 def filter_sponsorable(day):
     """Drop rows the occupation-code gate rejects. Only touches rows that carry a
-    `sponsorable` flag (jobs/hs); PhD, part-time and NHS rows have no Skilled
+    `sponsorable` flag (jobs, hs and nhs); PhD and part-time rows have no Skilled
     Worker code test and pass through untouched. Off by default, so the archive
     normally keeps the excluded rows visible with their reason."""
     kept = 0
@@ -1836,7 +1839,50 @@ def filter_sponsorable(day):
     print("--sponsorable-only dropped", kept, "rows", file=sys.stderr)
     return day
 
+# Sections the occupation-code gate applies to, and whether an unmapped title
+# fails open there. Mirrors what make_row (jobs/hs) and build_nhs do at write
+# time, so a backfilled day matches a freshly written one.
+_SOC_SECTIONS = (("jobs", False), ("hs", False), ("nhs", True))
+_SOC_KEYS = ("soc", "sponsorable", "soc_reason")
+
+def backfill_soc():
+    """Tag the archived days that predate the occupation-code gate.
+
+    The gate only runs at write time, so days written before it existed carry no
+    soc / sponsorable / soc_reason and show no badge. soc_fields is pure and
+    deterministic, so this fills them in from the stored title and salary with
+    no network. Rows already tagged at write time are left alone on purpose: the
+    pipeline judged those on the top of the advertised band (salary_max), which
+    the archive does not keep, so recomputing from the stored minimum would be
+    less accurate, not more. Counts, order and every other field are untouched.
+    Safe to re-run; a second pass changes nothing.
+    """
+    days = touched_rows = 0
+    for fn in sorted(os.listdir(DATA_DIR)):
+        if not re.match(r"\d{4}-\d{2}-\d{2}\.json$", fn):
+            continue
+        path = os.path.join(DATA_DIR, fn)
+        with open(path) as f:
+            day = json.load(f)
+        changed = 0
+        for section, nhs in _SOC_SECTIONS:
+            for r in day.get(section, []):
+                if all(k in r for k in _SOC_KEYS):
+                    continue                    # tagged at write time; keep that verdict
+                r["soc"], r["sponsorable"], r["soc_reason"] = soc_fields(
+                    r.get("title", ""), r.get("salary") or None, nhs=nhs)
+                changed += 1
+        if changed:
+            with open(path, "w") as f:
+                json.dump(day, f, indent=2)
+            days += 1
+            touched_rows += changed
+    print("backfill: re-tagged %d rows across %d day files" % (touched_rows, days), file=sys.stderr)
+
 if __name__ == "__main__":
+    if "--backfill" in sys.argv:
+        backfill_soc()                 # archive only; nothing is fetched or written for today
+        sys.exit(0)
     day = demo() if "--demo" in sys.argv else build_today()
     if "--sponsorable-only" in sys.argv:
         day = filter_sponsorable(day)

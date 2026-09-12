@@ -11,7 +11,10 @@
       "salary": 45000,
       "belowGeneral": false,
       "posted": "2026-07-08",
-      "url": "https://www.adzuna.co.uk/jobs/details/5792268265?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5792268265?utm_medium=api&utm_source=a3737efc",
+      "soc": "2141",
+      "sponsorable": true,
+      "soc_reason": "higher skilled"
     },
     {
       "score": 87,
@@ -22,7 +25,10 @@
       "salary": 40000,
       "belowGeneral": true,
       "posted": "2026-07-07",
-      "url": "https://www.adzuna.co.uk/jobs/details/5791267907?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5791267907?utm_medium=api&utm_source=a3737efc",
+      "soc": "2141",
+      "sponsorable": true,
+      "soc_reason": "higher skilled"
     },
     {
       "score": 87,
@@ -33,7 +39,10 @@
       "salary": 39846,
       "belowGeneral": true,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/details/5793826834?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5793826834?utm_medium=api&utm_source=a3737efc",
+      "soc": "2141",
+      "sponsorable": true,
+      "soc_reason": "higher skilled"
     },
     {
       "score": 87,
@@ -44,7 +53,10 @@
       "salary": 46499,
       "belowGeneral": false,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/details/5793826905?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5793826905?utm_medium=api&utm_source=a3737efc",
+      "soc": "3544",
+      "sponsorable": true,
+      "soc_reason": "shortage list"
     },
     {
       "score": 87,
@@ -55,7 +67,10 @@
       "salary": 42000,
       "belowGeneral": false,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793451361?se=suBKEnl78RGtZsZR5jHX3A&utm_medium=api&utm_source=a3737efc&v=2F2510FBC974BBD9F4D3C41824B6CEA0F788C858"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793451361?se=suBKEnl78RGtZsZR5jHX3A&utm_medium=api&utm_source=a3737efc&v=2F2510FBC974BBD9F4D3C41824B6CEA0F788C858",
+      "soc": "3544",
+      "sponsorable": true,
+      "soc_reason": "shortage list"
     },
     {
       "score": 87,
@@ -66,7 +81,10 @@
       "salary": 72753,
       "belowGeneral": false,
       "posted": "2026-07-08",
-      "url": "https://www.adzuna.co.uk/jobs/details/5792956031?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5792956031?utm_medium=api&utm_source=a3737efc",
+      "soc": "3544",
+      "sponsorable": true,
+      "soc_reason": "shortage list"
     },
     {
       "score": 87,
@@ -77,7 +95,10 @@
       "salary": 65000,
       "belowGeneral": false,
       "posted": "2026-07-08",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5792947864?se=suBKEnl78RGtZsZR5jHX3A&utm_medium=api&utm_source=a3737efc&v=8AD77CAACB260D1E3182A17CABA41BFD08F82480"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5792947864?se=suBKEnl78RGtZsZR5jHX3A&utm_medium=api&utm_source=a3737efc&v=8AD77CAACB260D1E3182A17CABA41BFD08F82480",
+      "soc": "3544",
+      "sponsorable": true,
+      "soc_reason": "shortage list"
     },
     {
       "score": 83,
@@ -88,7 +109,10 @@
       "salary": 49112,
       "belowGeneral": false,
       "posted": "2026-07-08",
-      "url": "https://www.adzuna.co.uk/jobs/details/5792955948?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5792955948?utm_medium=api&utm_source=a3737efc",
+      "soc": "2141",
+      "sponsorable": true,
+      "soc_reason": "higher skilled"
     },
     {
       "score": 83,
@@ -99,7 +123,10 @@
       "salary": 46625,
       "belowGeneral": false,
       "posted": "2026-07-08",
-      "url": "https://www.adzuna.co.uk/jobs/details/5792897318?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5792897318?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 83,
@@ -110,7 +137,10 @@
       "salary": 59000,
       "belowGeneral": false,
       "posted": "2026-07-08",
-      "url": "https://www.adzuna.co.uk/jobs/details/5792708950?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5792708950?utm_medium=api&utm_source=a3737efc",
+      "soc": "2141",
+      "sponsorable": true,
+      "soc_reason": "higher skilled"
     },
     {
       "score": 83,
@@ -121,7 +151,10 @@
       "salary": 72000,
       "belowGeneral": false,
       "posted": "2026-07-08",
-      "url": "https://www.adzuna.co.uk/jobs/details/5792782983?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5792782983?utm_medium=api&utm_source=a3737efc",
+      "soc": "2141",
+      "sponsorable": true,
+      "soc_reason": "higher skilled"
     },
     {
       "score": 83,
@@ -132,7 +165,10 @@
       "salary": 42171,
       "belowGeneral": false,
       "posted": "2026-07-08",
-      "url": "https://www.adzuna.co.uk/jobs/details/5792709270?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5792709270?utm_medium=api&utm_source=a3737efc",
+      "soc": "2141",
+      "sponsorable": true,
+      "soc_reason": "higher skilled"
     },
     {
       "score": 83,
@@ -143,7 +179,10 @@
       "salary": 59855,
       "belowGeneral": false,
       "posted": "2026-07-08",
-      "url": "https://www.adzuna.co.uk/jobs/details/5792475657?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5792475657?utm_medium=api&utm_source=a3737efc",
+      "soc": "2141",
+      "sponsorable": true,
+      "soc_reason": "higher skilled"
     },
     {
       "score": 83,
@@ -154,7 +193,10 @@
       "salary": 63099,
       "belowGeneral": false,
       "posted": "2026-07-08",
-      "url": "https://www.adzuna.co.uk/jobs/details/5792947172?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5792947172?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 79,
@@ -165,7 +207,10 @@
       "salary": 35227,
       "belowGeneral": true,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/details/5793559710?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5793559710?utm_medium=api&utm_source=a3737efc",
+      "soc": "3544",
+      "sponsorable": true,
+      "soc_reason": "shortage list"
     },
     {
       "score": 79,
@@ -176,7 +221,10 @@
       "salary": 40000,
       "belowGeneral": true,
       "posted": "2026-07-08",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793021161?se=suBKEnl78RGtZsZR5jHX3A&utm_medium=api&utm_source=a3737efc&v=F66DA8EB2812F8F07326C6CCA7CFF13C3F1FC66A"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793021161?se=suBKEnl78RGtZsZR5jHX3A&utm_medium=api&utm_source=a3737efc&v=F66DA8EB2812F8F07326C6CCA7CFF13C3F1FC66A",
+      "soc": "2482",
+      "sponsorable": true,
+      "soc_reason": "higher skilled"
     },
     {
       "score": 79,
@@ -187,7 +235,10 @@
       "salary": 40000,
       "belowGeneral": true,
       "posted": "2026-07-08",
-      "url": "https://www.adzuna.co.uk/jobs/details/5792843339?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5792843339?utm_medium=api&utm_source=a3737efc",
+      "soc": "3544",
+      "sponsorable": true,
+      "soc_reason": "shortage list"
     },
     {
       "score": 79,
@@ -198,7 +249,10 @@
       "salary": 38000,
       "belowGeneral": true,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/details/5793529332?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5793529332?utm_medium=api&utm_source=a3737efc",
+      "soc": "2125",
+      "sponsorable": true,
+      "soc_reason": "higher skilled"
     },
     {
       "score": 75,
@@ -209,7 +263,10 @@
       "salary": 36000,
       "belowGeneral": true,
       "posted": "2026-07-07",
-      "url": "https://www.adzuna.co.uk/jobs/details/5790883009?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5790883009?utm_medium=api&utm_source=a3737efc",
+      "soc": "2141",
+      "sponsorable": true,
+      "soc_reason": "higher skilled"
     },
     {
       "score": 75,
@@ -220,7 +277,10 @@
       "salary": 47849,
       "belowGeneral": false,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/details/5793826833?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5793826833?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 75,
@@ -231,7 +291,10 @@
       "salary": 58950,
       "belowGeneral": false,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/details/5793491067?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5793491067?utm_medium=api&utm_source=a3737efc",
+      "soc": "2141",
+      "sponsorable": true,
+      "soc_reason": "higher skilled"
     },
     {
       "score": 75,
@@ -242,7 +305,10 @@
       "salary": 43394,
       "belowGeneral": false,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/details/5793827004?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5793827004?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 75,
@@ -253,7 +319,10 @@
       "salary": 38260,
       "belowGeneral": true,
       "posted": "2026-07-08",
-      "url": "https://www.adzuna.co.uk/jobs/details/5792798664?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5792798664?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 75,
@@ -264,7 +333,10 @@
       "salary": 45718,
       "belowGeneral": false,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/details/5793827000?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5793827000?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 75,
@@ -275,7 +347,10 @@
       "salary": 143000,
       "belowGeneral": false,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793725770?se=suBKEnl78RGtZsZR5jHX3A&utm_medium=api&utm_source=a3737efc&v=798A3826684EC8D163311ABCD4D2139951985B8D"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793725770?se=suBKEnl78RGtZsZR5jHX3A&utm_medium=api&utm_source=a3737efc&v=798A3826684EC8D163311ABCD4D2139951985B8D",
+      "soc": "2133",
+      "sponsorable": true,
+      "soc_reason": "higher skilled"
     },
     {
       "score": 75,
@@ -286,7 +361,10 @@
       "salary": 46975,
       "belowGeneral": false,
       "posted": "2026-07-08",
-      "url": "https://www.adzuna.co.uk/jobs/details/5793378312?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5793378312?utm_medium=api&utm_source=a3737efc",
+      "soc": "2133",
+      "sponsorable": true,
+      "soc_reason": "higher skilled"
     },
     {
       "score": 75,
@@ -297,7 +375,10 @@
       "salary": 86619,
       "belowGeneral": false,
       "posted": "2026-07-08",
-      "url": "https://www.adzuna.co.uk/jobs/details/5792956024?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5792956024?utm_medium=api&utm_source=a3737efc",
+      "soc": "2133",
+      "sponsorable": true,
+      "soc_reason": "higher skilled"
     },
     {
       "score": 75,
@@ -308,7 +389,10 @@
       "salary": 45211,
       "belowGeneral": false,
       "posted": "2026-07-08",
-      "url": "https://www.adzuna.co.uk/jobs/details/5792955987?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5792955987?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 75,
@@ -319,7 +403,10 @@
       "salary": 53388,
       "belowGeneral": false,
       "posted": "2026-07-08",
-      "url": "https://www.adzuna.co.uk/jobs/details/5792955978?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5792955978?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 75,
@@ -330,7 +417,10 @@
       "salary": 71144,
       "belowGeneral": false,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793949283?se=YGL6FHl78RG77ot4PNCCLA&utm_medium=api&utm_source=a3737efc&v=C46623AFEBADF3F2F29F4E51450957CE4C7343CB"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793949283?se=YGL6FHl78RG77ot4PNCCLA&utm_medium=api&utm_source=a3737efc&v=C46623AFEBADF3F2F29F4E51450957CE4C7343CB",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 75,
@@ -341,7 +431,10 @@
       "salary": 50000,
       "belowGeneral": false,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793937007?se=YGL6FHl78RG77ot4PNCCLA&utm_medium=api&utm_source=a3737efc&v=EFF756A651429E296FA2C785E6326798861134C5"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793937007?se=YGL6FHl78RG77ot4PNCCLA&utm_medium=api&utm_source=a3737efc&v=EFF756A651429E296FA2C785E6326798861134C5",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 75,
@@ -352,7 +445,10 @@
       "salary": 45000,
       "belowGeneral": false,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793926822?se=mlIJInl78RGePrv1gFrA_w&utm_medium=api&utm_source=a3737efc&v=2B82DCC584689EF4293FE5295C746887C47E2AF3"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793926822?se=mlIJInl78RGePrv1gFrA_w&utm_medium=api&utm_source=a3737efc&v=2B82DCC584689EF4293FE5295C746887C47E2AF3",
+      "soc": "2125",
+      "sponsorable": true,
+      "soc_reason": "higher skilled"
     },
     {
       "score": 75,
@@ -363,7 +459,10 @@
       "salary": 52942,
       "belowGeneral": false,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/details/5793864576?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5793864576?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 75,
@@ -374,7 +473,10 @@
       "salary": 46833,
       "belowGeneral": false,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/details/5793826885?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5793826885?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 75,
@@ -385,7 +487,10 @@
       "salary": 46281,
       "belowGeneral": false,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/details/5793807475?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5793807475?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 75,
@@ -396,7 +501,10 @@
       "salary": 120640,
       "belowGeneral": false,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793724041?se=mlIJInl78RGePrv1gFrA_w&utm_medium=api&utm_source=a3737efc&v=4A09C56273281256D6579FD455B8053AB24AB294"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793724041?se=mlIJInl78RGePrv1gFrA_w&utm_medium=api&utm_source=a3737efc&v=4A09C56273281256D6579FD455B8053AB24AB294",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 75,
@@ -407,7 +515,10 @@
       "salary": 45000,
       "belowGeneral": false,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793716529?se=mlIJInl78RGePrv1gFrA_w&utm_medium=api&utm_source=a3737efc&v=F3C15D3333FD957910A5F80848E9AC50C3FCA328"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793716529?se=mlIJInl78RGePrv1gFrA_w&utm_medium=api&utm_source=a3737efc&v=F3C15D3333FD957910A5F80848E9AC50C3FCA328",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 75,
@@ -418,7 +529,10 @@
       "salary": 50000,
       "belowGeneral": false,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793716513?se=mlIJInl78RGePrv1gFrA_w&utm_medium=api&utm_source=a3737efc&v=B10E09075863B5FA259A8712ACC1DA9FFB245DB8"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793716513?se=mlIJInl78RGePrv1gFrA_w&utm_medium=api&utm_source=a3737efc&v=B10E09075863B5FA259A8712ACC1DA9FFB245DB8",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 75,
@@ -429,7 +543,10 @@
       "salary": 104000,
       "belowGeneral": false,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/details/5793528608?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5793528608?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 75,
@@ -440,7 +557,10 @@
       "salary": 66561,
       "belowGeneral": false,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/details/5793523752?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5793523752?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 71,
@@ -451,7 +571,10 @@
       "salary": null,
       "belowGeneral": false,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793464281?se=xtWiAXl78RG77ot4PNCCLA&utm_medium=api&utm_source=a3737efc&v=8000EF5C2EAE8AC68A698799DB0BC7AC8A752A84"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793464281?se=xtWiAXl78RG77ot4PNCCLA&utm_medium=api&utm_source=a3737efc&v=8000EF5C2EAE8AC68A698799DB0BC7AC8A752A84",
+      "soc": "2141",
+      "sponsorable": true,
+      "soc_reason": "higher skilled"
     },
     {
       "score": 67,
@@ -462,7 +585,10 @@
       "salary": 49531,
       "belowGeneral": false,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/details/5793826887?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5793826887?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -473,7 +599,10 @@
       "salary": 45000,
       "belowGeneral": false,
       "posted": "2026-07-08",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793021680?se=xtWiAXl78RG77ot4PNCCLA&utm_medium=api&utm_source=a3737efc&v=8E2825A0052574E7B6E28B96A0A93394092CD80C"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793021680?se=xtWiAXl78RG77ot4PNCCLA&utm_medium=api&utm_source=a3737efc&v=8E2825A0052574E7B6E28B96A0A93394092CD80C",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -484,7 +613,10 @@
       "salary": 45000,
       "belowGeneral": false,
       "posted": "2026-07-08",
-      "url": "https://www.adzuna.co.uk/jobs/details/5792949401?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5792949401?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -495,7 +627,10 @@
       "salary": 57704,
       "belowGeneral": false,
       "posted": "2026-07-08",
-      "url": "https://www.adzuna.co.uk/jobs/details/5792804190?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5792804190?utm_medium=api&utm_source=a3737efc",
+      "soc": "2431",
+      "sponsorable": true,
+      "soc_reason": "higher skilled"
     },
     {
       "score": 67,
@@ -506,7 +641,10 @@
       "salary": 72478,
       "belowGeneral": false,
       "posted": "2026-07-08",
-      "url": "https://www.adzuna.co.uk/jobs/details/5792749136?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5792749136?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -517,7 +655,10 @@
       "salary": 81019,
       "belowGeneral": false,
       "posted": "2026-07-08",
-      "url": "https://www.adzuna.co.uk/jobs/details/5792721500?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5792721500?utm_medium=api&utm_source=a3737efc",
+      "soc": "2141",
+      "sponsorable": true,
+      "soc_reason": "higher skilled"
     },
     {
       "score": 67,
@@ -528,7 +669,10 @@
       "salary": 80531,
       "belowGeneral": false,
       "posted": "2026-07-08",
-      "url": "https://www.adzuna.co.uk/jobs/details/5792711850?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5792711850?utm_medium=api&utm_source=a3737efc",
+      "soc": "2141",
+      "sponsorable": true,
+      "soc_reason": "higher skilled"
     },
     {
       "score": 67,
@@ -539,7 +683,10 @@
       "salary": 48614,
       "belowGeneral": false,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793931339?se=EvdaBHl78RG4yNUoBgOIfg&utm_medium=api&utm_source=a3737efc&v=D57B03CF81B5CEA25B57B2B9B6FD76AB935FC6C7"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793931339?se=EvdaBHl78RG4yNUoBgOIfg&utm_medium=api&utm_source=a3737efc&v=D57B03CF81B5CEA25B57B2B9B6FD76AB935FC6C7",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -550,7 +697,10 @@
       "salary": 70000,
       "belowGeneral": false,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793921411?se=EvdaBHl78RG4yNUoBgOIfg&utm_medium=api&utm_source=a3737efc&v=9BF343718E887B678ABEC70D8F4F64F3F2DCC03E"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793921411?se=EvdaBHl78RG4yNUoBgOIfg&utm_medium=api&utm_source=a3737efc&v=9BF343718E887B678ABEC70D8F4F64F3F2DCC03E",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -561,7 +711,10 @@
       "salary": 53373,
       "belowGeneral": false,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/details/5793826985?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5793826985?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -572,7 +725,10 @@
       "salary": 86043,
       "belowGeneral": false,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/details/5793826930?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5793826930?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -583,7 +739,10 @@
       "salary": 53205,
       "belowGeneral": false,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/details/5793826941?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5793826941?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -594,7 +753,10 @@
       "salary": 81195,
       "belowGeneral": false,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/details/5793826935?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5793826935?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -605,7 +767,10 @@
       "salary": 60096,
       "belowGeneral": false,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/details/5793826906?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5793826906?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -616,7 +781,10 @@
       "salary": 59294,
       "belowGeneral": false,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/details/5793826866?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5793826866?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -627,7 +795,10 @@
       "salary": 97445,
       "belowGeneral": false,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/details/5793826851?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5793826851?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -638,7 +809,10 @@
       "salary": 49751,
       "belowGeneral": false,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/details/5793826839?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5793826839?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -649,7 +823,10 @@
       "salary": 48316,
       "belowGeneral": false,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/details/5793826847?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5793826847?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -660,7 +837,10 @@
       "salary": 48948,
       "belowGeneral": false,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/details/5793826864?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5793826864?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -671,7 +851,10 @@
       "salary": 74102,
       "belowGeneral": false,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/details/5793826827?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5793826827?utm_medium=api&utm_source=a3737efc",
+      "soc": "2133",
+      "sponsorable": true,
+      "soc_reason": "higher skilled"
     },
     {
       "score": 67,
@@ -682,7 +865,10 @@
       "salary": 67417,
       "belowGeneral": false,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793724042?se=EvdaBHl78RG4yNUoBgOIfg&utm_medium=api&utm_source=a3737efc&v=4EDF9574A6426EA4B49B581D95468B1D3A74D9D5"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793724042?se=EvdaBHl78RG4yNUoBgOIfg&utm_medium=api&utm_source=a3737efc&v=4EDF9574A6426EA4B49B581D95468B1D3A74D9D5",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -693,7 +879,10 @@
       "salary": 62599,
       "belowGeneral": false,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793724021?se=EvdaBHl78RG4yNUoBgOIfg&utm_medium=api&utm_source=a3737efc&v=15E3367C477C56FD64AA09A179C38B4F8BE40BEF"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793724021?se=EvdaBHl78RG4yNUoBgOIfg&utm_medium=api&utm_source=a3737efc&v=15E3367C477C56FD64AA09A179C38B4F8BE40BEF",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -704,7 +893,10 @@
       "salary": 70000,
       "belowGeneral": false,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793722719?se=EvdaBHl78RG4yNUoBgOIfg&utm_medium=api&utm_source=a3737efc&v=C4BD05A0D6D4EE951E7DBD8FC94719B76934E4E2"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793722719?se=EvdaBHl78RG4yNUoBgOIfg&utm_medium=api&utm_source=a3737efc&v=C4BD05A0D6D4EE951E7DBD8FC94719B76934E4E2",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -715,7 +907,10 @@
       "salary": 45000,
       "belowGeneral": false,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793715878?se=EvdaBHl78RG4yNUoBgOIfg&utm_medium=api&utm_source=a3737efc&v=5FAE93B641B3C2E442104DAF9C6FBBEC25ADB312"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793715878?se=EvdaBHl78RG4yNUoBgOIfg&utm_medium=api&utm_source=a3737efc&v=5FAE93B641B3C2E442104DAF9C6FBBEC25ADB312",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -726,7 +921,10 @@
       "salary": 75364,
       "belowGeneral": false,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/details/5793667862?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5793667862?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -737,7 +935,10 @@
       "salary": 68000,
       "belowGeneral": false,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/details/5793532143?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5793532143?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -748,7 +949,10 @@
       "salary": 57574,
       "belowGeneral": false,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/details/5793531039?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5793531039?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -759,7 +963,10 @@
       "salary": 54253,
       "belowGeneral": false,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/details/5793489578?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5793489578?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -770,7 +977,10 @@
       "salary": 156000,
       "belowGeneral": false,
       "posted": "2026-07-08",
-      "url": "https://www.adzuna.co.uk/jobs/details/5792984456?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5792984456?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -781,7 +991,10 @@
       "salary": 60750,
       "belowGeneral": false,
       "posted": "2026-07-08",
-      "url": "https://www.adzuna.co.uk/jobs/details/5792955919?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5792955919?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -792,7 +1005,10 @@
       "salary": 49108,
       "belowGeneral": false,
       "posted": "2026-07-08",
-      "url": "https://www.adzuna.co.uk/jobs/details/5792764484?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5792764484?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -803,7 +1019,10 @@
       "salary": 58253,
       "belowGeneral": false,
       "posted": "2026-07-08",
-      "url": "https://www.adzuna.co.uk/jobs/details/5792716657?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5792716657?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -814,7 +1033,10 @@
       "salary": 70138,
       "belowGeneral": false,
       "posted": "2026-07-08",
-      "url": "https://www.adzuna.co.uk/jobs/details/5792709574?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5792709574?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -825,7 +1047,10 @@
       "salary": 51906,
       "belowGeneral": false,
       "posted": "2026-07-08",
-      "url": "https://www.adzuna.co.uk/jobs/details/5792475649?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5792475649?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -836,7 +1061,10 @@
       "salary": 59000,
       "belowGeneral": false,
       "posted": "2026-07-08",
-      "url": "https://www.adzuna.co.uk/jobs/details/5792268325?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5792268325?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -847,7 +1075,10 @@
       "salary": 62000,
       "belowGeneral": false,
       "posted": "2026-07-08",
-      "url": "https://www.adzuna.co.uk/jobs/details/5792268282?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5792268282?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -858,7 +1089,10 @@
       "salary": 58000,
       "belowGeneral": false,
       "posted": "2026-07-08",
-      "url": "https://www.adzuna.co.uk/jobs/details/5792268267?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5792268267?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -869,7 +1103,10 @@
       "salary": 50000,
       "belowGeneral": false,
       "posted": "2026-07-08",
-      "url": "https://www.adzuna.co.uk/jobs/details/5792268077?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5792268077?utm_medium=api&utm_source=a3737efc",
+      "soc": "2141",
+      "sponsorable": true,
+      "soc_reason": "higher skilled"
     },
     {
       "score": 67,
@@ -880,7 +1117,10 @@
       "salary": 169000,
       "belowGeneral": false,
       "posted": "2026-07-08",
-      "url": "https://www.adzuna.co.uk/jobs/details/5793005481?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5793005481?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -891,7 +1131,10 @@
       "salary": 57038,
       "belowGeneral": false,
       "posted": "2026-07-08",
-      "url": "https://www.adzuna.co.uk/jobs/details/5792737175?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5792737175?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -902,7 +1145,10 @@
       "salary": 60000,
       "belowGeneral": false,
       "posted": "2026-07-08",
-      "url": "https://www.adzuna.co.uk/jobs/details/5792268096?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5792268096?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -913,7 +1159,10 @@
       "salary": 62000,
       "belowGeneral": false,
       "posted": "2026-07-08",
-      "url": "https://www.adzuna.co.uk/jobs/details/5792268050?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5792268050?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -924,7 +1173,10 @@
       "salary": 80000,
       "belowGeneral": false,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793950763?se=CL_0C3l78RGtZsZR5jHX3A&utm_medium=api&utm_source=a3737efc&v=FFEB40E39480ADC364ECD3F8B384B45971235C2A"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793950763?se=CL_0C3l78RGtZsZR5jHX3A&utm_medium=api&utm_source=a3737efc&v=FFEB40E39480ADC364ECD3F8B384B45971235C2A",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -935,7 +1187,10 @@
       "salary": 100378,
       "belowGeneral": false,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793925490?se=CL_0C3l78RGtZsZR5jHX3A&utm_medium=api&utm_source=a3737efc&v=9239A0CAB4A317118DDBC74DD5C92171EE080C6D"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793925490?se=CL_0C3l78RGtZsZR5jHX3A&utm_medium=api&utm_source=a3737efc&v=9239A0CAB4A317118DDBC74DD5C92171EE080C6D",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -946,7 +1201,10 @@
       "salary": 55000,
       "belowGeneral": false,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793905007?se=CL_0C3l78RGtZsZR5jHX3A&utm_medium=api&utm_source=a3737efc&v=D993E38A47F836333FE3630E5D5804AD9514F60E"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793905007?se=CL_0C3l78RGtZsZR5jHX3A&utm_medium=api&utm_source=a3737efc&v=D993E38A47F836333FE3630E5D5804AD9514F60E",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -957,7 +1215,10 @@
       "salary": 57408,
       "belowGeneral": false,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/details/5793826943?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5793826943?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -968,7 +1229,10 @@
       "salary": 54918,
       "belowGeneral": false,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/details/5793826875?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5793826875?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -979,7 +1243,10 @@
       "salary": 49203,
       "belowGeneral": false,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/details/5793794267?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5793794267?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -990,7 +1257,10 @@
       "salary": 44439,
       "belowGeneral": false,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793722969?se=CL_0C3l78RGtZsZR5jHX3A&utm_medium=api&utm_source=a3737efc&v=143E40421ED3C9FFBBB59DDEE195FF7457EFB7B0"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793722969?se=CL_0C3l78RGtZsZR5jHX3A&utm_medium=api&utm_source=a3737efc&v=143E40421ED3C9FFBBB59DDEE195FF7457EFB7B0",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -1001,7 +1271,10 @@
       "salary": 150800,
       "belowGeneral": false,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793715880?se=CL_0C3l78RGtZsZR5jHX3A&utm_medium=api&utm_source=a3737efc&v=ADEA15A8D7B7FFC3684CDC92E96395AE60D8D06F"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793715880?se=CL_0C3l78RGtZsZR5jHX3A&utm_medium=api&utm_source=a3737efc&v=ADEA15A8D7B7FFC3684CDC92E96395AE60D8D06F",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -1012,7 +1285,10 @@
       "salary": 77000,
       "belowGeneral": false,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/details/5793681315?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5793681315?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -1023,7 +1299,10 @@
       "salary": 56621,
       "belowGeneral": false,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/details/5793667859?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5793667859?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -1034,7 +1313,10 @@
       "salary": 60406,
       "belowGeneral": false,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/details/5793648201?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5793648201?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -1045,7 +1327,10 @@
       "salary": 58265,
       "belowGeneral": false,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/details/5793648196?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5793648196?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -1056,7 +1341,10 @@
       "salary": 47430,
       "belowGeneral": false,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/details/5793523930?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5793523930?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -1067,7 +1355,10 @@
       "salary": 46344,
       "belowGeneral": false,
       "posted": "2026-07-08",
-      "url": "https://www.adzuna.co.uk/jobs/details/5792804752?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5792804752?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -1078,7 +1369,10 @@
       "salary": 71297,
       "belowGeneral": false,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793906957?se=suBKEnl78RGtZsZR5jHX3A&utm_medium=api&utm_source=a3737efc&v=BE295541E38F3881F5C4D6D0B6E1EB026B0B9B09"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793906957?se=suBKEnl78RGtZsZR5jHX3A&utm_medium=api&utm_source=a3737efc&v=BE295541E38F3881F5C4D6D0B6E1EB026B0B9B09",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -1089,7 +1383,10 @@
       "salary": 72779,
       "belowGeneral": false,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793906963?se=suBKEnl78RGtZsZR5jHX3A&utm_medium=api&utm_source=a3737efc&v=EFDCD328504E44E63560759F1343574D2862F594"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793906963?se=suBKEnl78RGtZsZR5jHX3A&utm_medium=api&utm_source=a3737efc&v=EFDCD328504E44E63560759F1343574D2862F594",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -1100,7 +1397,10 @@
       "salary": 75816,
       "belowGeneral": false,
       "posted": "2026-07-08",
-      "url": "https://www.adzuna.co.uk/jobs/details/5792955958?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5792955958?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -1111,7 +1411,10 @@
       "salary": 67693,
       "belowGeneral": false,
       "posted": "2026-07-08",
-      "url": "https://www.adzuna.co.uk/jobs/details/5792955970?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5792955970?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -1122,7 +1425,10 @@
       "salary": 100000,
       "belowGeneral": false,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793953456?se=YGL6FHl78RG77ot4PNCCLA&utm_medium=api&utm_source=a3737efc&v=AAF2B5CEBE8745D35096BFEF9A220F234B818AA8"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793953456?se=YGL6FHl78RG77ot4PNCCLA&utm_medium=api&utm_source=a3737efc&v=AAF2B5CEBE8745D35096BFEF9A220F234B818AA8",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -1133,7 +1439,10 @@
       "salary": 35000,
       "belowGeneral": true,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793933518?se=YGL6FHl78RG77ot4PNCCLA&utm_medium=api&utm_source=a3737efc&v=A45C214142EA65764C545DA5CD6F129B3F3D1052"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793933518?se=YGL6FHl78RG77ot4PNCCLA&utm_medium=api&utm_source=a3737efc&v=A45C214142EA65764C545DA5CD6F129B3F3D1052",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -1144,7 +1453,10 @@
       "salary": 35000,
       "belowGeneral": true,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793934835?se=Br_4GHl78RG77ot4PNCCLA&utm_medium=api&utm_source=a3737efc&v=CB7454484C44C10B0C67ED2A0D0FEBB4E382B9F0"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793934835?se=Br_4GHl78RG77ot4PNCCLA&utm_medium=api&utm_source=a3737efc&v=CB7454484C44C10B0C67ED2A0D0FEBB4E382B9F0",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -1155,7 +1467,10 @@
       "salary": 83200,
       "belowGeneral": false,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793953220?se=fC3OHXl78RG4yNUoBgOIfg&utm_medium=api&utm_source=a3737efc&v=69D7B4833D31C22AF6423310B43D214C89482AF0"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793953220?se=fC3OHXl78RG4yNUoBgOIfg&utm_medium=api&utm_source=a3737efc&v=69D7B4833D31C22AF6423310B43D214C89482AF0",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -1166,7 +1481,10 @@
       "salary": 37040,
       "belowGeneral": true,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793953099?se=mlIJInl78RGePrv1gFrA_w&utm_medium=api&utm_source=a3737efc&v=DBCE2830192CD7C583163DE281ABFDB62289E8D4"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793953099?se=mlIJInl78RGePrv1gFrA_w&utm_medium=api&utm_source=a3737efc&v=DBCE2830192CD7C583163DE281ABFDB62289E8D4",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -1177,7 +1495,10 @@
       "salary": 45000,
       "belowGeneral": false,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793929981?se=mlIJInl78RGePrv1gFrA_w&utm_medium=api&utm_source=a3737efc&v=893A3FA711AAF14D548C860E33C6044DB259CAF8"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793929981?se=mlIJInl78RGePrv1gFrA_w&utm_medium=api&utm_source=a3737efc&v=893A3FA711AAF14D548C860E33C6044DB259CAF8",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -1188,7 +1509,10 @@
       "salary": 90000,
       "belowGeneral": false,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793906203?se=mlIJInl78RGePrv1gFrA_w&utm_medium=api&utm_source=a3737efc&v=97ED906341508157AE6E1CA13A69134674D4BD3E"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793906203?se=mlIJInl78RGePrv1gFrA_w&utm_medium=api&utm_source=a3737efc&v=97ED906341508157AE6E1CA13A69134674D4BD3E",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -1199,7 +1523,10 @@
       "salary": 48468,
       "belowGeneral": false,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/details/5793826876?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5793826876?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 67,
@@ -1210,7 +1537,10 @@
       "salary": 37606,
       "belowGeneral": true,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793713975?se=mlIJInl78RGePrv1gFrA_w&utm_medium=api&utm_source=a3737efc&v=5BFDE34F3B5559041D373C3426ED1A3303268EE8"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793713975?se=mlIJInl78RGePrv1gFrA_w&utm_medium=api&utm_source=a3737efc&v=5BFDE34F3B5559041D373C3426ED1A3303268EE8",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 63,
@@ -1221,7 +1551,10 @@
       "salary": null,
       "belowGeneral": false,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793916076?se=suBKEnl78RGtZsZR5jHX3A&utm_medium=api&utm_source=a3737efc&v=37BEFA6885007CB4C29B170602C109C81D091728"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793916076?se=suBKEnl78RGtZsZR5jHX3A&utm_medium=api&utm_source=a3737efc&v=37BEFA6885007CB4C29B170602C109C81D091728",
+      "soc": "3544",
+      "sponsorable": true,
+      "soc_reason": "shortage list"
     },
     {
       "score": 59,
@@ -1232,7 +1565,10 @@
       "salary": 36617,
       "belowGeneral": true,
       "posted": "2026-07-08",
-      "url": "https://www.adzuna.co.uk/jobs/details/5792950761?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5792950761?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 59,
@@ -1243,7 +1579,10 @@
       "salary": 40000,
       "belowGeneral": true,
       "posted": "2026-07-08",
-      "url": "https://www.adzuna.co.uk/jobs/details/5792801660?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5792801660?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 59,
@@ -1254,7 +1593,10 @@
       "salary": 38093,
       "belowGeneral": true,
       "posted": "2026-07-08",
-      "url": "https://www.adzuna.co.uk/jobs/details/5792736259?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5792736259?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 59,
@@ -1265,7 +1607,10 @@
       "salary": 35000,
       "belowGeneral": true,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793949317?se=EvdaBHl78RG4yNUoBgOIfg&utm_medium=api&utm_source=a3737efc&v=FE459D7A7E8315B268AD7EDF4153D0D11C2BEB21"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793949317?se=EvdaBHl78RG4yNUoBgOIfg&utm_medium=api&utm_source=a3737efc&v=FE459D7A7E8315B268AD7EDF4153D0D11C2BEB21",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 59,
@@ -1276,7 +1621,10 @@
       "salary": 35735,
       "belowGeneral": true,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793901853?se=EvdaBHl78RG4yNUoBgOIfg&utm_medium=api&utm_source=a3737efc&v=BF18AFF5E72A0F5E8FE8D007B808D5BDE379C598"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793901853?se=EvdaBHl78RG4yNUoBgOIfg&utm_medium=api&utm_source=a3737efc&v=BF18AFF5E72A0F5E8FE8D007B808D5BDE379C598",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 59,
@@ -1287,7 +1635,10 @@
       "salary": 33753,
       "belowGeneral": true,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/details/5793826863?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5793826863?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 59,
@@ -1298,7 +1649,10 @@
       "salary": 36012,
       "belowGeneral": true,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793705619?se=EvdaBHl78RG4yNUoBgOIfg&utm_medium=api&utm_source=a3737efc&v=D8353F297FF197351798B5F222FFB2142CB30540"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793705619?se=EvdaBHl78RG4yNUoBgOIfg&utm_medium=api&utm_source=a3737efc&v=D8353F297FF197351798B5F222FFB2142CB30540",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 59,
@@ -1309,7 +1663,10 @@
       "salary": 40000,
       "belowGeneral": true,
       "posted": "2026-07-08",
-      "url": "https://www.adzuna.co.uk/jobs/details/5792268222?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5792268222?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 59,
@@ -1320,7 +1677,10 @@
       "salary": 37000,
       "belowGeneral": true,
       "posted": "2026-07-08",
-      "url": "https://www.adzuna.co.uk/jobs/details/5792268171?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5792268171?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 59,
@@ -1331,7 +1691,10 @@
       "salary": 35716,
       "belowGeneral": true,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793722927?se=CL_0C3l78RGtZsZR5jHX3A&utm_medium=api&utm_source=a3737efc&v=BAAE61FC0D7FA8331143552CF598698710687EF5"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793722927?se=CL_0C3l78RGtZsZR5jHX3A&utm_medium=api&utm_source=a3737efc&v=BAAE61FC0D7FA8331143552CF598698710687EF5",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 59,
@@ -1342,7 +1705,10 @@
       "salary": 39152,
       "belowGeneral": true,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793602649?se=CL_0C3l78RGtZsZR5jHX3A&utm_medium=api&utm_source=a3737efc&v=9EF355477AD0116723F0CD817077F1A1E4A669CB"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793602649?se=CL_0C3l78RGtZsZR5jHX3A&utm_medium=api&utm_source=a3737efc&v=9EF355477AD0116723F0CD817077F1A1E4A669CB",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 59,
@@ -1353,7 +1719,10 @@
       "salary": 36234,
       "belowGeneral": true,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/details/5793559661?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5793559661?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 59,
@@ -1364,7 +1733,10 @@
       "salary": 40000,
       "belowGeneral": true,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793928798?se=4kGVDnl78RG4yNUoBgOIfg&utm_medium=api&utm_source=a3737efc&v=ACCD20D02ED020987D2E5949E5B5E37352E185B3"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793928798?se=4kGVDnl78RG4yNUoBgOIfg&utm_medium=api&utm_source=a3737efc&v=ACCD20D02ED020987D2E5949E5B5E37352E185B3",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 59,
@@ -1375,7 +1747,10 @@
       "salary": 38796,
       "belowGeneral": true,
       "posted": "2026-07-08",
-      "url": "https://www.adzuna.co.uk/jobs/details/5793105085?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5793105085?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 59,
@@ -1386,7 +1761,10 @@
       "salary": 38423,
       "belowGeneral": true,
       "posted": "2026-07-08",
-      "url": "https://www.adzuna.co.uk/jobs/details/5792714681?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5792714681?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 59,
@@ -1397,7 +1775,10 @@
       "salary": 37830,
       "belowGeneral": true,
       "posted": "2026-07-08",
-      "url": "https://www.adzuna.co.uk/jobs/details/5792897272?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5792897272?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 59,
@@ -1408,7 +1789,10 @@
       "salary": 40000,
       "belowGeneral": true,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793948666?se=YGL6FHl78RG77ot4PNCCLA&utm_medium=api&utm_source=a3737efc&v=B460EC23DBD9076E6CAA9931061193EC0B9B4D7D"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793948666?se=YGL6FHl78RG77ot4PNCCLA&utm_medium=api&utm_source=a3737efc&v=B460EC23DBD9076E6CAA9931061193EC0B9B4D7D",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 59,
@@ -1419,7 +1803,10 @@
       "salary": 40000,
       "belowGeneral": true,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793937340?se=YGL6FHl78RG77ot4PNCCLA&utm_medium=api&utm_source=a3737efc&v=6DF2A5F7E105C5CBA4728B816197A646B39E3AC9"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793937340?se=YGL6FHl78RG77ot4PNCCLA&utm_medium=api&utm_source=a3737efc&v=6DF2A5F7E105C5CBA4728B816197A646B39E3AC9",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 59,
@@ -1430,7 +1817,10 @@
       "salary": 36358,
       "belowGeneral": true,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793937256?se=YGL6FHl78RG77ot4PNCCLA&utm_medium=api&utm_source=a3737efc&v=45E1CC6D96D5DF96D383C556850B05931EA816AB"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793937256?se=YGL6FHl78RG77ot4PNCCLA&utm_medium=api&utm_source=a3737efc&v=45E1CC6D96D5DF96D383C556850B05931EA816AB",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 59,
@@ -1441,7 +1831,10 @@
       "salary": 39617,
       "belowGeneral": true,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793934135?se=Br_4GHl78RG77ot4PNCCLA&utm_medium=api&utm_source=a3737efc&v=016831C16E937ADF0EB7F84EA367455360301690"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793934135?se=Br_4GHl78RG77ot4PNCCLA&utm_medium=api&utm_source=a3737efc&v=016831C16E937ADF0EB7F84EA367455360301690",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 59,
@@ -1452,7 +1845,10 @@
       "salary": 37440,
       "belowGeneral": true,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793953146?se=fC3OHXl78RG4yNUoBgOIfg&utm_medium=api&utm_source=a3737efc&v=FA1D36C43ADD893AB58EF7767D0A2233FB712C77"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793953146?se=fC3OHXl78RG4yNUoBgOIfg&utm_medium=api&utm_source=a3737efc&v=FA1D36C43ADD893AB58EF7767D0A2233FB712C77",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 59,
@@ -1463,7 +1859,10 @@
       "salary": 33467,
       "belowGeneral": true,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793929336?se=mlIJInl78RGePrv1gFrA_w&utm_medium=api&utm_source=a3737efc&v=C5B1640118733EBC7C37822B7A2EAD1B9F01ADCE"
+      "url": "https://www.adzuna.co.uk/jobs/land/ad/5793929336?se=mlIJInl78RGePrv1gFrA_w&utm_medium=api&utm_source=a3737efc&v=C5B1640118733EBC7C37822B7A2EAD1B9F01ADCE",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     },
     {
       "score": 55,
@@ -1474,7 +1873,10 @@
       "salary": null,
       "belowGeneral": false,
       "posted": "2026-07-09",
-      "url": "https://www.adzuna.co.uk/jobs/details/5793532133?utm_medium=api&utm_source=a3737efc"
+      "url": "https://www.adzuna.co.uk/jobs/details/5793532133?utm_medium=api&utm_source=a3737efc",
+      "soc": "",
+      "sponsorable": false,
+      "soc_reason": "code unknown"
     }
   ]
 }

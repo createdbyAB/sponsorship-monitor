@@ -106,5 +106,36 @@ class RequiredSalary(unittest.TestCase):
         self.assertIsNone(required_salary("0000"))
 
 
+class NhsGateSemantics(unittest.TestCase):
+    """The NHS tab defers to each advert's own Certificate of Sponsorship line,
+    so soc_fields(..., nhs=True) fails open on an unmapped title instead of
+    rejecting it. A code we can affirmatively call closed still greys the row."""
+
+    def setUp(self):
+        import monitor
+        self.soc_fields = monitor.soc_fields
+
+    def test_closed_code_still_greys_on_nhs(self):
+        code, ok, reason = self.soc_fields("Health and Safety Advisor", 60000, nhs=True)
+        self.assertEqual(code, "3582")
+        self.assertFalse(ok)
+        self.assertEqual(reason, "code closed: 3582")
+
+    def test_unmapped_clinical_title_defers_to_advert_on_nhs(self):
+        code, ok, reason = self.soc_fields("Advanced Biomedical Scientist", 40000, nhs=True)
+        self.assertEqual(code, "")
+        self.assertTrue(ok)                       # not rejected on the code alone
+        self.assertIn("check the advert", reason)
+
+    def test_same_unmapped_title_fails_closed_off_nhs(self):
+        code, ok, reason = self.soc_fields("Advanced Biomedical Scientist", 40000)
+        self.assertFalse(ok)                      # jobs/hs stay conservative
+        self.assertEqual(reason, "code unknown")
+
+    def test_mapped_code_behaves_the_same_either_way(self):
+        self.assertEqual(self.soc_fields("Data Analyst", 36000, nhs=True),
+                         ("3544", True, "shortage list"))
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

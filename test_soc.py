@@ -106,35 +106,127 @@ class RequiredSalary(unittest.TestCase):
         self.assertIsNone(required_salary("0000"))
 
 
-class NhsGateSemantics(unittest.TestCase):
-    """The NHS tab defers to each advert's own Certificate of Sponsorship line,
-    so soc_fields(..., nhs=True) fails open on an unmapped title instead of
-    rejecting it. A code we can affirmatively call closed still greys the row."""
+class GateSemantics(unittest.TestCase):
+    """soc_fields is the policy layer over soc.sponsorable. Only a code we can
+    affirmatively call closed (or below its floor) greys a row; an unmapped
+    title defers to the advert on every tab (jobs/hs failed closed until
+    2026-09-12; the NHS tab always deferred)."""
 
     def setUp(self):
         import monitor
+        self.monitor = monitor
         self.soc_fields = monitor.soc_fields
 
-    def test_closed_code_still_greys_on_nhs(self):
-        code, ok, reason = self.soc_fields("Health and Safety Advisor", 60000, nhs=True)
+    def test_closed_code_still_greys(self):
+        code, ok, reason = self.soc_fields("Health and Safety Advisor", 60000)
         self.assertEqual(code, "3582")
         self.assertFalse(ok)
         self.assertEqual(reason, "code closed: 3582")
 
-    def test_unmapped_clinical_title_defers_to_advert_on_nhs(self):
-        code, ok, reason = self.soc_fields("Advanced Biomedical Scientist", 40000, nhs=True)
-        self.assertEqual(code, "")
-        self.assertTrue(ok)                       # not rejected on the code alone
-        self.assertIn("check the advert", reason)
+    def test_unmapped_title_defers_to_advert(self):
+        for title in ("Advanced Biomedical Scientist",      # clinical, NHS-shaped
+                      "Trainee Accountant",                 # broad-sweep jobs row
+                      "Quality and Safety Lead"):           # hs-shaped, no rule
+            code, ok, reason = self.soc_fields(title, 40000)
+            self.assertEqual(code, "", title)
+            self.assertTrue(ok, title)                # not rejected on the code alone
+            self.assertEqual(reason, self.monitor.SOC_DEFER, title)
 
-    def test_same_unmapped_title_fails_closed_off_nhs(self):
-        code, ok, reason = self.soc_fields("Advanced Biomedical Scientist", 40000)
-        self.assertFalse(ok)                      # jobs/hs stay conservative
-        self.assertEqual(reason, "code unknown")
-
-    def test_mapped_code_behaves_the_same_either_way(self):
-        self.assertEqual(self.soc_fields("Data Analyst", 36000, nhs=True),
+    def test_below_floor_still_greys_a_mapped_code(self):
+        # Deferral is for missing codes only; a real code is judged as before.
+        self.assertEqual(self.soc_fields("Data Analyst", 32000),
+                         ("3544", False, "below floor £34900"))
+        self.assertEqual(self.soc_fields("Data Analyst", 36000),
                          ("3544", True, "shortage list"))
+
+    def test_code_unknown_is_never_written_any_more(self):
+        # The legacy fail-closed string must not reappear, or the backfill's
+        # stale-row migration would loop on it.
+        for title in ("Trainee Accountant", "", "Zzz Nonsense Role"):
+            self.assertNotEqual(self.soc_fields(title, None)[2], "code unknown")
+
+
+class BackfillMigration(unittest.TestCase):
+    """backfill_soc must fill untagged rows and migrate stale 'code unknown'
+    rows, while never touching a code-based verdict from write time (those were
+    judged on the band top, which the archive does not keep)."""
+
+    def setUp(self):
+        import monitor, tempfile, json, os
+        self.monitor, self.json, self.os = monitor, json, os
+        self.tmp = tempfile.TemporaryDirectory()
+        self.orig_dir = monitor.DATA_DIR
+        monitor.DATA_DIR = self.tmp.name
+        self.path = os.path.join(self.tmp.name, "2026-08-01.json")
+        self.day = {
+            "date": "2026-08-01",
+            "jobs": [
+                # untagged, predates the gate
+                {"title": "Process Engineer", "salary": 40000},
+                {"title": "Trainee Accountant", "salary": 28000},
+                # stale fail-closed verdicts (both spellings the archive holds)
+                {"title": "Trainee Accountant", "salary": 28000,
+                 "soc": "", "sponsorable": False, "soc_reason": "code unknown"},
+                {"title": "Warehouse Operative", "salary": None,
+                 "soc": None, "sponsorable": False, "soc_reason": "code unknown"},
+                # code-based verdicts from write time: judged on a band top the
+                # archive lacks, so they MUST survive untouched even where a
+                # recompute from the stored minimum would disagree.
+                {"title": "Data Analyst", "salary": 30000,
+                 "soc": "3544", "sponsorable": True, "soc_reason": "shortage list"},
+                {"title": "Business Analyst", "salary": 34000,
+                 "soc": "2431", "sponsorable": False, "soc_reason": "below floor £35140"},
+            ],
+            "hs": [{"title": "Health and Safety Manager", "salary": 50000}],
+            "nhs": [{"title": "Biomedical Scientist", "salary": 35000,
+                     "soc": "", "sponsorable": True,
+                     "soc_reason": "code not inferred — check the advert"}],
+            "phd": [{"title": "PhD in Catalysis", "stipend": 19000}],
+        }
+        with open(self.path, "w") as f:
+            json.dump(self.day, f)
+
+    def tearDown(self):
+        self.monitor.DATA_DIR = self.orig_dir
+        self.tmp.cleanup()
+
+    def run_backfill(self):
+        self.monitor.backfill_soc()
+        with open(self.path) as f:
+            return self.json.load(f)
+
+    def test_fills_migrates_and_preserves(self):
+        out = self.run_backfill()
+        jobs = out["jobs"]
+        defer = self.monitor.SOC_DEFER
+        # untagged rows are tagged by the current rules
+        self.assertEqual((jobs[0]["soc"], jobs[0]["sponsorable"], jobs[0]["soc_reason"]),
+                         ("2125", True, "higher skilled"))
+        self.assertEqual((jobs[1]["soc"], jobs[1]["sponsorable"], jobs[1]["soc_reason"]),
+                         ("", True, defer))
+        # stale fail-closed rows are migrated to deferral, None soc normalised
+        for r in (jobs[2], jobs[3]):
+            self.assertEqual((r["soc"], r["sponsorable"], r["soc_reason"]), ("", True, defer))
+        # code-based verdicts are preserved exactly, even the "wrong-looking" ones
+        self.assertEqual((jobs[4]["soc"], jobs[4]["sponsorable"], jobs[4]["soc_reason"]),
+                         ("3544", True, "shortage list"))
+        self.assertEqual((jobs[5]["soc"], jobs[5]["sponsorable"], jobs[5]["soc_reason"]),
+                         ("2431", False, "below floor £35140"))
+        # hs filled, nhs already-deferred row unchanged, phd untouched
+        self.assertEqual(out["hs"][0]["soc_reason"], "code closed: 3582")
+        self.assertEqual(out["nhs"][0], self.day["nhs"][0])
+        self.assertEqual(out["phd"][0], self.day["phd"][0])
+        # nothing else on a row was disturbed
+        self.assertEqual(jobs[5]["salary"], 34000)
+
+    def test_second_pass_is_a_noop(self):
+        first = self.run_backfill()
+        second = self.run_backfill()
+        self.assertEqual(first, second)
+
+
+if __name__ == "__main__":
+    unittest.main(verbosity=2)
 
 
 if __name__ == "__main__":

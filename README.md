@@ -24,6 +24,16 @@ Roles at licensed sponsors, cast as wide as the CV can reach and ranked by how w
 
 The status colour is still the sponsorship signal (a licence held, not a guarantee); the score is the new suitability read. So the loud number now answers "how much is this me", and the colour answers "can they sponsor".
 
+## The occupation-code gate
+
+Since **22 July 2025** a first Certificate of Sponsorship needs more than a licensed employer: the role's **occupation code** must be Higher Skilled on the gov.uk eligible-occupations list, or medium skilled *and* on the Temporary Shortage List. (The transitional route for people who already held Skilled Worker permission does not apply to AB.) In practice that closes health and safety outright: SOC 3582 (health and safety managers and officers), 3581 and 3319 are on neither list, so no H&S advert is sponsorable however willing the employer.
+
+`soc.py` is that test, pure and unit-tested (`python3 -m unittest test_soc`). It infers a code from the job title (`TITLE_MAP`, first match wins, with the closed codes matched first so "health and safety advisor" can never fall through to a generic rule), looks up what the code has to pay (`TSL_RATE` for shortage-list codes, the new-entrant floor pro-rated by hours for higher-skilled ones, never below £33,400) and judges the **top** of the advertised band against it. The values were checked against gov.uk on 2026-09-10.
+
+Every jobs, H&S and NHS row carries the result as `soc`, `sponsorable` and `soc_reason`, and the card shows the code as a small badge next to the employer. **Nothing is dropped.** A role whose code is closed, or whose pay is under the code's floor, is greyed out with the reason on hover, so the exclusion is visible rather than silent. A title that matches no code is *not* treated as closed: it gets a `SOC ?` badge and `check the advert`, because `TITLE_MAP` covers AB's fields, not every occupation, and reading "unmapped" as "ineligible" would grey most of a broad sweep. Only what the code can affirmatively rule out is greyed. `python monitor.py --sponsorable-only` writes just the eligible rows if you ever want a clean list.
+
+The gate runs at write time; `python monitor.py --backfill` brings the whole archive up to the current rules with no network (it fills untagged rows and migrates rows judged under an older rule, but never overwrites a code-based verdict, since those were judged on a band top the archive does not keep). It is idempotent, so it is safe to re-run after any change to `soc.py`.
+
 ## Funded PhDs
 
 Chemical engineering studentships, ranked against the research interests in `PHD_INTERESTS`: waste valorisation and circular economy first, then carbon capture, sustainability and decarbonisation, biomass, catalysis and reactors, hydrogen, life cycle assessment, and water. Reorder that list to change the ranking.

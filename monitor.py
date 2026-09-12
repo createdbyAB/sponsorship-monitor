@@ -1024,19 +1024,21 @@ def soc_reason(code, band_top):
             return "below floor £%d" % req
     return "shortage list" if code in TSL else "higher skilled"
 
-def soc_fields(title, band_top, nhs=False):
+SOC_DEFER = "code not inferred — check the advert"
+
+def soc_fields(title, band_top):
     """(soc, sponsorable, reason) for a title, judged on the top of the band.
 
-    jobs/hs fail closed: a title that maps to no code is treated as not
-    sponsorable, since the licence is the only other signal there. The NHS tab
-    is different -- each advert states its own sponsorship position -- so an
-    unmapped NHS title is not rejected on the code alone; it is flagged for a
-    look at the advert. Only a code we can affirmatively call closed (or below
-    its floor) greys an NHS row."""
+    Only a code we can affirmatively call closed (or below its floor) greys a
+    row. A title that maps to no code is not rejected on the code alone: it is
+    flagged SOC ? and left for the advert to settle. TITLE_MAP covers AB's CV
+    fields, not every occupation, so treating "unmapped" as "closed" would grey
+    most of a broad sweep and mislabel roles that are perfectly sponsorable.
+    (jobs/hs failed closed until 2026-09-12; the NHS tab always deferred.)"""
     code = infer_soc(title)
-    if code is None and nhs:
-        return "", True, "code not inferred — check the advert"
-    return (code or ""), sponsorable(code, band_top), soc_reason(code, band_top)
+    if code is None:
+        return "", True, SOC_DEFER
+    return code, sponsorable(code, band_top), soc_reason(code, band_top)
 
 def make_row(title, employer, location, pay, posted, url, field, section,
              source, base_score, deadline="", on_register=True, agency=False,
@@ -1045,8 +1047,8 @@ def make_row(title, employer, location, pay, posted, url, field, section,
     # Occupation-code gate. The employer licence is checked upstream; this adds
     # whether the SOC code AB would be sponsored under is open at all, judged on
     # the top of the advertised band (falls back to the single figure). No figure
-    # passes, so nothing is dropped for lacking a salary. Failing rows stay in the
-    # output, flagged, so the exclusion is visible rather than silent.
+    # passes, and an unmapped title defers to the advert, so nothing is dropped
+    # or greyed for lack of information -- only an affirmatively closed code is.
     band_top = salary_max or (int(pay) if pay else None)
     code, spons, reason = soc_fields(title, band_top)
     return {
@@ -1596,11 +1598,10 @@ def build_nhs(sponsors):
         status, note = classify_nhs(spons, row["nhs_body"])
         # A confirmed welcome lifts the score, so sponsorable roles surface first.
         sc = min(100, row["score"] + (12 if spons == "welcome" else 0))
-        # Occupation-code gate, NHS variant: the advert's own CoS statement is the
-        # primary signal here, so an unmapped clinical title is flagged, not
-        # rejected -- only a code we can call closed (e.g. 3582) greys the row.
+        # Occupation-code gate. The advert's own CoS statement is the primary
+        # signal here; the code only greys a row it can call closed (e.g. 3582).
         # A welcome the code has closed is exactly the case worth surfacing.
-        code, code_ok, reason = soc_fields(row["title"], row["salary"] or None, nhs=True)
+        code, code_ok, reason = soc_fields(row["title"], row["salary"] or None)
         out.append({
             "score": sc, "title": row["title"], "field": "NHS",
             "employer": row["employer"], "location": row["location"],
@@ -1806,7 +1807,7 @@ def demo():
     ]
     def nhsmk(score, spons, **kw):
         status, note = classify_nhs(spons, "nhs" in kw.get("employer", "").lower())
-        code, ok, reason = soc_fields(kw.get("title", ""), kw.get("salary") or None, nhs=True)
+        code, ok, reason = soc_fields(kw.get("title", ""), kw.get("salary") or None)
         return mk(score=score, section="nhs", field="NHS", source="jobs.nhs.uk",
                   sponsorship=spons, status=status, note=note,
                   soc=code, sponsorable=ok, soc_reason=reason, **kw)
@@ -1839,22 +1840,31 @@ def filter_sponsorable(day):
     print("--sponsorable-only dropped", kept, "rows", file=sys.stderr)
     return day
 
-# Sections the occupation-code gate applies to, and whether an unmapped title
-# fails open there. Mirrors what make_row (jobs/hs) and build_nhs do at write
-# time, so a backfilled day matches a freshly written one.
-_SOC_SECTIONS = (("jobs", False), ("hs", False), ("nhs", True))
+# Sections the occupation-code gate applies to. Mirrors what make_row (jobs/hs)
+# and build_nhs do at write time, so a backfilled day matches a freshly written one.
+_SOC_SECTIONS = ("jobs", "hs", "nhs")
 _SOC_KEYS = ("soc", "sponsorable", "soc_reason")
+# The verdict jobs/hs rows got for an unmapped title before 2026-09-12, when
+# they failed closed. Nothing writes it any more; it only survives in the archive.
+_SOC_STALE = "code unknown"
 
 def backfill_soc():
-    """Tag the archived days that predate the occupation-code gate.
+    """Bring the archive's occupation-code fields up to the current rules.
 
-    The gate only runs at write time, so days written before it existed carry no
-    soc / sponsorable / soc_reason and show no badge. soc_fields is pure and
-    deterministic, so this fills them in from the stored title and salary with
-    no network. Rows already tagged at write time are left alone on purpose: the
-    pipeline judged those on the top of the advertised band (salary_max), which
-    the archive does not keep, so recomputing from the stored minimum would be
-    less accurate, not more. Counts, order and every other field are untouched.
+    The gate only runs at write time, so it touches two kinds of archived row:
+      - rows from days before the gate existed, which carry no soc /
+        sponsorable / soc_reason and show no badge;
+      - rows tagged "code unknown" under the old fail-closed rule, which the
+        deferral rule now reads as SOC ? / check the advert.
+    soc_fields is pure and deterministic, so both are recomputed from the
+    stored title and salary with no network.
+
+    A row that already holds a code-based verdict is left alone on purpose:
+    the pipeline judged it on the top of the advertised band (salary_max),
+    which the archive does not keep, so recomputing from the stored minimum
+    would be less accurate, not more. A "code unknown" row never had such a
+    verdict -- no code, so no floor was compared -- so nothing is lost by
+    re-deciding it. Counts, order and every other field are untouched.
     Safe to re-run; a second pass changes nothing.
     """
     days = touched_rows = 0
@@ -1865,12 +1875,15 @@ def backfill_soc():
         with open(path) as f:
             day = json.load(f)
         changed = 0
-        for section, nhs in _SOC_SECTIONS:
+        for section in _SOC_SECTIONS:
             for r in day.get(section, []):
-                if all(k in r for k in _SOC_KEYS):
-                    continue                    # tagged at write time; keep that verdict
-                r["soc"], r["sponsorable"], r["soc_reason"] = soc_fields(
-                    r.get("title", ""), r.get("salary") or None, nhs=nhs)
+                tagged = all(k in r for k in _SOC_KEYS)
+                if tagged and r["soc_reason"] != _SOC_STALE:
+                    continue                    # code-based verdict from write time; keep it
+                fields = soc_fields(r.get("title", ""), r.get("salary") or None)
+                if tagged and (r["soc"], r["sponsorable"], r["soc_reason"]) == fields:
+                    continue
+                r["soc"], r["sponsorable"], r["soc_reason"] = fields
                 changed += 1
         if changed:
             with open(path, "w") as f:

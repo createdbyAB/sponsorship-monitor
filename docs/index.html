@@ -380,6 +380,7 @@ button{font:inherit;color:inherit;background:none;border:none;padding:0;cursor:p
 .cwtable .role a:hover{border-color:currentColor}
 .cwtable .soccell{font-family:var(--mono);font-size:11px;color:var(--text-60);white-space:nowrap}
 .cwtable .money{font-family:var(--mono);white-space:nowrap}
+.cwtable .money.est{color:var(--text-45);font-style:italic;cursor:help}
 .cwtable .gap-pos{color:var(--strong-tx)} .cwtable .gap-neg{color:var(--weak-tx)}
 .cwtable .reason{color:var(--text-55);font-size:11.5px;max-width:340px}
 .cwbadge{display:inline-block;font:600 9px var(--mono);border-radius:4px;padding:1px 5px;margin-left:6px;
@@ -650,7 +651,8 @@ function normalise(raw, day){
       headroom: item.headroom == null ? null : Number(item.headroom),
       proratedFloor: item.proratedFloor == null ? null : Number(item.proratedFloor),
       generalMinimum: item.generalMinimum == null ? null : Number(item.generalMinimum),
-      salaryText: item.salaryText || "", family: item.family || "",
+      salaryText: item.salaryText || "", salaryEstimated: !!item.salaryEstimated,
+      family: item.family || "",
       confidence: item.confidence || "", employer: item.employer || "",
       employerMatch: item.employerMatch || ""
     });
@@ -1396,7 +1398,9 @@ function cwRow(r){
     '<td class="co">' + esc(r.company) + '<span class="tierchip" title="' + esc(r.rating) + '">T' + esc(r.tier) + '</span></td>' +
     '<td class="role">' + role + badges + '</td>' +
     '<td>' + esc(r.location || "—") + '</td>' +
-    '<td class="money">' + esc(r.salaryText || "—") + '</td>' +
+    '<td class="money' + (r.salaryEstimated ? " est" : "") + '"' +
+      (r.salaryEstimated ? ' title="Estimated by Adzuna, not the advertised salary — confirm on the advert"' : "") +
+      '>' + esc(r.salaryText || "—") + '</td>' +
     '<td class="soccell">' + esc(r.soc) + '<br><span style="color:var(--text-38)">' + esc(r.family) + '</span></td>' +
     '<td class="money">' + req + '</td>' +
     '<td class="money">' + gap + '</td>' +

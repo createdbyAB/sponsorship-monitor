@@ -47,5 +47,11 @@
   "Sainsbury's": [{"ats": "oraclecloud", "host": "hdhe.fa.em3.oraclecloud.com", "site": "CX"}],
   "Oxford Nanopore": [{"ats": "oraclecloud", "host": "ejnh.fa.em2.oraclecloud.com"}],
   "HSBC": [{"ats": "eightfold", "host": "hsbc.eightfold.ai", "domain": "hsbc.com"}],
-  "Vodafone": [{"ats": "eightfold", "host": "jobs.vodafone.com", "domain": "vodafone.com"}]
+  "Vodafone": [{"ats": "eightfold", "host": "jobs.vodafone.com", "domain": "vodafone.com"}],
+  "EY": [{"ats": "successfactors", "host": "careers.ey.com", "prefix": "ey"}],
+  "National Grid": [{"ats": "successfactors", "host": "jobs-ats.nationalgrid.com", "prefix": ""}],
+  "Severn Trent": [{"ats": "successfactors", "host": "www.careers.severntrent.com", "prefix": ""}],
+  "Atos": [{"ats": "successfactors", "host": "jobs.atos.net", "prefix": ""}],
+  "Jaguar Land Rover": [{"ats": "successfactors", "host": "www.jaguarlandrovercareers.com", "prefix": ""}],
+  "Zurich Insurance": [{"ats": "successfactors", "host": "www.careers.zurich.com", "prefix": ""}]
 }

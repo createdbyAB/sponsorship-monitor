@@ -48,6 +48,12 @@ def _req(url, data=None, headers=None):
         return json.loads(r.read().decode("utf-8", "replace"))
 
 
+def _text_fetch(url):
+    req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept": "text/html"})
+    with urllib.request.urlopen(req, timeout=TIMEOUT) as r:
+        return r.read().decode("utf-8", "replace")
+
+
 def _safe(fn, label):
     """Every adapter returns [] rather than raising, so a dead or changed board
     thins the section instead of failing the whole run."""
@@ -305,11 +311,51 @@ def phenom(board):
     return _safe(go, "phenom/" + host)
 
 
+_SF_TILE = re.compile(r'<li class="job-tile job-id-(\d+)[^"]*"[^>]*data-url="([^"]+)"(.*?)</li>', re.S)
+_SF_TITLE = re.compile(r'<a class="jobTitle-link[^"]*"[^>]*>(.*?)</a>', re.S)
+
+def successfactors(board):
+    """SAP SuccessFactors "Recruiting Marketing" (RMK / Jobs2Web) career sites.
+    No JSON API -- the search endpoint returns server-rendered HTML job tiles,
+    which are stable and structured (job-id, data-url, jobTitle-link), so we parse
+    those (like the NHS scraper) rather than the JS-rendered page. board carries
+    {host, prefix?}: the RMK host and an optional company path segment. The tile's
+    data-url ends in the location + postcode, from which the UK filter reads the
+    location; no salary in the tile, so rows read 'unverified'."""
+    host, prefix = board.get("host"), (board.get("prefix") or "").strip("/")
+    if not host:
+        return []
+    base = "https://%s/%s/tile-search-results/" % (host, prefix) if prefix else \
+           "https://%s/tile-search-results/" % host
+    def go():
+        out, seen = [], set()
+        for term in _ENTERPRISE_SEARCHES:
+            q = urllib.parse.urlencode({"data": json.dumps({"keywords": term})})
+            try:
+                page = _text_fetch(base + "?" + q)
+            except Exception:
+                continue
+            for jid, data_url, body in _SF_TILE.findall(page):
+                if jid in seen:
+                    continue
+                seen.add(jid)
+                tm = _SF_TITLE.search(body)
+                title = _text(tm.group(1)) if tm else ""
+                # data-url: /job/{Location-Title-words-POSTCODE}/{id}/ -- the slug
+                # carries the location and postcode the UK filter needs.
+                slug = data_url.split("/job/")[-1].rsplit("/", 2)[0] if "/job/" in data_url else ""
+                loc = urllib.parse.unquote(slug).replace("-", " ")
+                out.append({"id": jid, "title": title, "location": loc,
+                            "url": "https://%s%s" % (host, data_url), "posted": "", "description": ""})
+        return out
+    return _safe(go, "successfactors/" + host)
+
+
 _ADAPTERS = {"greenhouse": greenhouse, "lever": lever, "ashby": ashby,
              "smartrecruiters": smartrecruiters, "workable": workable, "recruitee": recruitee}
 # Adapters whose board carries a host/coordinates rather than a bare slug.
 _HOST_ADAPTERS = {"workday": workday, "oraclecloud": oraclecloud, "phenom": phenom,
-                  "eightfold": eightfold}
+                  "eightfold": eightfold, "successfactors": successfactors}
 
 
 def fetch_board(board):

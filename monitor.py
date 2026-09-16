@@ -1748,10 +1748,21 @@ _CW_NON_UK = re.compile(
     r"switzerland|zurich|sweden|belgium|portugal|lisbon|philippines|malaysia|"
     r"south africa|nigeria|kenya|egypt|new jersey|texas|florida|california)\b", re.I)
 
+# A UK postcode (WC2N 5EH, SL0 0EB, PE21 7TW) is a strong positive UK signal;
+# a US state + ZIP (NY 13088, MA 01532) a strong negative. Used for ATS sources
+# (e.g. SuccessFactors) whose location is a slug ending in the postcode.
+_CW_UK_PC  = re.compile(r"\b[a-z]{1,2}\d[a-z\d]?\s?\d[a-z]{2}\b", re.I)
+_CW_US_ZIP = re.compile(r"\b(a[lkzr]|c[aot]|de|fl|ga|hi|i[adln]|k[sy]|la|m[adeinost]|"
+                        r"n[cdehjmvy]|o[hkr]|pa|ri|s[cd]|t[nx]|ut|v[at]|w[aivy])\s?\d{5}\b", re.I)
+
 def _looks_uk(location):
     loc = (location or "").strip()
     if not loc:
         return True                              # cannot rule out; keep
+    if _CW_US_ZIP.search(loc):
+        return False                             # US state + ZIP wins outright
+    if _CW_UK_PC.search(loc):
+        return True                              # UK postcode wins outright
     return bool(_CW_UK.search(loc)) and not _CW_NON_UK.search(loc)
 
 def load_company_boards():

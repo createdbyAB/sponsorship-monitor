@@ -1,0 +1,187 @@
+"""Company-watch eligibility engine. Pure: no I/O, no network (see test_eligibility.py).
+
+Three things must all hold for a vacancy to convert into a *first* Certificate of
+Sponsorship, and most job boards test none of them:
+
+  1. the employer holds an A-rated licence (companies.json handles this upstream);
+  2. the occupation code is open to a first CoS -- Higher Skilled (RQF6+), or
+     medium skilled AND on the Temporary Shortage List; closed codes never;
+  3. the job actually pays the floor for that code.
+
+This module is (2) and (3): it matches a title to a SOC code, parses the
+advertised salary, and returns a verdict with the arithmetic shown. Figures come
+from data/occupations.json and data/roleFamilies.json, never hardcoded here.
+
+The salary rules differ and are easy to get wrong, so read these:
+  - Higher-skilled figures are the new-entrant floor; they PRO-RATE below a
+    37.5h week. The £33,400 general minimum applies in full alongside and NEVER
+    pro-rates, so a pro-rated higher-skilled floor is still floored at £33,400.
+  - Temporary Shortage List figures are the salary the job must actually pay;
+    there is NO new-entrant discount on a shortage-list rate.
+  - A band is tested at its MINIMUM, not the midpoint or the top: appointment is
+    at the band minimum unless the advert says otherwise.
+  - Closed codes fail at any salary.
+"""
+from __future__ import annotations
+
+import json
+import os
+import re
+
+FULL_TIME_HOURS = 37.5
+
+
+def load(data_dir):
+    """Read the two config files. The only I/O in this module, kept apart from
+    the pure functions so those stay unit-testable without the filesystem."""
+    with open(os.path.join(data_dir, "occupations.json")) as f:
+        occ = json.load(f)
+    with open(os.path.join(data_dir, "roleFamilies.json")) as f:
+        roles = json.load(f)
+    return occ, roles
+
+
+# --- role matching --------------------------------------------------------
+_YEAR = re.compile(r"\b(20\d\d)\b")
+
+
+def match_role(title, roles, today_year=None):
+    """The role family for a title, or None if excluded / unmatched.
+
+    Excludes run first: graduate schemes, internships, apprenticeships and
+    closed-code safety titles (`excludeTitles`); seniority markers
+    (`excludeSeniority`) unless the title is on the `seniorityKeep` allow-list;
+    and, when `today_year` is given, a future intake year in the title (the
+    "2027 ... Analyst" graduate-cohort shape), which recruits too far out to use.
+    First matching family phrase wins, so the list order in roleFamilies.json is
+    the priority (exception phrases sit ahead of the family they would fall into).
+    """
+    t = (title or "").lower()
+    if not t:
+        return None
+    if any(x in t for x in roles.get("excludeTitles", [])):
+        return None
+    keep = any(k in t for k in roles.get("seniorityKeep", []))
+    if not keep and any(s in t for s in roles.get("excludeSeniority", [])):
+        return None
+    if today_year is not None:
+        for y in _YEAR.findall(title or ""):
+            if int(y) > today_year:
+                return None                       # future cohort / graduate scheme
+    for fam in roles.get("families", []):
+        for phrase in fam["titles"]:
+            if phrase in t:
+                return {"soc": fam["soc"], "family": fam["family"],
+                        "confidence": fam.get("confidence", "check"), "matched": phrase}
+    return None
+
+
+# --- salary parsing -------------------------------------------------------
+_MONEY = re.compile(r"£?\s*(\d[\d,]*(?:\.\d+)?)\s*(k)?", re.I)
+_UNVERIFIED = ("competitive", "negotiable", "depending on experience", "doe",
+               "market rate", "excellent salary", "attractive")
+_RANGE = re.compile(r"(?:to|-|–|—|between)")
+
+
+def _num(raw, suffix):
+    v = float(raw.replace(",", ""))
+    if suffix:                                    # "35k"
+        v *= 1000
+    return v
+
+
+def parse_salary(text, hours=FULL_TIME_HOURS):
+    """Parse an advertised salary into {min, max, period, stated, note}.
+
+    A band gives min and max (both annualised); the caller tests min. Hourly and
+    daily rates are annualised at the stated hours and flagged in `note`. Where
+    the advert is "competitive"/"negotiable"/blank, `stated` is False and the row
+    must render as unverified, never as passing.
+    """
+    s = (text or "").strip().lower()
+    out = {"min": None, "max": None, "period": "unstated", "stated": False, "note": ""}
+    if not s or any(w in s for w in _UNVERIFIED) and not _MONEY.search(s):
+        return out
+    nums = [_num(m.group(1), m.group(2)) for m in _MONEY.finditer(s)]
+    nums = [n for n in nums if n >= 1]            # drop stray "0"/decimals
+    if not nums:
+        return out
+    period, note = "year", ""
+    if re.search(r"per\s*hour|/\s*hour|\bp/?h\b|hourly|per hr", s):
+        period, factor, note = "hour", hours * 52, "annualised from an hourly rate at %g h/wk" % hours
+        nums = [n * factor for n in nums]
+    elif re.search(r"per\s*day|/\s*day|\bday rate\b|daily|per diem", s):
+        period, factor, note = "day", 5 * 52, "annualised from a day rate at 5 days/wk"
+        nums = [n * factor for n in nums]
+    lo, hi = min(nums), max(nums)
+    out.update({"min": round(lo), "max": round(hi), "period": period, "stated": True, "note": note})
+    return out
+
+
+# --- the verdict engine ---------------------------------------------------
+def required_floor(soc, occ, hours=FULL_TIME_HOURS):
+    """(floor, basis, prorated, general) the advert must clear, or ('closed'/None).
+
+    basis is 'rate' for a Temporary Shortage List code (fixed, no discount) or
+    'floor' for a higher-skilled code (pro-rates below 37.5h, but never below the
+    general minimum, which itself never pro-rates)."""
+    if soc in occ["closed"]:
+        return {"floor": None, "basis": "closed", "prorated": None, "general": None}
+    if soc in occ["temporaryShortageList"]:
+        return {"floor": occ["temporaryShortageList"][soc], "basis": "rate",
+                "prorated": None, "general": None}
+    if soc in occ["higherSkilled"]:
+        base, general = occ["higherSkilled"][soc], occ["generalMinimum"]
+        if hours < FULL_TIME_HOURS:
+            prorated = round(base * hours / FULL_TIME_HOURS)
+            return {"floor": max(prorated, general), "basis": "floor",
+                    "prorated": prorated, "general": general}
+        return {"floor": base, "basis": "floor", "prorated": None, "general": general}
+    return {"floor": None, "basis": "unknown", "prorated": None, "general": None}
+
+
+def _pounds(n):
+    return "£%s" % format(int(round(n)), ",")
+
+
+def evaluate(soc, parsed, occ, hours=FULL_TIME_HOURS):
+    """Verdict for one vacancy: pass / fail / unverified / closed, with the
+    required floor, the advertised floor, the gap, and a plain-English reason."""
+    rf = required_floor(soc, occ, hours)
+    basisword = "rate" if rf["basis"] == "rate" else "floor"
+    res = {"soc": soc, "verdict": None, "requiredFloor": rf["floor"],
+           "advertisedFloor": None, "shortfall": None, "headroom": None,
+           "generalMinimum": rf["general"], "proratedFloor": rf["prorated"],
+           "stated": bool(parsed and parsed.get("stated")), "reason": ""}
+
+    if rf["basis"] == "closed":
+        res.update(verdict="closed", reason="closed occupation code %s" % soc)
+        if res["stated"]:
+            res["advertisedFloor"] = parsed["min"]
+        return res
+    if rf["basis"] == "unknown":
+        res.update(verdict="unverified",
+                   reason="occupation code %s is not on the eligibility list" % soc)
+        return res
+
+    tail = " for code %s" % soc
+    if rf["prorated"] is not None:                # part-time higher-skilled
+        tail += " (pro-rated floor %s at %gh, general minimum %s never pro-rates)" % (
+            _pounds(rf["prorated"]), hours, _pounds(rf["general"]))
+
+    if not res["stated"]:
+        res.update(verdict="unverified",
+                   reason="salary not stated — needs %s %s%s" % (_pounds(rf["floor"]), basisword, tail))
+        return res
+
+    advertised = parsed["min"]
+    res["advertisedFloor"] = advertised
+    if advertised >= rf["floor"]:
+        res.update(verdict="pass", headroom=advertised - rf["floor"],
+                   reason="%s above the %s %s%s" % (_pounds(advertised - rf["floor"]),
+                                                    _pounds(rf["floor"]), basisword, tail))
+    else:
+        res.update(verdict="fail", shortfall=rf["floor"] - advertised,
+                   reason="%s below the %s %s%s" % (_pounds(rf["floor"] - advertised),
+                                                    _pounds(rf["floor"]), basisword, tail))
+    return res

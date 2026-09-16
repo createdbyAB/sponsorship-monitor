@@ -1,0 +1,1969 @@
+[
+ {
+  "name": "Aviva",
+  "sector": "Banking, finance and insurance",
+  "tier": 1,
+  "rating": "A rating",
+  "licensedEntities": [
+   "Aviva plc"
+  ],
+  "registeredLocations": [
+   "London"
+  ],
+  "ukHubs": [
+   "Norwich",
+   "York",
+   "Sheffield"
+  ],
+  "searchAliases": [
+   "Aviva",
+   "Aviva plc"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "Barclays",
+  "sector": "Banking, finance and insurance",
+  "tier": 1,
+  "rating": "A rating",
+  "licensedEntities": [
+   "Barclays Bank PLC",
+   "Barclays Bank UK PLC",
+   "Barclays Execution Services Limited"
+  ],
+  "registeredLocations": [
+   "London"
+  ],
+  "ukHubs": [
+   "Glasgow",
+   "Knutsford",
+   "Northampton",
+   "London"
+  ],
+  "searchAliases": [
+   "Barclays",
+   "Barclays Bank PLC",
+   "Barclays Bank UK PLC",
+   "Barclays Execution Services Limited"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "Experian",
+  "sector": "Banking, finance and insurance",
+  "tier": 1,
+  "rating": "A rating",
+  "licensedEntities": [
+   "EXPERIAN LIMITED"
+  ],
+  "registeredLocations": [
+   "Nottingham"
+  ],
+  "ukHubs": [
+   "Nottingham"
+  ],
+  "searchAliases": [
+   "EXPERIAN LIMITED",
+   "Experian"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "HSBC",
+  "sector": "Banking, finance and insurance",
+  "tier": 1,
+  "rating": "A (Premium)",
+  "licensedEntities": [
+   "HSBC Holdings plc"
+  ],
+  "registeredLocations": [
+   "London"
+  ],
+  "ukHubs": [
+   "Birmingham",
+   "Sheffield",
+   "Leeds",
+   "London"
+  ],
+  "searchAliases": [
+   "HSBC",
+   "HSBC Holdings plc"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "JPMorganChase",
+  "sector": "Banking, finance and insurance",
+  "tier": 1,
+  "rating": "A rating",
+  "licensedEntities": [
+   "JPMorgan Chase Bank, National Association"
+  ],
+  "registeredLocations": [
+   "London"
+  ],
+  "ukHubs": [
+   "Glasgow",
+   "Bournemouth",
+   "London"
+  ],
+  "searchAliases": [
+   "JPMorgan Chase Bank, National Association",
+   "JPMorganChase"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "Lloyds Banking Group",
+  "sector": "Banking, finance and insurance",
+  "tier": 1,
+  "rating": "A rating",
+  "licensedEntities": [
+   "Lloyds Bank plc"
+  ],
+  "registeredLocations": [
+   "London"
+  ],
+  "ukHubs": [
+   "Edinburgh",
+   "Halifax",
+   "Leeds",
+   "Bristol"
+  ],
+  "searchAliases": [
+   "Lloyds Bank plc",
+   "Lloyds Banking Group"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "NatWest Group",
+  "sector": "Banking, finance and insurance",
+  "tier": 1,
+  "rating": "A rating",
+  "licensedEntities": [
+   "NatWest Group PLC"
+  ],
+  "registeredLocations": [
+   "Edinburgh"
+  ],
+  "ukHubs": [
+   "Edinburgh",
+   "Manchester",
+   "Bristol"
+  ],
+  "searchAliases": [
+   "NatWest Group",
+   "NatWest Group PLC"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "Direct Line Insurance",
+  "sector": "Banking, finance and insurance",
+  "tier": 2,
+  "rating": "A rating",
+  "licensedEntities": [
+   "Direct Line Insurance Group Plc"
+  ],
+  "registeredLocations": [
+   "Bromley"
+  ],
+  "ukHubs": [
+   "Leeds",
+   "Glasgow",
+   "Bromley"
+  ],
+  "searchAliases": [
+   "Direct Line Insurance",
+   "Direct Line Insurance Group Plc"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "Legal and General",
+  "sector": "Banking, finance and insurance",
+  "tier": 2,
+  "rating": "A rating",
+  "licensedEntities": [
+   "Legal & General Resources Ltd"
+  ],
+  "registeredLocations": [
+   "London"
+  ],
+  "ukHubs": [
+   "Cardiff",
+   "Hove",
+   "London"
+  ],
+  "searchAliases": [
+   "Legal & General Resources Ltd",
+   "Legal and General"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "Monzo Bank",
+  "sector": "Banking, finance and insurance",
+  "tier": 2,
+  "rating": "A rating",
+  "licensedEntities": [
+   "Monzo Bank Ltd"
+  ],
+  "registeredLocations": [
+   "London"
+  ],
+  "ukHubs": [
+   "Cardiff",
+   "London"
+  ],
+  "searchAliases": [
+   "Monzo Bank",
+   "Monzo Bank Ltd"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "Nationwide Building Society",
+  "sector": "Banking, finance and insurance",
+  "tier": 2,
+  "rating": "A rating",
+  "licensedEntities": [
+   "Nationwide Building Society"
+  ],
+  "registeredLocations": [
+   "Swindon"
+  ],
+  "ukHubs": [
+   "Swindon",
+   "Northampton"
+  ],
+  "searchAliases": [
+   "Nationwide Building Society"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "Santander UK",
+  "sector": "Banking, finance and insurance",
+  "tier": 2,
+  "rating": "A rating",
+  "licensedEntities": [
+   "Santander UK PLC"
+  ],
+  "registeredLocations": [
+   "Milton Keynes"
+  ],
+  "ukHubs": [
+   "Milton Keynes",
+   "Leeds",
+   "Bootle"
+  ],
+  "searchAliases": [
+   "Santander UK",
+   "Santander UK PLC"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "Starling Bank",
+  "sector": "Banking, finance and insurance",
+  "tier": 2,
+  "rating": "A rating",
+  "licensedEntities": [
+   "STARLING BANK LIMITED"
+  ],
+  "registeredLocations": [
+   "London"
+  ],
+  "ukHubs": [
+   "Southampton",
+   "Cardiff",
+   "Manchester"
+  ],
+  "searchAliases": [
+   "STARLING BANK LIMITED",
+   "Starling Bank"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "TSB Bank",
+  "sector": "Banking, finance and insurance",
+  "tier": 2,
+  "rating": "A rating",
+  "licensedEntities": [
+   "TSB Bank plc"
+  ],
+  "registeredLocations": [
+   "Edinburgh"
+  ],
+  "ukHubs": [
+   "Edinburgh",
+   "Birmingham"
+  ],
+  "searchAliases": [
+   "TSB Bank",
+   "TSB Bank plc"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "Virgin Money",
+  "sector": "Banking, finance and insurance",
+  "tier": 2,
+  "rating": "A rating",
+  "licensedEntities": [
+   "Clydesdale Bank PLC"
+  ],
+  "registeredLocations": [
+   "Glasgow"
+  ],
+  "ukHubs": [
+   "Newcastle",
+   "Glasgow"
+  ],
+  "searchAliases": [
+   "Clydesdale Bank PLC",
+   "Virgin Money"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "Zurich Insurance",
+  "sector": "Banking, finance and insurance",
+  "tier": 2,
+  "rating": "A rating",
+  "licensedEntities": [
+   "Zurich Insurance Group"
+  ],
+  "registeredLocations": [
+   "Swindon"
+  ],
+  "ukHubs": [
+   "Swindon",
+   "Glasgow"
+  ],
+  "searchAliases": [
+   "Zurich Insurance",
+   "Zurich Insurance Group"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "BlackRock",
+  "sector": "Banking, finance and insurance",
+  "tier": 3,
+  "rating": "A rating",
+  "licensedEntities": [
+   "BLACKROCK INVESTMENT MANAGEMENT (UK) LIMITED",
+   "BLACKROCK RECRUITMENT SERVICES LIMITED",
+   "BlackRock Investment Management (UK) Limited",
+   "Blackrock Construction Group Ltd",
+   "Blackrock Traders Ltd t/a Creams Cafe Morden"
+  ],
+  "registeredLocations": [
+   "Ilford",
+   "LONDON",
+   "London",
+   "Moodiesburn"
+  ],
+  "ukHubs": [
+   "Edinburgh",
+   "London"
+  ],
+  "searchAliases": [
+   "BLACKROCK INVESTMENT MANAGEMENT (UK) LIMITED",
+   "BLACKROCK RECRUITMENT SERVICES LIMITED",
+   "BlackRock",
+   "BlackRock Investment Management (UK) Limited",
+   "Blackrock Construction Group Ltd",
+   "Blackrock Traders Ltd t/a Creams Cafe Morden"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "Goldman Sachs",
+  "sector": "Banking, finance and insurance",
+  "tier": 3,
+  "rating": "A rating",
+  "licensedEntities": [
+   "Goldman Sachs (UK) SVC. Limited",
+   "Goldman Sachs International"
+  ],
+  "registeredLocations": [
+   "London"
+  ],
+  "ukHubs": [
+   "Birmingham",
+   "London"
+  ],
+  "searchAliases": [
+   "Goldman Sachs",
+   "Goldman Sachs (UK) SVC. Limited",
+   "Goldman Sachs International"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "London Stock Exchange Group",
+  "sector": "Banking, finance and insurance",
+  "tier": 3,
+  "rating": "A rating",
+  "licensedEntities": [
+   "London Stock Exchange Group plc"
+  ],
+  "registeredLocations": [
+   "London"
+  ],
+  "ukHubs": [
+   "London"
+  ],
+  "searchAliases": [
+   "London Stock Exchange Group",
+   "London Stock Exchange Group plc"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "Morgan Stanley",
+  "sector": "Banking, finance and insurance",
+  "tier": 3,
+  "rating": "A rating",
+  "licensedEntities": [
+   "Morgan Stanley UK Limited"
+  ],
+  "registeredLocations": [
+   "London"
+  ],
+  "ukHubs": [
+   "Glasgow",
+   "London"
+  ],
+  "searchAliases": [
+   "Morgan Stanley",
+   "Morgan Stanley UK Limited"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "Revolut",
+  "sector": "Banking, finance and insurance",
+  "tier": 3,
+  "rating": "A rating",
+  "licensedEntities": [
+   "Revolut Ltd"
+  ],
+  "registeredLocations": [
+   "London"
+  ],
+  "ukHubs": [
+   "London"
+  ],
+  "searchAliases": [
+   "Revolut",
+   "Revolut Ltd"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "Schroders",
+  "sector": "Banking, finance and insurance",
+  "tier": 3,
+  "rating": "A rating",
+  "licensedEntities": [
+   "Schroder Investment Management Limited",
+   "Schroders Greencoat LLP"
+  ],
+  "registeredLocations": [
+   "London"
+  ],
+  "ukHubs": [
+   "Horsham",
+   "London"
+  ],
+  "searchAliases": [
+   "Schroder Investment Management Limited",
+   "Schroders",
+   "Schroders Greencoat LLP"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "Accenture",
+  "sector": "Tech, telecoms and consulting",
+  "tier": 1,
+  "rating": "A rating",
+  "licensedEntities": [
+   "Accenture (UK) Limited",
+   "Accenture Song Brand UK Limited"
+  ],
+  "registeredLocations": [
+   "London"
+  ],
+  "ukHubs": [
+   "Newcastle",
+   "Manchester",
+   "London"
+  ],
+  "searchAliases": [
+   "Accenture",
+   "Accenture (UK) Limited",
+   "Accenture Song Brand UK Limited"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "BT Group",
+  "sector": "Tech, telecoms and consulting",
+  "tier": 1,
+  "rating": "A rating",
+  "licensedEntities": [
+   "BT Group"
+  ],
+  "registeredLocations": [
+   "London"
+  ],
+  "ukHubs": [
+   "Birmingham",
+   "Ipswich",
+   "Bristol",
+   "London"
+  ],
+  "searchAliases": [
+   "BT Group"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "Capgemini",
+  "sector": "Tech, telecoms and consulting",
+  "tier": 1,
+  "rating": "A rating",
+  "licensedEntities": [
+   "Capgemini UK PLC"
+  ],
+  "registeredLocations": [
+   "London"
+  ],
+  "ukHubs": [
+   "Telford",
+   "Manchester",
+   "London"
+  ],
+  "searchAliases": [
+   "Capgemini",
+   "Capgemini UK PLC"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "Cognizant",
+  "sector": "Tech, telecoms and consulting",
+  "tier": 1,
+  "rating": "A rating",
+  "licensedEntities": [
+   "Cognizant Business Logics Limited",
+   "Cognizant Worldwide Limited"
+  ],
+  "registeredLocations": [
+   "Coventry",
+   "London"
+  ],
+  "ukHubs": [
+   "London",
+   "Nationwide"
+  ],
+  "searchAliases": [
+   "Cognizant",
+   "Cognizant Business Logics Limited",
+   "Cognizant Worldwide Limited"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "Deloitte",
+  "sector": "Tech, telecoms and consulting",
+  "tier": 1,
+  "rating": "A rating",
+  "licensedEntities": [
+   "Deloitte LLP"
+  ],
+  "registeredLocations": [
+   "London"
+  ],
+  "ukHubs": [
+   "Belfast",
+   "Cardiff",
+   "Manchester",
+   "London"
+  ],
+  "searchAliases": [
+   "Deloitte",
+   "Deloitte LLP"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "IBM",
+  "sector": "Tech, telecoms and consulting",
+  "tier": 1,
+  "rating": "A rating",
+  "licensedEntities": [
+   "IBM UK Ltd"
+  ],
+  "registeredLocations": [
+   "Winchester"
+  ],
+  "ukHubs": [
+   "Manchester",
+   "Warwick",
+   "London"
+  ],
+  "searchAliases": [
+   "IBM",
+   "IBM UK Ltd"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "Infosys",
+  "sector": "Tech, telecoms and consulting",
+  "tier": 1,
+  "rating": "A rating",
+  "licensedEntities": [
+   "Infosys Fluido UK LTD",
+   "Infosys Limited",
+   "Infosys Tech Solutions Ltd"
+  ],
+  "registeredLocations": [
+   "B radford",
+   "London"
+  ],
+  "ukHubs": [
+   "London",
+   "Nationwide"
+  ],
+  "searchAliases": [
+   "Infosys",
+   "Infosys Fluido UK LTD",
+   "Infosys Limited",
+   "Infosys Tech Solutions Ltd"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "KPMG",
+  "sector": "Tech, telecoms and consulting",
+  "tier": 1,
+  "rating": "A rating",
+  "licensedEntities": [
+   "KPMG IFRG Ltd",
+   "KPMG Ireland",
+   "KPMG LLP",
+   "KPMG LLP (Local Hires)",
+   "KPMG US Tax Service (London) LLP"
+  ],
+  "registeredLocations": [
+   "Belfast",
+   "London"
+  ],
+  "ukHubs": [
+   "Leeds",
+   "Birmingham",
+   "Glasgow",
+   "London"
+  ],
+  "searchAliases": [
+   "KPMG",
+   "KPMG IFRG Ltd",
+   "KPMG Ireland",
+   "KPMG LLP",
+   "KPMG LLP (Local Hires)",
+   "KPMG US Tax Service (London) LLP"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "Kainos",
+  "sector": "Tech, telecoms and consulting",
+  "tier": 1,
+  "rating": "A rating",
+  "licensedEntities": [
+   "Kainos Software Ltd"
+  ],
+  "registeredLocations": [
+   "Belfast"
+  ],
+  "ukHubs": [
+   "Belfast",
+   "Birmingham"
+  ],
+  "searchAliases": [
+   "Kainos",
+   "Kainos Software Ltd"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "PwC",
+  "sector": "Tech, telecoms and consulting",
+  "tier": 1,
+  "rating": "A rating",
+  "licensedEntities": [
+   "PricewaterhouseCoopers (Northern Ireland) LLP",
+   "PricewaterhouseCoopers LLP"
+  ],
+  "registeredLocations": [
+   "Belfast",
+   "London"
+  ],
+  "ukHubs": [
+   "Belfast",
+   "Birmingham",
+   "Manchester",
+   "London"
+  ],
+  "searchAliases": [
+   "PricewaterhouseCoopers (Northern Ireland) LLP",
+   "PricewaterhouseCoopers LLP",
+   "PwC"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "Sage Group",
+  "sector": "Tech, telecoms and consulting",
+  "tier": 1,
+  "rating": "A rating",
+  "licensedEntities": [
+   "The Sage Group plc"
+  ],
+  "registeredLocations": [
+   "Newcastle upon Tyne"
+  ],
+  "ukHubs": [
+   "Newcastle"
+  ],
+  "searchAliases": [
+   "Sage Group",
+   "The Sage Group plc"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "Sky",
+  "sector": "Tech, telecoms and consulting",
+  "tier": 1,
+  "rating": "A rating",
+  "licensedEntities": [
+   "Sky UK Limited",
+   "Sky UK New Co Limited"
+  ],
+  "registeredLocations": [
+   "London",
+   "Middlesex"
+  ],
+  "ukHubs": [
+   "Leeds",
+   "Osterley"
+  ],
+  "searchAliases": [
+   "Sky",
+   "Sky UK Limited",
+   "Sky UK New Co Limited"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "Sopra Steria",
+  "sector": "Tech, telecoms and consulting",
+  "tier": 1,
+  "rating": "A rating",
+  "licensedEntities": [
+   "Sopra Steria Limited"
+  ],
+  "registeredLocations": [
+   "Newcastle Upon Tyne"
+  ],
+  "ukHubs": [
+   "Newcastle",
+   "Sheffield"
+  ],
+  "searchAliases": [
+   "Sopra Steria",
+   "Sopra Steria Limited"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "Tata Consultancy Services",
+  "sector": "Tech, telecoms and consulting",
+  "tier": 1,
+  "rating": "A rating",
+  "licensedEntities": [
+   "Tata Consultancy Services"
+  ],
+  "registeredLocations": [
+   "London"
+  ],
+  "ukHubs": [
+   "Peterborough",
+   "London"
+  ],
+  "searchAliases": [
+   "Tata Consultancy Services"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "Version 1",
+  "sector": "Tech, telecoms and consulting",
+  "tier": 1,
+  "rating": "A rating",
+  "licensedEntities": [
+   "Version 1 Solutions Limited",
+   "Version 1 Technology Limited"
+  ],
+  "registeredLocations": [
+   "Belfast",
+   "Birmingham"
+  ],
+  "ukHubs": [
+   "Belfast",
+   "Birmingham"
+  ],
+  "searchAliases": [
+   "Version 1",
+   "Version 1 Solutions Limited",
+   "Version 1 Technology Limited"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "Atos",
+  "sector": "Tech, telecoms and consulting",
+  "tier": 2,
+  "rating": "A rating",
+  "licensedEntities": [
+   "Atos Executive Limited",
+   "Atos IT Services UK Ltd"
+  ],
+  "registeredLocations": [
+   "London"
+  ],
+  "ukHubs": [
+   "Manchester",
+   "London"
+  ],
+  "searchAliases": [
+   "Atos",
+   "Atos Executive Limited",
+   "Atos IT Services UK Ltd"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "BAE Systems",
+  "sector": "Tech, telecoms and consulting",
+  "tier": 2,
+  "rating": "A rating",
+  "licensedEntities": [
+   "BAE Systems OneArc UK Limited",
+   "BAE Systems Plc"
+  ],
+  "registeredLocations": [
+   "Farnborough",
+   "London"
+  ],
+  "ukHubs": [
+   "Preston",
+   "Guildford",
+   "Leeds"
+  ],
+  "searchAliases": [
+   "BAE Systems",
+   "BAE Systems OneArc UK Limited",
+   "BAE Systems Plc"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "EY",
+  "sector": "Tech, telecoms and consulting",
+  "tier": 2,
+  "rating": "A rating",
+  "licensedEntities": [
+   "Ernst & Young"
+  ],
+  "registeredLocations": [
+   "London"
+  ],
+  "ukHubs": [
+   "Manchester",
+   "Belfast",
+   "London"
+  ],
+  "searchAliases": [
+   "EY",
+   "Ernst & Young"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "Fujitsu",
+  "sector": "Tech, telecoms and consulting",
+  "tier": 2,
+  "rating": "A rating",
+  "licensedEntities": [
+   "Fujitsu Research of Europe Ltd.",
+   "Fujitsu Services Limited"
+  ],
+  "registeredLocations": [
+   "Bracknell",
+   "Slough"
+  ],
+  "ukHubs": [
+   "Manchester",
+   "Bracknell"
+  ],
+  "searchAliases": [
+   "Fujitsu",
+   "Fujitsu Research of Europe Ltd.",
+   "Fujitsu Services Limited"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "Ordnance Survey",
+  "sector": "Tech, telecoms and consulting",
+  "tier": 2,
+  "rating": "A rating",
+  "licensedEntities": [
+   "Ordnance Survey Ltd"
+  ],
+  "registeredLocations": [
+   "Southampton"
+  ],
+  "ukHubs": [
+   "Southampton"
+  ],
+  "searchAliases": [
+   "Ordnance Survey",
+   "Ordnance Survey Ltd"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "Vodafone",
+  "sector": "Tech, telecoms and consulting",
+  "tier": 2,
+  "rating": "A rating",
+  "licensedEntities": [
+   "Vodafone Group Services Limited",
+   "Vodafone Limited"
+  ],
+  "registeredLocations": [
+   "Newbury"
+  ],
+  "ukHubs": [
+   "Newbury",
+   "Manchester"
+  ],
+  "searchAliases": [
+   "Vodafone",
+   "Vodafone Group Services Limited",
+   "Vodafone Limited"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "Wipro",
+  "sector": "Tech, telecoms and consulting",
+  "tier": 2,
+  "rating": "A rating",
+  "licensedEntities": [
+   "WIPRO CONNECTED SERVICES UK LIMITED",
+   "Wipro Appirio UK Limited",
+   "Wipro Limited"
+  ],
+  "registeredLocations": [
+   "London",
+   "Reading"
+  ],
+  "ukHubs": [
+   "London",
+   "Nationwide"
+  ],
+  "searchAliases": [
+   "WIPRO CONNECTED SERVICES UK LIMITED",
+   "Wipro",
+   "Wipro Appirio UK Limited",
+   "Wipro Limited"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "Google UK",
+  "sector": "Tech, telecoms and consulting",
+  "tier": 3,
+  "rating": "A (Premium)",
+  "licensedEntities": [
+   "Google (UK) Limited"
+  ],
+  "registeredLocations": [
+   "London"
+  ],
+  "ukHubs": [
+   "London"
+  ],
+  "searchAliases": [
+   "Google (UK) Limited",
+   "Google UK"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "Microsoft",
+  "sector": "Tech, telecoms and consulting",
+  "tier": 3,
+  "rating": "A rating",
+  "licensedEntities": [
+   "Microsoft Limited",
+   "Microsoft Research Limited"
+  ],
+  "registeredLocations": [
+   "Cambridge",
+   "Reading"
+  ],
+  "ukHubs": [
+   "Reading",
+   "Cambridge"
+  ],
+  "searchAliases": [
+   "Microsoft",
+   "Microsoft Limited",
+   "Microsoft Research Limited"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "AstraZeneca",
+  "sector": "Healthcare, pharma and life sciences",
+  "tier": 1,
+  "rating": "A rating",
+  "licensedEntities": [
+   "AstraZeneca UK Limited"
+  ],
+  "registeredLocations": [
+   "Cambridge"
+  ],
+  "ukHubs": [
+   "Cambridge",
+   "Macclesfield"
+  ],
+  "searchAliases": [
+   "AstraZeneca",
+   "AstraZeneca UK Limited"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "Boots",
+  "sector": "Healthcare, pharma and life sciences",
+  "tier": 1,
+  "rating": "A rating",
+  "licensedEntities": [
+   "Boots Management Services",
+   "Boots Opticians",
+   "The Boots Group Services Limited"
+  ],
+  "registeredLocations": [
+   "Nottingham",
+   "Rayleigh",
+   "Weybridge"
+  ],
+  "ukHubs": [
+   "Nottingham"
+  ],
+  "searchAliases": [
+   "Boots",
+   "Boots Management Services",
+   "Boots Opticians",
+   "The Boots Group Services Limited"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "Bupa",
+  "sector": "Healthcare, pharma and life sciences",
+  "tier": 1,
+  "rating": "A rating",
+  "licensedEntities": [
+   "Bupa",
+   "Bupa Care Services",
+   "Bupa Cromwell Hospital",
+   "Bupa Occupational Health Limited"
+  ],
+  "registeredLocations": [
+   "Leeds",
+   "London"
+  ],
+  "ukHubs": [
+   "Salford",
+   "Staines",
+   "Brighton"
+  ],
+  "searchAliases": [
+   "Bupa",
+   "Bupa Care Services",
+   "Bupa Cromwell Hospital",
+   "Bupa Occupational Health Limited"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "GSK",
+  "sector": "Healthcare, pharma and life sciences",
+  "tier": 1,
+  "rating": "A rating",
+  "licensedEntities": [
+   "GSK Plc"
+  ],
+  "registeredLocations": [
+   "London"
+  ],
+  "ukHubs": [
+   "Stevenage",
+   "Ware",
+   "London"
+  ],
+  "searchAliases": [
+   "GSK",
+   "GSK Plc"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "IQVIA",
+  "sector": "Healthcare, pharma and life sciences",
+  "tier": 1,
+  "rating": "A rating",
+  "licensedEntities": [
+   "IQVIA Laboratories Ltd",
+   "IQVIA Limited"
+  ],
+  "registeredLocations": [
+   "Livingston",
+   "Reading"
+  ],
+  "ukHubs": [
+   "Reading",
+   "Brighton"
+  ],
+  "searchAliases": [
+   "IQVIA",
+   "IQVIA Laboratories Ltd",
+   "IQVIA Limited"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "NHS England",
+  "sector": "Healthcare, pharma and life sciences",
+  "tier": 1,
+  "rating": "A rating",
+  "licensedEntities": [
+   "NHS England"
+  ],
+  "registeredLocations": [
+   "Leeds"
+  ],
+  "ukHubs": [
+   "Leeds",
+   "London"
+  ],
+  "searchAliases": [
+   "NHS England"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "ICON Clinical Research",
+  "sector": "Healthcare, pharma and life sciences",
+  "tier": 2,
+  "rating": "A rating",
+  "licensedEntities": [
+   "ICON Clinical (UK) Limited"
+  ],
+  "registeredLocations": [
+   "Reading"
+  ],
+  "ukHubs": [
+   "Reading",
+   "Marlow"
+  ],
+  "searchAliases": [
+   "ICON Clinical (UK) Limited",
+   "ICON Clinical Research"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "Johnson and Johnson",
+  "sector": "Healthcare, pharma and life sciences",
+  "tier": 2,
+  "rating": "A rating",
+  "licensedEntities": [
+   "Janssen-Cilag Ltd",
+   "Johnson & Johnson Medical Ltd"
+  ],
+  "registeredLocations": [
+   "High Wycombe",
+   "West Lothian"
+  ],
+  "ukHubs": [
+   "High Wycombe",
+   "Leeds"
+  ],
+  "searchAliases": [
+   "Janssen-Cilag Ltd",
+   "Johnson & Johnson Medical Ltd",
+   "Johnson and Johnson"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "Parexel",
+  "sector": "Healthcare, pharma and life sciences",
+  "tier": 2,
+  "rating": "A rating",
+  "licensedEntities": [
+   "PAREXEL International Limited"
+  ],
+  "registeredLocations": [
+   "Harrow"
+  ],
+  "ukHubs": [
+   "Nottingham",
+   "Uxbridge"
+  ],
+  "searchAliases": [
+   "PAREXEL International Limited",
+   "Parexel"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "Pfizer",
+  "sector": "Healthcare, pharma and life sciences",
+  "tier": 2,
+  "rating": "A rating",
+  "licensedEntities": [
+   "Pfizer Limited",
+   "Pfizer Ltd ( Registered Office)"
+  ],
+  "registeredLocations": [
+   "Sandwich",
+   "Tadworth"
+  ],
+  "ukHubs": [
+   "Sandwich",
+   "Tadworth"
+  ],
+  "searchAliases": [
+   "Pfizer",
+   "Pfizer Limited",
+   "Pfizer Ltd ( Registered Office)"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "Roche Products",
+  "sector": "Healthcare, pharma and life sciences",
+  "tier": 2,
+  "rating": "A rating",
+  "licensedEntities": [
+   "Roche Diagnostics Limited",
+   "Roche Products Limited"
+  ],
+  "registeredLocations": [
+   "Burgess HIll",
+   "Welwyn Garden City"
+  ],
+  "ukHubs": [
+   "Welwyn Garden City",
+   "Burgess Hill"
+  ],
+  "searchAliases": [
+   "Roche Diagnostics Limited",
+   "Roche Products",
+   "Roche Products Limited"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "UK Health Security Agency",
+  "sector": "Healthcare, pharma and life sciences",
+  "tier": 2,
+  "rating": "A rating",
+  "licensedEntities": [
+   "UK Health Security Agency"
+  ],
+  "registeredLocations": [
+   "London"
+  ],
+  "ukHubs": [
+   "Colindale",
+   "Porton Down"
+  ],
+  "searchAliases": [
+   "UK Health Security Agency"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "Novartis",
+  "sector": "Healthcare, pharma and life sciences",
+  "tier": 3,
+  "rating": "A rating",
+  "licensedEntities": [
+   "Novartis Pharmaceuticals UK Ltd"
+  ],
+  "registeredLocations": [
+   "London"
+  ],
+  "ukHubs": [
+   "London"
+  ],
+  "searchAliases": [
+   "Novartis",
+   "Novartis Pharmaceuticals UK Ltd"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "Oxford Nanopore",
+  "sector": "Healthcare, pharma and life sciences",
+  "tier": 3,
+  "rating": "A rating",
+  "licensedEntities": [
+   "Oxford Nanopore Technologies plc."
+  ],
+  "registeredLocations": [
+   "Oxford"
+  ],
+  "ukHubs": [
+   "Oxford"
+  ],
+  "searchAliases": [
+   "Oxford Nanopore",
+   "Oxford Nanopore Technologies plc."
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "Wellcome Sanger Institute",
+  "sector": "Healthcare, pharma and life sciences",
+  "tier": 3,
+  "rating": "A rating",
+  "licensedEntities": [
+   "Genome Research Limited"
+  ],
+  "registeredLocations": [
+   "Cambridge"
+  ],
+  "ukHubs": [
+   "Hinxton",
+   "Cambridge"
+  ],
+  "searchAliases": [
+   "Genome Research Limited",
+   "Wellcome Sanger Institute"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "ASDA",
+  "sector": "Energy, utilities, retail and logistics",
+  "tier": 1,
+  "rating": "A rating",
+  "licensedEntities": [
+   "Asda Stores Ltd"
+  ],
+  "registeredLocations": [
+   "Leeds"
+  ],
+  "ukHubs": [
+   "Leeds"
+  ],
+  "searchAliases": [
+   "ASDA",
+   "Asda Stores Ltd"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "Amazon",
+  "sector": "Energy, utilities, retail and logistics",
+  "tier": 1,
+  "rating": "A rating",
+  "licensedEntities": [
+   "Amazon UK Services Ltd"
+  ],
+  "registeredLocations": [
+   "London"
+  ],
+  "ukHubs": [
+   "Manchester",
+   "Edinburgh",
+   "Cambridge",
+   "London"
+  ],
+  "searchAliases": [
+   "Amazon",
+   "Amazon UK Services Ltd"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "Centrica",
+  "sector": "Energy, utilities, retail and logistics",
+  "tier": 1,
+  "rating": "A rating",
+  "licensedEntities": [
+   "Centrica plc"
+  ],
+  "registeredLocations": [
+   "Windsor"
+  ],
+  "ukHubs": [
+   "Windsor",
+   "Leicester"
+  ],
+  "searchAliases": [
+   "Centrica",
+   "Centrica plc"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "Jaguar Land Rover",
+  "sector": "Energy, utilities, retail and logistics",
+  "tier": 1,
+  "rating": "A rating",
+  "licensedEntities": [
+   "Jaguar Land Rover Limited"
+  ],
+  "registeredLocations": [
+   "Coventry"
+  ],
+  "ukHubs": [
+   "Coventry",
+   "Gaydon"
+  ],
+  "searchAliases": [
+   "Jaguar Land Rover",
+   "Jaguar Land Rover Limited"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "National Grid",
+  "sector": "Energy, utilities, retail and logistics",
+  "tier": 1,
+  "rating": "A rating",
+  "licensedEntities": [
+   "National Grid Electricity Distribution (South West) plc",
+   "National Grid plc"
+  ],
+  "registeredLocations": [
+   "Bristol",
+   "Warwick"
+  ],
+  "ukHubs": [
+   "Warwick",
+   "Wokingham"
+  ],
+  "searchAliases": [
+   "National Grid",
+   "National Grid Electricity Distribution (South West) plc",
+   "National Grid plc"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "Ocado",
+  "sector": "Energy, utilities, retail and logistics",
+  "tier": 1,
+  "rating": "A rating",
+  "licensedEntities": [
+   "Ocado Central Services Limited",
+   "Ocado Retail Limited"
+  ],
+  "registeredLocations": [
+   "Hatfield"
+  ],
+  "ukHubs": [
+   "Hatfield",
+   "Welwyn Garden City"
+  ],
+  "searchAliases": [
+   "Ocado",
+   "Ocado Central Services Limited",
+   "Ocado Retail Limited"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "Rolls-Royce",
+  "sector": "Energy, utilities, retail and logistics",
+  "tier": 1,
+  "rating": "A rating",
+  "licensedEntities": [
+   "Rolls-Royce SMR Limited",
+   "Rolls-Royce plc"
+  ],
+  "registeredLocations": [
+   "Derby"
+  ],
+  "ukHubs": [
+   "Derby",
+   "Bristol"
+  ],
+  "searchAliases": [
+   "Rolls-Royce",
+   "Rolls-Royce SMR Limited",
+   "Rolls-Royce plc"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "Sainsbury's",
+  "sector": "Energy, utilities, retail and logistics",
+  "tier": 1,
+  "rating": "A rating",
+  "licensedEntities": [
+   "J Sainsbury Plc"
+  ],
+  "registeredLocations": [
+   "London"
+  ],
+  "ukHubs": [
+   "Coventry",
+   "London"
+  ],
+  "searchAliases": [
+   "J Sainsbury Plc",
+   "Sainsbury's"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "Severn Trent",
+  "sector": "Energy, utilities, retail and logistics",
+  "tier": 1,
+  "rating": "A rating",
+  "licensedEntities": [
+   "Severn Trent"
+  ],
+  "registeredLocations": [
+   "Coventry"
+  ],
+  "ukHubs": [
+   "Coventry"
+  ],
+  "searchAliases": [
+   "Severn Trent"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "Tesco",
+  "sector": "Energy, utilities, retail and logistics",
+  "tier": 1,
+  "rating": "A rating",
+  "licensedEntities": [
+   "Tesco Personal Finance plc",
+   "Tesco Stores Limited"
+  ],
+  "registeredLocations": [
+   "Edinburgh",
+   "Welwyn Garden City"
+  ],
+  "ukHubs": [
+   "Welwyn Garden City"
+  ],
+  "searchAliases": [
+   "Tesco",
+   "Tesco Personal Finance plc",
+   "Tesco Stores Limited"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "Airbus",
+  "sector": "Energy, utilities, retail and logistics",
+  "tier": 2,
+  "rating": "A rating",
+  "licensedEntities": [
+   "Airbus Belfast Limited",
+   "Airbus Defence and Space Limited",
+   "Airbus Helicopters UK Limited",
+   "Airbus Operations Limited",
+   "Airbus Protect Limited"
+  ],
+  "registeredLocations": [
+   "Belfast",
+   "Bristol",
+   "Kidlington",
+   "Portsmouth"
+  ],
+  "ukHubs": [
+   "Filton",
+   "Broughton"
+  ],
+  "searchAliases": [
+   "Airbus",
+   "Airbus Belfast Limited",
+   "Airbus Defence and Space Limited",
+   "Airbus Helicopters UK Limited",
+   "Airbus Operations Limited",
+   "Airbus Protect Limited"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "DHL",
+  "sector": "Energy, utilities, retail and logistics",
+  "tier": 2,
+  "rating": "A rating",
+  "licensedEntities": [
+   "DHL Air (UK) Ltd",
+   "DHL Aviation (UK) Ltd",
+   "DHL Express UK LTD",
+   "DHL GBS (UK) Limited",
+   "DHL Global Forwarding (UK) Ltd",
+   "DHL International (UK) Ltd",
+   "DHL Services Limited",
+   "DHL eCommerce UK Limited"
+  ],
+  "registeredLocations": [
+   "Colnbrook",
+   "Coventry",
+   "Derby",
+   "Milton Keynes"
+  ],
+  "ukHubs": [
+   "Milton Keynes",
+   "Bedford"
+  ],
+  "searchAliases": [
+   "DHL",
+   "DHL Air (UK) Ltd",
+   "DHL Aviation (UK) Ltd",
+   "DHL Express UK LTD",
+   "DHL GBS (UK) Limited",
+   "DHL Global Forwarding (UK) Ltd",
+   "DHL International (UK) Ltd",
+   "DHL Services Limited",
+   "DHL eCommerce UK Limited"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "EDF Energy",
+  "sector": "Energy, utilities, retail and logistics",
+  "tier": 2,
+  "rating": "A rating",
+  "licensedEntities": [
+   "EDF Energy Ltd"
+  ],
+  "registeredLocations": [
+   "London"
+  ],
+  "ukHubs": [
+   "Exeter",
+   "Gloucester",
+   "London"
+  ],
+  "searchAliases": [
+   "EDF Energy",
+   "EDF Energy Ltd"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "Marks and Spencer",
+  "sector": "Energy, utilities, retail and logistics",
+  "tier": 2,
+  "rating": "A rating",
+  "licensedEntities": [
+   "Marks and Spencer Group Plc"
+  ],
+  "registeredLocations": [
+   "London"
+  ],
+  "ukHubs": [
+   "London",
+   "Salford"
+  ],
+  "searchAliases": [
+   "Marks and Spencer",
+   "Marks and Spencer Group Plc"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "Network Rail",
+  "sector": "Energy, utilities, retail and logistics",
+  "tier": 2,
+  "rating": "A rating",
+  "licensedEntities": [
+   "Network Rail Infrastructure"
+  ],
+  "registeredLocations": [
+   "Manchetser"
+  ],
+  "ukHubs": [
+   "Milton Keynes",
+   "York"
+  ],
+  "searchAliases": [
+   "Network Rail",
+   "Network Rail Infrastructure"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "Octopus Energy",
+  "sector": "Energy, utilities, retail and logistics",
+  "tier": 2,
+  "rating": "A rating",
+  "licensedEntities": [
+   "Octopus Energy Limited"
+  ],
+  "registeredLocations": [
+   "London"
+  ],
+  "ukHubs": [
+   "London",
+   "Leicester"
+  ],
+  "searchAliases": [
+   "Octopus Energy",
+   "Octopus Energy Limited"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "Royal Mail",
+  "sector": "Energy, utilities, retail and logistics",
+  "tier": 2,
+  "rating": "A rating",
+  "licensedEntities": [
+   "Royal Mail Group Limited"
+  ],
+  "registeredLocations": [
+   "London"
+  ],
+  "ukHubs": [
+   "Sheffield",
+   "London"
+  ],
+  "searchAliases": [
+   "Royal Mail",
+   "Royal Mail Group Limited"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "SSE",
+  "sector": "Energy, utilities, retail and logistics",
+  "tier": 2,
+  "rating": "A rating",
+  "licensedEntities": [
+   "SSE Plc"
+  ],
+  "registeredLocations": [
+   "Perth"
+  ],
+  "ukHubs": [
+   "Perth",
+   "Reading"
+  ],
+  "searchAliases": [
+   "SSE",
+   "SSE Plc"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "United Utilities",
+  "sector": "Energy, utilities, retail and logistics",
+  "tier": 2,
+  "rating": "A rating",
+  "licensedEntities": [
+   "United Utilities PLC"
+  ],
+  "registeredLocations": [
+   "Warrington"
+  ],
+  "ukHubs": [
+   "Warrington"
+  ],
+  "searchAliases": [
+   "United Utilities",
+   "United Utilities PLC"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "BP",
+  "sector": "Energy, utilities, retail and logistics",
+  "tier": 3,
+  "rating": "A rating",
+  "licensedEntities": [
+   "BP Oil UK Ltd",
+   "BP plc"
+  ],
+  "registeredLocations": [
+   "Central Milton Keynes",
+   "London"
+  ],
+  "ukHubs": [
+   "Sunbury",
+   "Aberdeen",
+   "London"
+  ],
+  "searchAliases": [
+   "BP",
+   "BP Oil UK Ltd",
+   "BP plc"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "Shell",
+  "sector": "Energy, utilities, retail and logistics",
+  "tier": 3,
+  "rating": "A rating",
+  "licensedEntities": [
+   "Shell International Ltd"
+  ],
+  "registeredLocations": [
+   "London"
+  ],
+  "ukHubs": [
+   "London",
+   "Aberdeen"
+  ],
+  "searchAliases": [
+   "Shell",
+   "Shell International Ltd"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ },
+ {
+  "name": "Transport for London",
+  "sector": "Energy, utilities, retail and logistics",
+  "tier": 3,
+  "rating": "A rating",
+  "licensedEntities": [
+   "Transport for London"
+  ],
+  "registeredLocations": [
+   "London"
+  ],
+  "ukHubs": [
+   "London"
+  ],
+  "searchAliases": [
+   "Transport for London"
+  ],
+  "verifiedAgainstRegister": true,
+  "registerCheckedOn": "2026-09-16"
+ }
+]

@@ -124,9 +124,9 @@ class GateSemantics(unittest.TestCase):
         self.assertEqual(reason, "code closed: 3582")
 
     def test_unmapped_title_defers_to_advert(self):
-        for title in ("Advanced Biomedical Scientist",      # clinical, NHS-shaped
-                      "Trainee Accountant",                 # broad-sweep jobs row
-                      "Quality and Safety Lead"):           # hs-shaped, no rule
+        for title in ("Trainee Accountant",                 # broad-sweep jobs row
+                      "Quality and Safety Lead",            # hs-shaped, no rule
+                      "Widget Calibration Lead"):           # genuinely off-map
             code, ok, reason = self.soc_fields(title, 40000)
             self.assertEqual(code, "", title)
             self.assertTrue(ok, title)                # not rejected on the code alone
@@ -144,6 +144,87 @@ class GateSemantics(unittest.TestCase):
         # stale-row migration would loop on it.
         for title in ("Trainee Accountant", "", "Zzz Nonsense Role"):
             self.assertNotEqual(self.soc_fields(title, None)[2], "code unknown")
+
+
+class ClinicalGate(unittest.TestCase):
+    """NHS clinical occupations: eligible professions map to their SOC code and
+    are sponsorable on the code alone (pay deferred to the advert, since NHS pay
+    is on a national scale soc.py does not model); RQF 3-5 support roles map to a
+    closed code and grey. gov.uk verified 2026-09-16."""
+
+    def setUp(self):
+        import monitor, soc
+        self.soc_fields = monitor.soc_fields
+        self.soc, self.monitor = soc, monitor
+
+    def test_eligible_professions_map_and_defer_pay(self):
+        cases = {
+            "Staff Nurse": "2237", "Registered Mental Health Nurse": "2235",
+            "Community Midwife": "2231", "Specialty Doctor - Haematology": "2212",
+            "Locum Consultant Psychiatrist": "2212", "Salaried GP": "2211",
+            "Band 6 Physiotherapist": "2221", "Occupational Therapist": "2222",
+            "Highly Specialist Pharmacist": "2251", "MRI Radiographer": "2254",
+            "Paramedic": "2255", "Biomedical Scientist - Immunology": "2113",
+            "Clinical Psychologist": "2225", "Operating Department Practitioner": "2259",
+        }
+        for title, code in cases.items():
+            soc_code, ok, reason = self.soc_fields(title, None)
+            self.assertEqual(soc_code, code, title)
+            self.assertTrue(ok, title)                       # eligible on the code
+            self.assertEqual(reason, "clinical role, pay set by the advert", title)
+
+    def test_clinical_stays_eligible_even_below_general_floor(self):
+        # A band-3/4 clinical wage must NOT grey the row: pay is deferred, not
+        # floor-checked, so a low advertised figure cannot rule it out.
+        code, ok, reason = self.soc_fields("Staff Nurse", 26000)
+        self.assertEqual((code, ok), ("2237", True))
+        self.assertEqual(reason, "clinical role, pay set by the advert")
+
+    def test_support_roles_are_closed(self):
+        for title, code in {"Healthcare Assistant": "6131",
+                            "Nursing Auxiliary": "6131",
+                            "Clinical Support Worker": "6131",
+                            "Phlebotomist": "6131",
+                            "Pharmacy Technician": "3212",
+                            "Dental Nurse": "3213",
+                            "Care Worker": "6135",
+                            "Senior Care Worker": "6135"}.items():
+            soc_code, ok, reason = self.soc_fields(title, 40000)
+            self.assertEqual(soc_code, code, title)
+            self.assertFalse(ok, title)                      # RQF 3-5, not on a list
+            self.assertIn("code closed", reason)
+
+    def test_british_speciality_spelling_maps(self):
+        # NHS adverts overwhelmingly write "Speciality Doctor" (extra i).
+        self.assertEqual(self.soc_fields("Speciality Doctor", None)[0], "2212")
+        self.assertEqual(self.soc_fields("Speciality Registrar", None)[0], "2212")
+
+    def test_nursing_associate_defers_not_closed(self):
+        # Ambiguous registered band-4 role: left to the advert, not asserted closed.
+        code, ok, reason = self.soc_fields("Nursing Associate", 40000)
+        self.assertEqual(code, "")
+        self.assertTrue(ok)
+        self.assertEqual(reason, self.monitor.SOC_DEFER)
+
+    def test_support_beats_profession_in_ordering(self):
+        # The closed support pattern must win over the eligible one it contains.
+        self.assertFalse(self.soc_fields("Nursing Assistant", 40000)[1])   # not a "nurse"
+        self.assertFalse(self.soc_fields("Pharmacy Technician", 40000)[1]) # not a "pharmacist"
+        self.assertFalse(self.soc_fields("Dental Nurse", 40000)[1])        # not a "dentist"/"nurse"
+
+    def test_every_clinical_code_is_placed_in_exactly_one_set(self):
+        sets = (self.soc.HIGHER, self.soc.TSL, self.soc.DEAD,
+                self.soc.CLINICAL, self.soc.MEDIUM_CLOSED)
+        for _, code in self.soc.TITLE_MAP:
+            hits = sum(code in s for s in sets)
+            self.assertEqual(hits, 1, "%s in %d sets" % (code, hits))
+
+    def test_non_clinical_titles_are_untouched(self):
+        # The clinical block must not capture engineering/design/data titles.
+        self.assertEqual(self.soc_fields("Process Engineer", 50000)[0], "2125")
+        self.assertEqual(self.soc_fields("UX Designer", 50000)[0], "2141")
+        self.assertEqual(self.soc_fields("Data Analyst", 40000)[0], "3544")
+        self.assertEqual(self.soc_fields("Management Consultant", 60000)[0], "2431")
 
 
 class BackfillMigration(unittest.TestCase):
@@ -178,9 +259,17 @@ class BackfillMigration(unittest.TestCase):
                  "soc": "2431", "sponsorable": False, "soc_reason": "below floor £35140"},
             ],
             "hs": [{"title": "Health and Safety Manager", "salary": 50000}],
-            "nhs": [{"title": "Biomedical Scientist", "salary": 35000,
-                     "soc": "", "sponsorable": True,
-                     "soc_reason": "code not inferred — check the advert"}],
+            "nhs": [
+                # deferred SOC ? whose title now maps to a clinical code: the
+                # new TITLE_MAP rule must reach it on the next backfill.
+                {"title": "Biomedical Scientist", "salary": 35000,
+                 "soc": "", "sponsorable": True,
+                 "soc_reason": "code not inferred — check the advert"},
+                # deferred SOC ? that still maps to nothing: stays deferred.
+                {"title": "Ward Clerk", "salary": 23000,
+                 "soc": "", "sponsorable": True,
+                 "soc_reason": "code not inferred — check the advert"},
+            ],
             "phd": [{"title": "PhD in Catalysis", "stipend": 19000}],
         }
         with open(self.path, "w") as f:
@@ -212,9 +301,13 @@ class BackfillMigration(unittest.TestCase):
                          ("3544", True, "shortage list"))
         self.assertEqual((jobs[5]["soc"], jobs[5]["sponsorable"], jobs[5]["soc_reason"]),
                          ("2431", False, "below floor £35140"))
-        # hs filled, nhs already-deferred row unchanged, phd untouched
+        # hs filled; a deferred clinical NHS row is now mapped by the new rule;
+        # a still-unmapped NHS row stays deferred; phd untouched
         self.assertEqual(out["hs"][0]["soc_reason"], "code closed: 3582")
-        self.assertEqual(out["nhs"][0], self.day["nhs"][0])
+        self.assertEqual((out["nhs"][0]["soc"], out["nhs"][0]["sponsorable"],
+                          out["nhs"][0]["soc_reason"]),
+                         ("2113", True, "clinical role, pay set by the advert"))
+        self.assertEqual(out["nhs"][1], self.day["nhs"][1])
         self.assertEqual(out["phd"][0], self.day["phd"][0])
         # nothing else on a row was disturbed
         self.assertEqual(jobs[5]["salary"], 34000)
@@ -223,10 +316,6 @@ class BackfillMigration(unittest.TestCase):
         first = self.run_backfill()
         second = self.run_backfill()
         self.assertEqual(first, second)
-
-
-if __name__ == "__main__":
-    unittest.main(verbosity=2)
 
 
 if __name__ == "__main__":

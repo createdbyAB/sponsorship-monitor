@@ -1272,9 +1272,9 @@
       "belowGeneral": false,
       "posted": "2026-07-15",
       "url": "https://www.adzuna.co.uk/jobs/details/5800626187?utm_medium=api&utm_source=a3737efc",
-      "soc": "",
+      "soc": "2237",
       "sponsorable": true,
-      "soc_reason": "code not inferred \u2014 check the advert"
+      "soc_reason": "clinical role, pay set by the advert"
     },
     {
       "score": 67,
@@ -1580,9 +1580,9 @@
       "belowGeneral": false,
       "posted": "2026-07-15",
       "url": "https://www.adzuna.co.uk/jobs/details/5800544043?utm_medium=api&utm_source=a3737efc",
-      "soc": "",
+      "soc": "2254",
       "sponsorable": true,
-      "soc_reason": "code not inferred \u2014 check the advert"
+      "soc_reason": "clinical role, pay set by the advert"
     },
     {
       "score": 67,
@@ -1860,9 +1860,9 @@
       "belowGeneral": true,
       "posted": "2026-07-15",
       "url": "https://www.adzuna.co.uk/jobs/land/ad/5800893542?se=Jp7UZiOA8RG16YRTrH0dTg&utm_medium=api&utm_source=a3737efc&v=AA33960ED55730F85509D54ED170E15DE06DE78F",
-      "soc": "",
+      "soc": "2237",
       "sponsorable": true,
-      "soc_reason": "code not inferred \u2014 check the advert"
+      "soc_reason": "clinical role, pay set by the advert"
     },
     {
       "score": 59,
@@ -1930,9 +1930,9 @@
       "belowGeneral": false,
       "posted": "2026-07-15",
       "url": "https://www.adzuna.co.uk/jobs/details/5800861828?utm_medium=api&utm_source=a3737efc",
-      "soc": "",
-      "sponsorable": true,
-      "soc_reason": "code not inferred \u2014 check the advert"
+      "soc": "6135",
+      "sponsorable": false,
+      "soc_reason": "code closed: 6135 (medium-skilled)"
     }
   ]
 }

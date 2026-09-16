@@ -4232,9 +4232,9 @@
       "note": "No salary stated, or the advert gives too wide a band to trust. The employer holds a licence, so confirm the pay and the sponsorship on the advert before you apply.",
       "source": "adzuna",
       "firstSeen": "2026-08-16",
-      "soc": "",
-      "sponsorable": true,
-      "soc_reason": "code not inferred \u2014 check the advert"
+      "soc": "6135",
+      "sponsorable": false,
+      "soc_reason": "code closed: 6135 (medium-skilled)"
     }
   ],
   "hs": [

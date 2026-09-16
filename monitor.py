@@ -25,7 +25,8 @@ import urllib.parse, urllib.request, urllib.error
 # Occupation-code eligibility gate (Skilled Worker, July 2025 rule). Employer
 # licence is necessary but no longer sufficient; the SOC code must also be on
 # the eligible-occupations or Temporary Shortage List. Pure, local module.
-from soc import infer_soc, sponsorable, required_salary, HIGHER, TSL, DEAD
+from soc import (infer_soc, sponsorable, required_salary,
+                 HIGHER, TSL, DEAD, CLINICAL, MEDIUM_CLOSED)
 
 ADZUNA_ID  = os.environ.get("ADZUNA_ID", "")
 ADZUNA_KEY = os.environ.get("ADZUNA_KEY", "")
@@ -1016,6 +1017,10 @@ def soc_reason(code, band_top):
         return "code unknown"
     if code in DEAD:
         return "code closed: " + code
+    if code in MEDIUM_CLOSED:
+        return "code closed: " + code + " (medium-skilled)"
+    if code in CLINICAL:
+        return "clinical role, pay set by the advert"
     if code not in HIGHER and code not in TSL:
         return "code unknown"
     if band_top is not None:
@@ -1704,13 +1709,14 @@ def demo():
         row = dict({"field": "Design", "posted": datetime.date.today().isoformat(),
                     "url": "https://example.com/advert/%d" % n[0], "note": "",
                     "belowGeneral": False, "deadline": "", "source": "adzuna"}, **kw)
-        # jobs/hs rows carry the occupation-code gate, exactly like the live path.
+        # jobs/hs rows carry the occupation-code gate, through the same policy
+        # layer (soc_fields) as the live path, so the demo can never show a
+        # verdict the pipeline no longer writes.
         if row.get("section") in ("jobs", "hs"):
-            code = infer_soc(row.get("title", ""))
-            band = row.get("salary")
+            code, ok, reason = soc_fields(row.get("title", ""), row.get("salary") or None)
             row.setdefault("soc", code)
-            row.setdefault("sponsorable", sponsorable(code, band))
-            row.setdefault("soc_reason", soc_reason(code, band))
+            row.setdefault("sponsorable", ok)
+            row.setdefault("soc_reason", reason)
         return row
     jobs = [
         mk(score=92, title="Senior Process Engineer", employer="Johnson Matthey", location="London, UK",
@@ -1844,28 +1850,27 @@ def filter_sponsorable(day):
 # and build_nhs do at write time, so a backfilled day matches a freshly written one.
 _SOC_SECTIONS = ("jobs", "hs", "nhs")
 _SOC_KEYS = ("soc", "sponsorable", "soc_reason")
-# The verdict jobs/hs rows got for an unmapped title before 2026-09-12, when
-# they failed closed. Nothing writes it any more; it only survives in the archive.
-_SOC_STALE = "code unknown"
 
 def backfill_soc():
-    """Bring the archive's occupation-code fields up to the current rules.
+    """Re-judge every archived row that holds no occupation code.
 
-    The gate only runs at write time, so it touches two kinds of archived row:
-      - rows from days before the gate existed, which carry no soc /
-        sponsorable / soc_reason and show no badge;
-      - rows tagged "code unknown" under the old fail-closed rule, which the
-        deferral rule now reads as SOC ? / check the advert.
-    soc_fields is pure and deterministic, so both are recomputed from the
-    stored title and salary with no network.
+    The gate only runs at write time, so the archive lags any change to the
+    rules. This pass recomputes soc / sponsorable / soc_reason for rows that
+    have no code: rows from before the gate existed (no fields at all), rows
+    deferred as SOC ? because their title matched nothing, and rows still
+    carrying the pre-2026-09-12 "code unknown" verdict. soc_fields is pure and
+    deterministic, so that needs only the stored title and salary, no network.
+    It is how a new TITLE_MAP rule -- e.g. the NHS clinical codes -- reaches the
+    archive: a deferred SOC ? row whose title now maps gets its real code.
 
-    A row that already holds a code-based verdict is left alone on purpose:
-    the pipeline judged it on the top of the advertised band (salary_max),
-    which the archive does not keep, so recomputing from the stored minimum
-    would be less accurate, not more. A "code unknown" row never had such a
-    verdict -- no code, so no floor was compared -- so nothing is lost by
-    re-deciding it. Counts, order and every other field are untouched.
-    Safe to re-run; a second pass changes nothing.
+    A row that already holds a code is left alone on purpose: the pipeline
+    judged it on the top of the advertised band (salary_max), which the archive
+    does not keep, so recomputing from the stored minimum would be less
+    accurate, not more. A row with no code never had such a verdict -- no code,
+    so no floor was compared -- so nothing is lost by re-deciding it. (A change
+    to a code's floor or rate therefore does NOT reach rows already coded; that
+    is deliberate.) Counts, order and every other field are untouched. Safe to
+    re-run; a second pass changes nothing.
     """
     days = touched_rows = 0
     for fn in sorted(os.listdir(DATA_DIR)):
@@ -1878,8 +1883,8 @@ def backfill_soc():
         for section in _SOC_SECTIONS:
             for r in day.get(section, []):
                 tagged = all(k in r for k in _SOC_KEYS)
-                if tagged and r["soc_reason"] != _SOC_STALE:
-                    continue                    # code-based verdict from write time; keep it
+                if tagged and r["soc"]:
+                    continue                    # holds a code: band-top verdict from write time; keep it
                 fields = soc_fields(r.get("title", ""), r.get("salary") or None)
                 if tagged and (r["soc"], r["sponsorable"], r["soc_reason"]) == fields:
                     continue

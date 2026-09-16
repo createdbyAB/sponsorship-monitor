@@ -1694,6 +1694,7 @@ class AdzunaCompanySource:
             return []
         self.calls[0] += 1
         rows = adzuna(company=alias, max_days=CW_MAX_DAYS)
+        time.sleep(0.3)                 # be polite to the API's rate limit
         try:
             with open(cache, "w") as f:
                 json.dump(rows, f)

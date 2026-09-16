@@ -143,5 +143,65 @@ class CompaniesIntegrity(unittest.TestCase):
         self.assertNotIn("CGI", [c["name"] for c in self.companies])
 
 
+class TwoDeadlines(unittest.TestCase):
+    """There are two deadlines, and the earlier one governs the codes the user
+    most wants. A shortage-list code is only on the list for a CoS assigned
+    before 31 Dec 2026; a higher-skilled code has no expiry, so the binding date
+    is the user's own Graduate visa (31 Mar 2027). Conflating them overstates the
+    runway on shortage-list roles by three months."""
+
+    def _v(self, soc, closing, salary="£40,000"):
+        return e.evaluate(soc, e.parse_salary(salary), OCC, closing=closing)
+
+    def test_1_shortage_list_role_closing_15_dec_is_too_late(self):
+        v = self._v("3544", "2026-12-15")
+        self.assertEqual(v["applicableDeadline"], "2026-12-31")
+        self.assertEqual(v["deadlineBasis"], "temporary shortage list")
+        self.assertEqual(v["verdict"], "too_late")
+
+    def test_2_higher_skilled_role_closing_15_dec_is_not_too_late(self):
+        v = self._v("2136", "2026-12-15")
+        self.assertEqual(v["applicableDeadline"], "2027-03-31")
+        self.assertEqual(v["deadlineBasis"], "graduate visa")
+        self.assertNotEqual(v["verdict"], "too_late")
+
+    def test_3_the_two_deadlines_differ(self):
+        # The conflation the data model exists to prevent: a single global date
+        # would pass tests 1 and 2 in isolation but fail this one.
+        tsl = self._v("3544", "2026-12-15")["applicableDeadline"]
+        higher = self._v("2136", "2026-12-15")["applicableDeadline"]
+        self.assertNotEqual(tsl, higher)
+        self.assertEqual((tsl, higher), ("2026-12-31", "2027-03-31"))
+
+    def test_4_shortage_list_role_closing_1_oct_is_not_too_late(self):
+        # 60 days from 1 Oct is 30 Nov, which clears 31 Dec.
+        self.assertNotEqual(self._v("3544", "2026-10-01")["verdict"], "too_late")
+
+    def test_allowance_is_config_not_literal(self):
+        self.assertEqual(OCC["cosAssignmentAllowanceDays"], 60)
+
+    def test_closed_code_has_no_deadline(self):
+        v = self._v("3582", "2026-12-15", salary="£90,000")
+        self.assertEqual(v["verdict"], "closed")
+        self.assertIsNone(v["applicableDeadline"])
+
+
+class OccupationsData(unittest.TestCase):
+    def setUp(self):
+        with open(os.path.join(DATA, "occupations.json")) as f:
+            self.occ = json.load(f)
+
+    def test_no_stale_expiry_key(self):
+        # A stale `expiry` key that something still reads is the failure mode; it
+        # must be gone, replaced by the two named deadlines.
+        self.assertNotIn("expiry", self.occ)
+        self.assertIn("temporaryShortageListExpiry", self.occ)
+        self.assertIn("graduateVisaExpiry", self.occ)
+
+    def test_3544_is_the_standard_going_rate(self):
+        # £34,900 is the standard column; the £28,600 lower column does not apply.
+        self.assertEqual(self.occ["temporaryShortageList"]["3544"], 34900)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

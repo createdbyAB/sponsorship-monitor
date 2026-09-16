@@ -1,6 +1,8 @@
 {
   "generalMinimum": 33400,
-  "expiry": "2027-03-31",
+  "temporaryShortageListExpiry": "2026-12-31",
+  "graduateVisaExpiry": "2027-03-31",
+  "cosAssignmentAllowanceDays": 60,
   "higherSkilled": {
     "2111": 33400, "2125": 33400, "2129": 33400, "2136": 33400,
     "2141": 33400, "2142": 33400, "2151": 33400, "2152": 33400,

@@ -366,7 +366,10 @@ button{font:inherit;color:inherit;background:none;border:none;padding:0;cursor:p
 .cwgroup > h3 .dot{width:9px;height:9px;border-radius:50%}
 .cwgroup > h3 .n{margin-left:auto;color:var(--text-45);font-weight:500}
 .v-pass{background:var(--strong)} .v-unverified{background:var(--caution)}
-.v-fail{background:var(--weak)} .v-closed{background:var(--weak)}
+.v-fail{background:var(--weak)} .v-too_late{background:var(--weak)} .v-closed{background:var(--weak)}
+.cwnote{font-size:11.5px;color:var(--text-55);margin:2px 0 10px;padding:0 2px}
+.cwtable .dl{font:600 9px var(--mono);color:var(--text-45);white-space:nowrap}
+.cwtable .dl.tsl{color:var(--caution-tx)}
 .cwscroll{overflow-x:auto}
 .cwtable{width:100%;border-collapse:collapse;font-size:12.5px;min-width:640px}
 .cwtable th{text-align:left;font:600 9.5px var(--mono);letter-spacing:.06em;text-transform:uppercase;
@@ -520,10 +523,17 @@ const shortMoney = n => n ? "£" + Math.round(n / 1000) + "k" : "salary not stat
 const SECTIONS = ["jobs", "hs", "phd", "pt", "nhs", "companywatch"];
 const SECTION_NAME = {jobs:"sponsored jobs", hs:"health and safety", phd:"funded PhDs",
                       pt:"part-time Leicester", nhs:"NHS jobs", companywatch:"company watch"};
-// The Graduate visa deadline a first CoS must beat, mirrored from occupations.json.
-const VISA_EXPIRY = "2027-03-31";
+// Two deadlines, read from occupations.json via index.json (never hardcoded):
+// the shortage list closes 31 Dec 2026, the user's Graduate visa 31 Mar 2027.
+// The fallbacks below only apply to an archive written before the split.
+function cwDeadlines(){
+  const m = INDEX.companyWatch || {};
+  return {tsl: m.tslExpiry || "2026-12-31", graduate: m.graduateVisaExpiry || "2027-03-31",
+          allowance: m.cosAssignmentAllowanceDays || 60};
+}
 const VERDICT_GROUPS = [["pass","Sponsorable"], ["unverified","Salary not stated"],
-                        ["fail","Fails on salary"], ["closed","Closed occupation code"]];
+                        ["fail","Fails on salary"], ["too_late","Too late for the shortage list deadline"],
+                        ["closed","Closed occupation code"]];
 const STATUS_ORDER = {strong:0, caution:1, weak:2};
 const STATUS_LABEL = {strong:"✓ Strong", caution:"⚠ Caution", weak:"✕ Weak"};
 const SHIFT_LABEL  = {evening:"Evenings", weekend:"Weekends", flexible:"Flexible",
@@ -652,6 +662,7 @@ function normalise(raw, day){
       proratedFloor: item.proratedFloor == null ? null : Number(item.proratedFloor),
       generalMinimum: item.generalMinimum == null ? null : Number(item.generalMinimum),
       salaryText: item.salaryText || "", salaryEstimated: !!item.salaryEstimated,
+      applicableDeadline: item.applicableDeadline || "", deadlineBasis: item.deadlineBasis || "",
       family: item.family || "",
       confidence: item.confidence || "", employer: item.employer || "",
       employerMatch: item.employerMatch || ""
@@ -1258,7 +1269,15 @@ const FOOTNOTE = {
         "<em>minimum</em>, because appointment is at the band minimum unless the advert says otherwise. Failing " +
         "rows are shown, not hidden — seeing why a role failed is the point. <em>Employer uncertain</em> flags a " +
         "row whose advertised employer did not clearly match the watched company; <em>confirm code</em> flags a " +
-        "SOC that is a judgement call. Confirm everything on the advert before applying."
+        "SOC that is a judgement call. <strong>Two deadlines apply, and they differ:</strong> a shortage-list code " +
+        "(like data analyst 3544) is only on the list for a Certificate of Sponsorship <em>assigned</em> before " +
+        "31 December 2026 — after that it is closed; a higher-skilled code has no expiry of its own, so the binding " +
+        "date is your own Graduate visa, 31 March 2027. Higher-skilled codes are the durable route and sort first. " +
+        "<strong>The going rate and the £33,400 general minimum are two separate tests</strong> — a role can clear " +
+        "its code's going rate and still fail the general minimum, which is exactly what an NHS Band 5 at £32,073 " +
+        "does. The figures used are the <em>standard</em> going rate; the lower column on gov.uk applies only to " +
+        "Health and Care Worker visas and to people who already held Skilled Worker permission, neither of which " +
+        "applies here. Confirm everything on the advert before applying."
 };
 
 function renderAll(){
@@ -1298,21 +1317,28 @@ function renderCompanyWatch(){
   const found = all.length;
   const passes = all.filter(r => r.verdict === "pass").length;
   const failSalary = all.filter(r => r.verdict === "fail").length;
+  const tooLate = all.filter(r => r.verdict === "too_late").length;
 
   $("#tiles").innerHTML =
     '<div class="tile hero"><div><div class="lab">Sponsorable</div><div class="num">' + passes + '</div></div></div>' +
     '<div class="tile"><div class="lab">Vacancies today</div><div class="num">' + found + '</div></div>' +
     '<div class="tile"><div class="lab">Fail on salary alone</div><div class="num">' + failSalary + '</div></div>' +
+    '<div class="tile"><div class="lab">Too late (shortage list)</div><div class="num">' + tooLate + '</div></div>' +
     '<div class="tile"><div class="lab">Companies watched</div><div class="num">83</div></div>';
 
-  // deadline countdown + register freshness + last run
-  const left = cwDays(cwToday(), VISA_EXPIRY);
+  // two countdowns (data-driven) + register freshness + last run. The shortage
+  // list closing is the urgent one and renders in the danger colour under 120 days.
+  const dl = cwDeadlines();
+  const tslLeft = cwDays(cwToday(), dl.tsl), gradLeft = cwDays(cwToday(), dl.graduate);
+  const tslSoon = tslLeft != null && tslLeft < 120;
   const stamp = (all.find(r => r.registerCheckedOn) || {}).registerCheckedOn || "";
   const stale = stamp ? cwDays(stamp, cwToday()) : null;
-  const soon = left != null && left < 42;
-  let head = '<div class="cwdeadline' + (soon ? " soon" : "") + '">' +
-    '<span>Graduate visa deadline <strong>' + VISA_EXPIRY + '</strong> · a first CoS must be assigned before then</span>' +
-    (left != null ? '<span class="n">' + left + ' days left' + (soon ? " — a corporate hiring cycle may not complete in time" : "") + '</span>' : "");
+  let head = '<div class="cwdeadline' + (tslSoon ? " soon" : "") + '">' +
+    '<span>Shortage list closes <strong>' + esc(dl.tsl) + '</strong> — governs shortage-list codes (e.g. data analyst 3544)</span>' +
+    (tslLeft != null ? '<span class="n">' + tslLeft + ' days to the shortage-list deadline' +
+                       (tslSoon ? " — tight for a corporate hiring cycle" : "") + '</span>' : "") +
+    '<span class="reg">Graduate leave ends <strong>' + esc(dl.graduate) + '</strong>' +
+      (gradLeft != null ? ' · ' + gradLeft + ' days left' : "") + '</span>';
   if (stamp) head += '<span class="reg' + (stale != null && stale > 90 ? " stale" : "") + '">register checked ' + esc(stamp) +
                      (stale != null ? " · " + stale + "d ago" + (stale > 90 ? " (over 90 days — re-verify)" : "") : "") + '</span>';
   if (INDEX.updated) head += '<span class="reg">last run ' + esc(INDEX.updated.slice(0, 16).replace("T", " ")) + ' UTC · ok</span>';
@@ -1345,8 +1371,13 @@ function renderCompanyWatch(){
            'Adzuna API key (<code>ADZUNA_ID</code> / <code>ADZUNA_KEY</code>); without one this section ' +
            'is intentionally empty rather than pretending the market is quiet.</div>';
   } else {
+    body += '<div class="cwnote">Higher-skilled codes do not expire; shortage-list codes close on <strong>' +
+            esc(dl.tsl) + '</strong>. Higher-skilled roles are sorted first — they are the durable route now.</div>';
+    // Within a group, higher-skilled (graduate-visa deadline) above shortage-list.
+    const hsFirst = (a, b) => (a.deadlineBasis === "temporary shortage list") -
+                              (b.deadlineBasis === "temporary shortage list");
     VERDICT_GROUPS.forEach(([key, label]) => {
-      const g = shown.filter(r => r.verdict === key);
+      const g = shown.filter(r => r.verdict === key).sort(hsFirst);
       if (!g.length && CW.verdict && CW.verdict !== key) return;   // hide off-filter groups
       body += '<div class="cwgroup"><h3><span class="dot v-' + key + '"></span>' + label +
               '<span class="n">' + g.length + '</span></h3>';
@@ -1394,6 +1425,13 @@ function cwRow(r){
   const role = r.url
     ? '<a href="' + esc(r.url) + '" target="_blank" rel="noopener">' + esc(r.title) + '</a>'
     : esc(r.title);
+  const tsl = r.deadlineBasis === "temporary shortage list";
+  const dlChip = r.applicableDeadline
+    ? '<br><span class="dl' + (tsl ? " tsl" : "") + '" title="' +
+      esc(tsl ? "On the shortage list only for a CoS assigned before this date; after it the code is closed"
+              : "Your Graduate visa deadline — higher-skilled codes have no expiry of their own") + '">' +
+      (tsl ? "TSL" : "grad") + " · " + esc(r.applicableDeadline) + '</span>'
+    : "";
   return '<tr class="' + (r.employerMatch === "uncertain" ? "uncertain " : "") + (mark ? "marked" : "") + '">' +
     '<td class="co">' + esc(r.company) + '<span class="tierchip" title="' + esc(r.rating) + '">T' + esc(r.tier) + '</span></td>' +
     '<td class="role">' + role + badges + '</td>' +
@@ -1401,7 +1439,7 @@ function cwRow(r){
     '<td class="money' + (r.salaryEstimated ? " est" : "") + '"' +
       (r.salaryEstimated ? ' title="Estimated by Adzuna, not the advertised salary — confirm on the advert"' : "") +
       '>' + esc(r.salaryText || "—") + '</td>' +
-    '<td class="soccell">' + esc(r.soc) + '<br><span style="color:var(--text-38)">' + esc(r.family) + '</span></td>' +
+    '<td class="soccell">' + esc(r.soc) + '<br><span style="color:var(--text-38)">' + esc(r.family) + '</span>' + dlChip + '</td>' +
     '<td class="money">' + req + '</td>' +
     '<td class="money">' + gap + '</td>' +
     '<td class="reason">' + esc(r.reason) + '</td>' +

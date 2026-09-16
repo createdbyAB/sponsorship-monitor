@@ -1646,7 +1646,6 @@ CW_MAX_DAYS    = 30            # advert recency window for company watch
 CW_CALL_CAP    = 240          # safety cap on Adzuna calls per run (see budget note)
 CW_CACHE_DIR   = os.path.join(".cache", "companywatch")
 CW_CACHE_TTL   = 12 * 3600    # brief: cache >= 12h; this runs daily, not continuously
-VISA_EXPIRY    = "2027-03-31" # the Graduate visa deadline shown in the header
 REGISTER_STALE_DAYS = 90
 
 def load_companies():
@@ -1816,11 +1815,15 @@ def build_companywatch(sponsors):
     today_year = datetime.date.today().year
     calls = [0]
     adz = AdzunaCompanySource(calls)
-    rank = {"pass": 0, "unverified": 1, "fail": 2, "closed": 3}
-    status_of = {"pass": "strong", "unverified": "caution", "fail": "weak", "closed": "weak"}
+    rank = {"pass": 0, "unverified": 1, "fail": 2, "too_late": 3, "closed": 4}
+    status_of = {"pass": "strong", "unverified": "caution", "fail": "weak",
+                 "too_late": "weak", "closed": "weak"}
+    # Within a group, higher-skilled codes sort above shortage-list ones: they are
+    # the durable route (no expiry), shortage-list codes close 2026-12-31.
+    code_tier = lambda soc: 0 if soc in occ["higherSkilled"] else 1
     rows, seen_urls = [], set()
 
-    def emit(co, title, location, url, posted, description, employer, match, src, salary=None):
+    def emit(co, title, location, url, posted, description, employer, match, src, salary=None, closing=""):
         role = eligibility.match_role(title, roles, today_year=today_year)
         if not role:
             return                                 # not an entry/associate target role
@@ -1830,7 +1833,7 @@ def build_companywatch(sponsors):
         seen_urls.add(u)
         if salary is None:                         # ATS: read the real figure from the advert body
             salary = eligibility.find_salary(description) if description else {"stated": False}
-        v = eligibility.evaluate(role["soc"], salary, occ)
+        v = eligibility.evaluate(role["soc"], salary, occ, closing=closing)
         stated = salary.get("stated")
         estimated = bool(salary.get("predicted") and salary.get("min"))
         # A stated figure shows plainly; a predicted one as an estimate ("≈… est.")
@@ -1850,7 +1853,8 @@ def build_companywatch(sponsors):
             "requiredFloor": v["requiredFloor"], "advertisedFloor": v["advertisedFloor"],
             "shortfall": v["shortfall"], "headroom": v["headroom"],
             "generalMinimum": v["generalMinimum"], "proratedFloor": v["proratedFloor"],
-            "status": status_of[v["verdict"]], "deadline": "",
+            "applicableDeadline": v["applicableDeadline"], "deadlineBasis": v["deadlineBasis"],
+            "status": status_of[v["verdict"]], "deadline": closing,
             "score": 100 - rank[v["verdict"]] * 20,
         })
 
@@ -1872,14 +1876,15 @@ def build_companywatch(sponsors):
                          j["employer"], employer_match(j["employer"], co["searchAliases"]),
                          adz.name, salary=j["salary"] or {"stated": False})
 
-    rows.sort(key=lambda r: (rank[r["verdict"]], r["employerMatch"] == "uncertain",
-                             -(r["advertisedFloor"] or 0), r["company"]))
+    rows.sort(key=lambda r: (rank[r["verdict"]], code_tier(r["soc"]),
+                             r["employerMatch"] == "uncertain", -(r["advertisedFloor"] or 0), r["company"]))
     by_ats = sum(1 for r in rows if r["source"] != "adzuna")
     passes = sum(1 for r in rows if r["verdict"] == "pass")
     fails_salary = sum(1 for r in rows if r["verdict"] == "fail")
+    too_late = sum(1 for r in rows if r["verdict"] == "too_late")
     print("companywatch  %d companies (%d via ATS boards, %d Adzuna calls) -> %d roles "
-          "(%d ATS-sourced, %d pass, %d fail on salary)"
-          % (len(companies), len(boards), calls[0], len(rows), by_ats, passes, fails_salary),
+          "(%d ATS-sourced, %d pass, %d fail on salary, %d too late)"
+          % (len(companies), len(boards), calls[0], len(rows), by_ats, passes, fails_salary, too_late),
           file=sys.stderr)
     return rows
 
@@ -1953,10 +1958,21 @@ def write(day):
             except Exception:
                 pass
     days.sort(key=lambda d: d["date"], reverse=True)
+    # Company-watch deadlines, carried from occupations.json so the dashboard's
+    # two countdowns are data-driven, not hardcoded.
+    cw_meta = {}
+    try:
+        with open(os.path.join(CW_DIR, "occupations.json")) as f:
+            _o = json.load(f)
+        cw_meta = {"tslExpiry": _o.get("temporaryShortageListExpiry"),
+                   "graduateVisaExpiry": _o.get("graduateVisaExpiry"),
+                   "cosAssignmentAllowanceDays": _o.get("cosAssignmentAllowanceDays")}
+    except (OSError, ValueError):
+        pass
     with open(os.path.join(DATA_DIR, "index.json"), "w") as f:
         json.dump({"updated": datetime.datetime.now(datetime.timezone.utc)
                                        .replace(tzinfo=None).isoformat() + "Z",
-                   "floors": floors, "days": days}, f, indent=2)
+                   "floors": floors, "companyWatch": cw_meta, "days": days}, f, indent=2)
     print("Wrote", total, "opportunities for", today,
           "(" + ", ".join("%s %d" % (k, len(day[k])) for k in SECTIONS) + ")",
           file=sys.stderr)
@@ -2093,25 +2109,27 @@ def demo():
     # every group -- pass, salary not stated, fails on salary, closed code -- and
     # both employer-match states, verdicted through the real engine.
     _cw_occ, _cw_roles = eligibility.load(CW_DIR)
-    _cw_rank = {"pass": 0, "unverified": 1, "fail": 2, "closed": 3}
-    _cw_status = {"pass": "strong", "unverified": "caution", "fail": "weak", "closed": "weak"}
+    _cw_rank = {"pass": 0, "unverified": 1, "fail": 2, "too_late": 3, "closed": 4}
+    _cw_status = {"pass": "strong", "unverified": "caution", "fail": "weak",
+                  "too_late": "weak", "closed": "weak"}
     def cwmk(company, sector, tier, title, soc, family, confidence, salary, **kw):
         est = kw.get("estimated", False)
         # An estimate is not a stated salary, so the verdict is unverified; it is
         # shown as "≈… est." rather than blank.
         parsed = {"stated": False} if est or not salary else eligibility.parse_salary(salary)
-        v = eligibility.evaluate(soc, parsed, _cw_occ)
+        v = eligibility.evaluate(soc, parsed, _cw_occ, closing=kw.get("closing", ""))
         return mk(section="companywatch", company=company, sector=sector, tier=tier,
                   rating=kw.get("rating", "A rating"), registerCheckedOn="2026-09-16",
                   title=title, soc=soc, family=family, confidence=confidence,
                   salaryText=("≈%s est." % salary if est else (salary or "")),
                   salaryEstimated=est, employer=kw.get("employer", company),
-                  employerMatch=kw.get("employerMatch", "confirmed"),
+                  employerMatch=kw.get("employerMatch", "confirmed"), deadline=kw.get("closing", ""),
                   location=kw.get("location", ""), source="adzuna", status=_cw_status[v["verdict"]],
                   verdict=v["verdict"], reason=v["reason"], requiredFloor=v["requiredFloor"],
                   advertisedFloor=v["advertisedFloor"], shortfall=v["shortfall"],
                   headroom=v["headroom"], generalMinimum=v["generalMinimum"],
-                  proratedFloor=v["proratedFloor"],
+                  proratedFloor=v["proratedFloor"], applicableDeadline=v["applicableDeadline"],
+                  deadlineBasis=v["deadlineBasis"],
                   score=100 - _cw_rank[v["verdict"]] * 20)
     companywatch = [
         cwmk("Barclays", "Banking, finance and insurance", 1, "Data Analyst", "3544",
@@ -2126,6 +2144,10 @@ def demo():
              employer="NatWest Markets Plc", employerMatch="uncertain"),
         cwmk("Deloitte", "Tech, telecoms and consulting", 1, "Assistant Project Manager", "2440",
              "Project and change", "check", "£35,000", location="Manchester"),
+        # A shortage-list role (3544) that pays enough but closes too near the
+        # 31 Dec 2026 deadline to reach an assigned CoS in time -> too late.
+        cwmk("Experian", "Banking, finance and insurance", 1, "Data Analyst", "3544",
+             "Data and analytics", "established", "£40,000", location="Nottingham", closing="2026-12-10"),
         cwmk("Bupa", "Healthcare, pharma and life sciences", 1, "Health and Safety Analyst", "3582",
              "Health & safety", "established", "£40,000", location="Salford"),
     ]

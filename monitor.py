@@ -400,7 +400,7 @@ DATA_DIR = os.path.join("docs", "data")
 
 # The dashboard tabs, in order. One place to add a section, so the stamp, the
 # counts and the written payload can never drift out of step.
-SECTIONS = ("jobs", "hs", "phd", "pt", "nhs")
+SECTIONS = ("jobs", "hs", "phd", "pt", "nhs", "companywatch")
 
 # Routes a title into the health and safety section. Deliberately narrow at the
 # edges: "Health and Social Care" and "Healthcare Architecture" must not match.
@@ -476,7 +476,7 @@ def is_sponsor(company, sponsors):
     return bool(difflib.get_close_matches(c, sponsors, n=1, cutoff=0.93))
 
 def adzuna(keyword=None, where=None, part_time=False, full_time=False, max_days=MAX_DAYS_OLD,
-           category=None):
+           category=None, company=None):
     params = {
         "app_id": ADZUNA_ID, "app_key": ADZUNA_KEY, "results_per_page": 50,
         "max_days_old": max_days, "sort_by": "date",
@@ -485,6 +485,11 @@ def adzuna(keyword=None, where=None, part_time=False, full_time=False, max_days=
         params["what"] = keyword
     if category:
         params["category"] = category   # slug, e.g. engineering-jobs; sweeps a whole field
+    if company:
+        # Adzuna's company filter is a loose keyword match on the employer name,
+        # not an anchored exact match, so the caller must re-verify each returned
+        # advert's employer against the company's aliases (see employer_match).
+        params["company"] = company
     if where:
         params["where"] = where
         params["distance"] = PT_DISTANCE
@@ -496,7 +501,7 @@ def adzuna(keyword=None, where=None, part_time=False, full_time=False, max_days=
     try:
         return json.loads(fetch(f"https://api.adzuna.com/v1/api/jobs/{COUNTRY}/search/1?{q}")).get("results", [])
     except Exception as e:
-        print("Adzuna error:", keyword or category, e, file=sys.stderr)
+        print("Adzuna error:", keyword or category or company, e, file=sys.stderr)
         return []
 
 # ---------------------------------------------------------------- jobs.ac.uk
@@ -1183,12 +1188,14 @@ def build_today():
     phd = build_phds()
     pt = build_parttime()
     nhs = build_nhs(sponsors)
+    companywatch = build_companywatch(sponsors)
 
     for bucket in (jobs, hs, phd):
         bucket.sort(key=lambda m: m["score"], reverse=True)
-    # pt and nhs are already sorted by their own key; leave that order intact.
+    # pt, nhs and companywatch are already sorted by their own key; leave intact.
     print("Adzuna calls:", calls + len(PT_QUERIES) + len(PT_FT_QUERIES), file=sys.stderr)
-    return {"jobs": jobs, "hs": hs, "phd": phd, "pt": pt, "nhs": nhs}
+    return {"jobs": jobs, "hs": hs, "phd": phd, "pt": pt, "nhs": nhs,
+            "companywatch": companywatch}
 
 def build_phds():
     """Funded PhD openings, ranked against the research interests.
@@ -1623,6 +1630,229 @@ def build_nhs(sponsors):
              min(len(found), NHS_ENRICH)), file=sys.stderr)
     return out
 
+# ============================================================================
+# Company watch. Watches a fixed list of register-verified employers (not
+# occupation codes) and surfaces only their entry/associate vacancies that could
+# convert into a FIRST Certificate of Sponsorship. The eligibility test is the
+# value, not the feed: see eligibility.py. Config data lives in data/, never in
+# code. Off unless Adzuna keys are set; the section renders an honest empty state
+# without them.
+# ============================================================================
+import eligibility
+import ats
+
+CW_DIR         = "data"
+CW_MAX_DAYS    = 30            # advert recency window for company watch
+CW_CALL_CAP    = 240          # safety cap on Adzuna calls per run (see budget note)
+CW_CACHE_DIR   = os.path.join(".cache", "companywatch")
+CW_CACHE_TTL   = 12 * 3600    # brief: cache >= 12h; this runs daily, not continuously
+VISA_EXPIRY    = "2027-03-31" # the Graduate visa deadline shown in the header
+REGISTER_STALE_DAYS = 90
+
+def load_companies():
+    with open(os.path.join(CW_DIR, "companies.json")) as f:
+        return json.load(f)
+
+def _cw_cache(key):
+    os.makedirs(CW_CACHE_DIR, exist_ok=True)
+    return os.path.join(CW_CACHE_DIR, re.sub(r"[^a-z0-9]+", "_", key.lower())[:120] + ".json")
+
+def employer_match(display_name, aliases):
+    """Anchored re-verification of a returned advert's employer against a
+    company's aliases -- Adzuna's company filter is a loose keyword match, so a
+    row that does not anchor closely to an alias is flagged 'uncertain' rather
+    than trusted or dropped. Anchored to the START of the name, the same rule
+    that built companies.json (a mid-string match returned 'Visage' for Sage)."""
+    d = norm(display_name)
+    if not d:
+        return "uncertain"
+    for a in aliases:
+        na = norm(a)
+        if not na:
+            continue
+        if d == na or d.startswith(na) or na.startswith(d):
+            if abs(len(d) - len(na)) <= 8:
+                return "confirmed"
+    return "uncertain"
+
+class AdzunaCompanySource:
+    """One JobSource adapter. A second source (Reed, Find a job) can implement the
+    same fetch(alias) -> [vacancy dict] and slot in without touching the filter."""
+    name = "adzuna"
+
+    def __init__(self, calls):
+        self.calls = calls          # mutable [int] budget counter shared with build_today
+
+    def _get(self, alias):
+        cache = _cw_cache(self.name + "|" + alias)
+        try:
+            if time.time() - os.path.getmtime(cache) < CW_CACHE_TTL:
+                with open(cache) as f:
+                    return json.load(f)
+        except OSError:
+            pass
+        if self.calls[0] >= CW_CALL_CAP:
+            return []
+        self.calls[0] += 1
+        rows = adzuna(company=alias, max_days=CW_MAX_DAYS)
+        time.sleep(0.3)                 # be polite to the API's rate limit
+        try:
+            with open(cache, "w") as f:
+                json.dump(rows, f)
+        except OSError:
+            pass
+        return rows
+
+    def fetch(self, alias):
+        out = []
+        for j in self._get(alias):
+            comp = (j.get("company") or {}).get("display_name", "")
+            predicted = str(j.get("salary_is_predicted", "0")) == "1"
+            lo, hi = j.get("salary_min"), j.get("salary_max")
+            out.append({
+                "id": str(j.get("id", "")), "title": re.sub("<.*?>", "", j.get("title") or ""),
+                "employer": comp, "location": (j.get("location") or {}).get("display_name", ""),
+                "url": j.get("redirect_url", ""), "posted": (j.get("created") or "")[:10],
+                # Adzuna gives a numeric band; the minimum is what we test. A
+                # predicted (estimated) figure is not an advertised salary.
+                "salary": None if predicted or not lo else
+                          {"min": round(lo), "max": round(hi or lo), "period": "year",
+                           "stated": True, "note": ""},
+                "salaryText": "" if not lo else ("£%s" % format(int(lo), ",") +
+                              ("" if not hi or hi == lo else "–£%s" % format(int(hi), ","))),
+            })
+        return out
+
+# ATS boards list an employer's jobs worldwide; company watch is about UK
+# sponsorship, so an ATS row with a clearly non-UK location is dropped. (Adzuna
+# is already GB-scoped.) A blank location is kept -- it cannot be ruled out.
+_CW_UK = re.compile(
+    r"\b(united kingdom|\buk\b|\bg\.?b\.?\b|great britain|england|scotland|wales|"
+    r"northern ireland|london|manchester|birmingham|leeds|glasgow|edinburgh|bristol|"
+    r"liverpool|sheffield|newcastle|nottingham|cardiff|belfast|leicester|coventry|"
+    r"reading|cambridge|oxford|milton keynes|swindon|southampton|portsmouth|brighton|"
+    r"norwich|york|derby|warwick|warrington|hatfield|welwyn|winchester|slough|bracknell|"
+    r"newbury|windsor|knutsford|northampton|bournemouth|telford|farnborough|harrow|"
+    r"uxbridge|stevenage|macclesfield|hinxton|sandwich|tadworth|perth|swansea|aberdeen|"
+    r"remote,? uk|uk remote|hybrid.*uk)\b", re.I)
+
+def _looks_uk(location):
+    loc = (location or "").strip()
+    return (not loc) or bool(_CW_UK.search(loc))
+
+def load_company_boards():
+    """{company name -> [board, ...]}, board = {ats, slug} or a workday dict. The
+    ATS map: which employers can be sourced directly and precisely. Missing file
+    or a company absent from it means that company falls back to Adzuna."""
+    try:
+        with open(os.path.join(CW_DIR, "companyBoards.json")) as f:
+            data = json.load(f)
+    except (OSError, ValueError):
+        return {}
+    return {k: v for k, v in data.items() if not k.startswith("_")}
+
+def _ats_board(board):
+    """Fetch one ATS board, 12h-cached and polite -- same cache as the Adzuna
+    source, so a re-run within the window re-bills nobody."""
+    key = "ats|%s|%s" % (board.get("ats"), board.get("slug") or board.get("tenant", ""))
+    cache = _cw_cache(key)
+    try:
+        if time.time() - os.path.getmtime(cache) < CW_CACHE_TTL:
+            with open(cache) as f:
+                return json.load(f)
+    except OSError:
+        pass
+    rows = ats.fetch_board(board)
+    try:
+        with open(cache, "w") as f:
+            json.dump(rows, f)
+    except OSError:
+        pass
+    time.sleep(0.3)
+    return rows
+
+def build_companywatch(sponsors):
+    """Vacancies at the watched employers, verdicted against the eligibility gate.
+
+    Primary feed is direct ATS sourcing (ats.py): an endpoint keyed by the
+    employer's own board slug, so every row is definitionally that employer's and
+    the advert body carries the real salary. Companies with no board mapping fall
+    back to the Adzuna company filter, whose employer name is re-verified and
+    whose predicted salaries read as 'not stated'. Failing rows are kept and
+    rendered as failing -- seeing why a role failed is the point."""
+    companies = load_companies()
+    boards = load_company_boards()
+    occ, roles = eligibility.load(CW_DIR)
+    have_adzuna = bool(ADZUNA_ID and ADZUNA_KEY)
+    if not boards and not have_adzuna:
+        print("companywatch  no ATS map and no Adzuna key -> empty (honest empty state)",
+              file=sys.stderr)
+        return []
+    today_year = datetime.date.today().year
+    calls = [0]
+    adz = AdzunaCompanySource(calls)
+    rank = {"pass": 0, "unverified": 1, "fail": 2, "closed": 3}
+    status_of = {"pass": "strong", "unverified": "caution", "fail": "weak", "closed": "weak"}
+    rows, seen_urls = [], set()
+
+    def emit(co, title, location, url, posted, description, employer, match, src, salary=None):
+        role = eligibility.match_role(title, roles, today_year=today_year)
+        if not role:
+            return                                 # not an entry/associate target role
+        u = (url or "").split("?")[0]
+        if not u or u in seen_urls:
+            return
+        seen_urls.add(u)
+        if salary is None:                         # ATS: read the real figure from the advert body
+            salary = eligibility.find_salary(description) if description else {"stated": False}
+        v = eligibility.evaluate(role["soc"], salary, occ)
+        stated = salary.get("stated")
+        salary_text = "" if not stated else ("£%s" % format(int(salary["min"]), ",") +
+                      ("" if salary["max"] == salary["min"] else "–£%s" % format(int(salary["max"]), ",")))
+        rows.append({
+            "section": "companywatch", "company": co["name"], "sector": co["sector"],
+            "tier": co["tier"], "rating": co["rating"], "registerCheckedOn": co["registerCheckedOn"],
+            "title": title, "location": location, "url": url, "posted": posted, "source": src,
+            "employer": employer, "employerMatch": match,
+            "salaryText": salary_text, "soc": role["soc"], "family": role["family"],
+            "confidence": role["confidence"],
+            "verdict": v["verdict"], "reason": v["reason"],
+            "requiredFloor": v["requiredFloor"], "advertisedFloor": v["advertisedFloor"],
+            "shortfall": v["shortfall"], "headroom": v["headroom"],
+            "generalMinimum": v["generalMinimum"], "proratedFloor": v["proratedFloor"],
+            "status": status_of[v["verdict"]], "deadline": "",
+            "score": 100 - rank[v["verdict"]] * 20,
+        })
+
+    ats_boards = 0
+    for co in companies:
+        cb = boards.get(co["name"])
+        if cb:                                     # direct ATS: precise, real salaries
+            for board in cb:
+                ats_boards += 1
+                for j in _ats_board(board):
+                    if not _looks_uk(j["location"]):
+                        continue                   # ATS boards are global; keep UK only
+                    emit(co, j["title"], j["location"], j["url"], j["posted"],
+                         j.get("description", ""), co["name"], "confirmed", board["ats"])
+        elif have_adzuna:                          # fallback: Adzuna company filter
+            for alias in co["searchAliases"]:
+                for j in adz.fetch(alias):
+                    emit(co, j["title"], j["location"], j["url"], j["posted"], "",
+                         j["employer"], employer_match(j["employer"], co["searchAliases"]),
+                         adz.name, salary=j["salary"] or {"stated": False})
+
+    rows.sort(key=lambda r: (rank[r["verdict"]], r["employerMatch"] == "uncertain",
+                             -(r["advertisedFloor"] or 0), r["company"]))
+    by_ats = sum(1 for r in rows if r["source"] != "adzuna")
+    passes = sum(1 for r in rows if r["verdict"] == "pass")
+    fails_salary = sum(1 for r in rows if r["verdict"] == "fail")
+    print("companywatch  %d companies (%d via ATS boards, %d Adzuna calls) -> %d roles "
+          "(%d ATS-sourced, %d pass, %d fail on salary)"
+          % (len(companies), len(boards), calls[0], len(rows), by_ats, passes, fails_salary),
+          file=sys.stderr)
+    return rows
+
 SEEN_PATH = os.path.join(DATA_DIR, "seen.json")
 SEEN_KEEP_DAYS = 180
 
@@ -1829,7 +2059,46 @@ def demo():
         nhsmk(45, "unstated", title="Administrator", employer="Berkshire Healthcare NHS Foundation Trust",
               location="Reading", salary=25760, deadline=d(6)),
     ]
-    return {"jobs": jobs, "hs": hs, "phd": phd, "pt": pt, "nhs": nhs}
+    # Company watch: the eligibility verdict is the point, so the sample covers
+    # every group -- pass, salary not stated, fails on salary, closed code -- and
+    # both employer-match states, verdicted through the real engine.
+    _cw_occ, _cw_roles = eligibility.load(CW_DIR)
+    _cw_rank = {"pass": 0, "unverified": 1, "fail": 2, "closed": 3}
+    _cw_status = {"pass": "strong", "unverified": "caution", "fail": "weak", "closed": "weak"}
+    def cwmk(company, sector, tier, title, soc, family, confidence, salary, **kw):
+        parsed = eligibility.parse_salary(salary) if salary else {"stated": False}
+        v = eligibility.evaluate(soc, parsed, _cw_occ)
+        return mk(section="companywatch", company=company, sector=sector, tier=tier,
+                  rating=kw.get("rating", "A rating"), registerCheckedOn="2026-09-16",
+                  title=title, soc=soc, family=family, confidence=confidence,
+                  salaryText=salary or "", employer=kw.get("employer", company),
+                  employerMatch=kw.get("employerMatch", "confirmed"),
+                  location=kw.get("location", ""), source="adzuna", status=_cw_status[v["verdict"]],
+                  verdict=v["verdict"], reason=v["reason"], requiredFloor=v["requiredFloor"],
+                  advertisedFloor=v["advertisedFloor"], shortfall=v["shortfall"],
+                  headroom=v["headroom"], generalMinimum=v["generalMinimum"],
+                  proratedFloor=v["proratedFloor"],
+                  score=100 - _cw_rank[v["verdict"]] * 20)
+    companywatch = [
+        cwmk("Barclays", "Banking, finance and insurance", 1, "Data Analyst", "3544",
+             "Data and analytics", "established", "£38,000", location="Glasgow",
+             employer="Barclays Execution Services Limited"),
+        cwmk("Sage Group", "Tech, telecoms and consulting", 1, "Product Designer", "2141",
+             "Design", "established", "£41,000", location="Newcastle"),
+        cwmk("Ocado", "Energy, utilities, retail and logistics", 1, "Business Analyst", "2136",
+             "Technology", "check", "Competitive", location="Hatfield"),
+        cwmk("NatWest Group", "Banking, finance and insurance", 1, "Data Analyst", "3544",
+             "Data and analytics", "established", "£32,073 to £39,043", location="Edinburgh",
+             employer="NatWest Markets Plc", employerMatch="uncertain"),
+        cwmk("Deloitte", "Tech, telecoms and consulting", 1, "Assistant Project Manager", "2440",
+             "Project and change", "check", "£35,000", location="Manchester"),
+        cwmk("Bupa", "Healthcare, pharma and life sciences", 1, "Health and Safety Analyst", "3582",
+             "Health & safety", "established", "£40,000", location="Salford"),
+    ]
+    companywatch.sort(key=lambda r: (_cw_rank[r["verdict"]], r["employerMatch"] == "uncertain",
+                                     -(r["advertisedFloor"] or 0)))
+    return {"jobs": jobs, "hs": hs, "phd": phd, "pt": pt, "nhs": nhs,
+            "companywatch": companywatch}
 
 def filter_sponsorable(day):
     """Drop rows the occupation-code gate rejects. Only touches rows that carry a

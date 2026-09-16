@@ -4,9 +4,9 @@ A daily dashboard of recent UK jobs at employers **licensed to sponsor a Skilled
 
 The interface is the **Control Room** design system: dark mode first, mobile first, with light mode as a first-class swap of the same tokens. Every card leads with the two things worth judging fast, a fit score out of 100 and an eligibility status. Status colour is always paired with an icon and a word, so colour never carries meaning on its own.
 
-## The five sections
+## The six sections
 
-One shell, one card language, five tabs.
+One shell, one card language, six tabs.
 
 | Tab | What it holds | What the card adds |
 | --- | --- | --- |
@@ -15,6 +15,7 @@ One shell, one card language, five tabs.
 | **PhD** | funded chemical engineering studentships | funding, international eligibility, deadline |
 | **Part-time** | part-time roles in Leicester, no sponsor check | estimated hourly rate, pay tier, CV-fit tag |
 | **NHS** | NHS Jobs roles, clinical and non-clinical, open to sponsorship | the advert's own sponsorship line, closing date |
+| **Companies** | vacancies at 83 register-verified employers, verdicted against all three sponsorship tests | required floor, the salary gap, pass/fail reason |
 
 ## Sponsored jobs
 
@@ -100,6 +101,39 @@ Adverts that **explicitly rule sponsorship out** are dropped, so you never see a
 **How it stays cheap.** NHS search returns hundreds of hits, and reading every advert's detail page would be slow. So it runs as a two-stage funnel: a cheap listing gate first (NHS-named employer *or* on the register, plus a salary floor), then it fetches detail pages only for the top `NHS_ENRICH` roles by fit to read the sponsorship line and closing date. The rest are shown as "can sponsor" on the listing signal alone. Tune the search with `NHS_QUERIES`, the depth with `NHS_PAGES`, the floor with `NHS_FLOOR`, and the enrichment cap with `NHS_ENRICH`.
 
 New postings are the point of the tab — the daily run stamps each role's first-seen date, so anything posted since the last run shows under **New**. No API key is needed; the site has no `robots.txt` and the scrape is polite (descriptive user agent, a pause between requests).
+
+## Company watch
+
+Every other section watches occupation codes. This one watches **employers** — a fixed list of 83 UK companies in `data/companies.json`, each confirmed on the Home Office register of licensed sponsors with an A-rated (or A (Premium)) Skilled Worker licence, checked on 16 September 2026. It surfaces only their entry- and associate-level vacancies, and puts every one through the full eligibility test.
+
+**The filter is the value, not the feed.** A licensed employer is *not* a sponsorable job. Three things must all hold for a first Certificate of Sponsorship, and most job boards test none of them:
+
+1. **The employer holds an A-rated licence.** Every company here already passes; the section footer shows `registerCheckedOn` and warns when it is over 90 days old, because ratings can be downgraded.
+2. **The occupation code is open to a first CoS.** Since 22 July 2025, a first CoS needs the code to be Higher Skilled (RQF 6+), *or* Medium Skilled *and* on the Temporary Shortage List. Codes on neither are closed at any salary.
+3. **The job pays the floor for that code.** A band is tested at its **minimum** — appointment is at the band minimum unless the advert says otherwise, so an NHS Band 5 at £32,073–£39,043 *fails* against the £34,900 rate for code 3544, even though its top clears it.
+
+A row that fails any test is **shown as failing**, with the reason and the arithmetic (`£2,827 below the £34,900 rate for code 3544`). Seeing *why* a role failed is the point; the most useful number in the header is how many fail on salary *alone*, because that is how close the market is. Passing rows sort first, then salary-not-stated (amber, never counted as passing), then fails, then closed codes.
+
+**The eligibility engine** (`eligibility.py`) is pure and unit-tested (`python3 -m unittest test_eligibility`) — title→SOC matching, salary parsing and the verdict, with every threshold read from `data/occupations.json` and every title rule from `data/roleFamilies.json`, never hardcoded. Higher-skilled floors pro-rate below a 37.5-hour week but never below the £33,400 general minimum, which itself never pro-rates; shortage-list rates take no new-entrant discount. The seven tests in `test_eligibility.py` pin these, including the band-minimum failure that cost a real application.
+
+**The feed is direct ATS scraping, with Adzuna as a fallback.** Almost every one of these employers runs its careers site on a third-party Applicant Tracking System (Greenhouse, Lever, Ashby, SmartRecruiters, Workable, Workday…), and those ATS expose a **public, unauthenticated JSON endpoint keyed by a board slug** — the same data the front end renders, without scraping the rendered page. Hitting it (`ats.py`) returns exactly one employer's postings, so an ATS-sourced row is *definitionally* that employer's — no name-matching, always `employerMatch: confirmed` — and the advert body carries the real advertised salary. This is the [open-jobs](https://github.com/elliottdehn/open-jobs) approach (CC0), ported to Python: one adapter per ATS, all normalising to the same `Vacancy` shape. `data/companyBoards.json` maps each mapped company to its confirmed `{ats, slug}` (Workday boards carry `host`/`tenant`/`site`); **31 of the 83** are mapped today, and the map is easy to extend.
+
+A company with no board mapping falls back to **`AdzunaCompanySource`** — the same `JobSource` interface, so the eligibility filter is untouched by source. Adzuna's own company filter is a loose keyword match, not an anchored one, so there each returned advert's employer is re-verified against the company's `searchAliases`, anchored to the start of the name (the rule that built `companies.json` — it turns *Visage* away from *Sage*); a row that does not anchor is flagged **EMPLOYER ?** and dimmed rather than dropped or trusted. Adzuna also returns *predicted* salaries, which read as "salary not stated" — another reason ATS, with the real figure, is preferred. Responses from both sources are cached for 12 hours under a gitignored `.cache/`.
+
+Adverts also carry a **CONFIRM CODE** flag where the title→SOC mapping is a judgement call (`confidence: "check"` in `roleFamilies.json`), and the header counts down to the **31 March 2027** Graduate-visa deadline a first CoS must beat.
+
+### Adding an ATS board
+
+To move a company off the Adzuna fallback onto its precise ATS feed: open its careers page, see which ATS host serves the listings (a `*.myworkdayjobs.com`, `boards.greenhouse.io`, `jobs.lever.co`, `jobs.smartrecruiters.com`, `apply.workable.com`, …), then **confirm** the endpoint returns that employer's UK jobs before adding it to `data/companyBoards.json` — never guess a slug (slug collisions are real: a `tcs` Greenhouse board is a UK healthcare provider, not Tata Consultancy). Supported ATS: Greenhouse, Lever, Ashby, SmartRecruiters, Workable, Recruitee, and Workday. Bespoke portals and Oracle/Taleo, SAP SuccessFactors, Phenom and Eightfold sites are not supported — those companies stay on Adzuna.
+
+### Turning it on, adding a company, updating the rules
+
+- **Environment variables.** ATS sourcing needs **no key** (the endpoints are public), so the 31 ATS-mapped companies work out of the box. The Adzuna fallback for the other 52 reuses the existing `ADZUNA_ID` / `ADZUNA_KEY` (see setup below). With neither an ATS map nor a key, the section renders an honest empty state rather than pretending the market is quiet — it never fails the rest of the page.
+- **Adding a company.** Append to `data/companies.json` following `data/README.md`: verify on the register **first**, anchored to the start of the name, list every legal entity in `searchAliases`, and set `registerCheckedOn`. A test asserts the file holds 83 entries, all `verifiedAgainstRegister`, all with non-empty aliases, so a truncated file fails the build — bump that number when you add one. Then, ideally, map its ATS board (above) so it uses the precise feed.
+- **Updating the thresholds.** Edit `data/occupations.json` when the Temporary Shortage List or the going rates are revised, and move its `expiry` to the new review date. Edit `data/roleFamilies.json` to change which titles are watched or their SOC. No figure or company name lives in code.
+- **Budget.** ATS calls are free (public endpoints), rate-limited and 12-hour cached. The Adzuna fallback queries every alias of the ~52 unmapped companies — bounded by `CW_CALL_CAP` and cached — so mapping more ATS boards *reduces* the Adzuna spend. A busy fallback list may still want a higher Adzuna tier.
+
+*(This is the [open-jobs](https://github.com/elliottdehn/open-jobs) approach: don't scrape the JavaScript-rendered career pages — hit each ATS's public JSON endpoint, keyed by the employer's own board slug, which is precise and unauthenticated. The remaining 52 companies run bespoke portals or unsupported systems, Oracle/Taleo, SAP SuccessFactors, Phenom, Eightfold, so they stay on the Adzuna fallback until an adapter or mapping is added.)*
 
 ## Where the data comes from
 

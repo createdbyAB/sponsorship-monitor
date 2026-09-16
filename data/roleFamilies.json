@@ -1,0 +1,30 @@
+{
+  "_comment": "Title -> SOC role matching for the Company watch section. First match wins, matched on lowercase substrings, so more specific / exception phrases are listed BEFORE the general family they would otherwise fall into (e.g. 'risk analyst' -> 3544 ahead of the audit family, 'esg data analyst' -> 3544 ahead of 'esg analyst'). confidence 'check' means the SOC is a judgement call and the card must show a caution to confirm the code before applying.",
+  "families": [
+    {"family": "Data and analytics", "soc": "3544", "confidence": "established",
+     "titles": ["esg data analyst", "data quality analyst", "data governance analyst",
+                "business intelligence analyst", "bi analyst", "mi analyst",
+                "management information analyst", "reporting analyst", "insight analyst",
+                "risk analyst", "data analyst"]},
+    {"family": "Data engineering and science", "soc": "2136", "confidence": "check",
+     "titles": ["analytics engineer", "data engineer", "junior data scientist"]},
+    {"family": "Audit, risk and controls", "soc": "2431", "confidence": "check",
+     "titles": ["internal audit", "data assurance", "controls testing"]},
+    {"family": "Project and change", "soc": "2440", "confidence": "check",
+     "titles": ["assistant project manager", "project support officer",
+                "pmo analyst", "business change analyst"]},
+    {"family": "Technology", "soc": "2136", "confidence": "check",
+     "titles": ["business analyst", "product analyst", "junior software",
+                "graduate software", "associate developer"]},
+    {"family": "Design", "soc": "2141", "confidence": "established",
+     "titles": ["ux researcher", "ux designer", "product designer", "service designer"]},
+    {"family": "Sustainability", "soc": "2152", "confidence": "check",
+     "titles": ["sustainability analyst", "sustainability officer", "esg analyst"]}
+  ],
+  "excludeTitles": ["graduate scheme", "graduate programme", "internship", "intern",
+                    "placement", "apprentice", "apprenticeship", "summer analyst",
+                    "industrial placement", "work experience", "volunteer",
+                    "health and safety", "hse", "ehs", "sheq"],
+  "excludeSeniority": ["senior", "lead", "principal", "head of", "manager", "director", "staff ", "vice president", " vp", "chief"],
+  "seniorityKeep": ["assistant project manager"]
+}

@@ -69,7 +69,7 @@ The primary feed's ATS map: company `name` → a list of boards, each `{ats, slu
 sourced **directly from its ATS's public JSON endpoint** — precise, real salaries,
 `employerMatch: confirmed` — instead of the Adzuna company filter. A company absent
 here falls back to Adzuna. Supported ATS: greenhouse, lever, ashby, smartrecruiters,
-workable, recruitee, workday. 31 of the 83 are mapped as at 16 September 2026.
+workable, recruitee, workday. 47 of the 83 are mapped as at 16 September 2026.
 
 **Confirm before adding, never guess a slug.** Slug collisions are real — a `tcs`
 Greenhouse board is a UK healthcare provider, not Tata Consultancy; a `nationwide`

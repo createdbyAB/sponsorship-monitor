@@ -30,5 +30,22 @@
   "ICON Clinical Research": [{"ats": "workday", "host": "icon.wd3.myworkdayjobs.com", "tenant": "icon", "site": "broadbean_external"}],
   "Roche Products": [{"ats": "workday", "host": "roche.wd3.myworkdayjobs.com", "tenant": "roche", "site": "roche-ext"}],
   "Wellcome Sanger Institute": [{"ats": "workday", "host": "sanger.wd103.myworkdayjobs.com", "tenant": "sanger", "site": "WellcomeSangerInstitute"}],
-  "BP": [{"ats": "workday", "host": "bpinternational.wd3.myworkdayjobs.com", "tenant": "bpinternational", "site": "bpCareers"}]
+  "BP": [{"ats": "workday", "host": "bpinternational.wd3.myworkdayjobs.com", "tenant": "bpinternational", "site": "bpCareers"}],
+
+  "Barclays": [{"ats": "workday", "host": "barclays.wd3.myworkdayjobs.com", "tenant": "barclays", "site": "External_Career_Site_Barclays"}],
+  "Lloyds Banking Group": [{"ats": "workday", "host": "lbg.wd3.myworkdayjobs.com", "tenant": "lbg", "site": "lbg_Careers"}],
+  "ASDA": [{"ats": "workday", "host": "asda.wd103.myworkdayjobs.com", "tenant": "asda", "site": "AsdaJobs"}],
+  "Ordnance Survey": [{"ats": "workday", "host": "ordnancesurvey.wd3.myworkdayjobs.com", "tenant": "ordnancesurvey", "site": "OS_Careers"}],
+  "Sky": [{"ats": "workday", "host": "sky.wd3.myworkdayjobs.com", "tenant": "sky", "site": "sky_careers"}],
+  "Kainos": [{"ats": "workday", "host": "kainos.wd3.myworkdayjobs.com", "tenant": "kainos", "site": "Kainos"}],
+  "Accenture": [{"ats": "workday", "host": "accenture.wd103.myworkdayjobs.com", "tenant": "accenture", "site": "AccentureCareers"}],
+  "Cognizant": [{"ats": "smartrecruiters", "slug": "CognizantTechnologies2"}],
+  "Schroders": [{"ats": "oraclecloud", "host": "ekbq.fa.em2.oraclecloud.com", "site": "CX_2"}],
+  "Nationwide Building Society": [{"ats": "oraclecloud", "host": "dnn.fa.em2.oraclecloud.com", "site": "CX_1"}],
+  "Marks and Spencer": [{"ats": "oraclecloud", "host": "fa-eqid-saasfaprod1.fa.ocs.oraclecloud.com", "site": "CX_1"}],
+  "JPMorganChase": [{"ats": "oraclecloud", "host": "jpmc.fa.oraclecloud.com", "site": "CX_1001"}],
+  "Sainsbury's": [{"ats": "oraclecloud", "host": "hdhe.fa.em3.oraclecloud.com", "site": "CX"}],
+  "Oxford Nanopore": [{"ats": "oraclecloud", "host": "ejnh.fa.em2.oraclecloud.com"}],
+  "HSBC": [{"ats": "eightfold", "host": "hsbc.eightfold.ai", "domain": "hsbc.com"}],
+  "Vodafone": [{"ats": "eightfold", "host": "jobs.vodafone.com", "domain": "vodafone.com"}]
 }

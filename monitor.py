@@ -1736,9 +1736,23 @@ _CW_UK = re.compile(
     r"uxbridge|stevenage|macclesfield|hinxton|sandwich|tadworth|perth|swansea|aberdeen|"
     r"remote,? uk|uk remote|hybrid.*uk)\b", re.I)
 
+# A clear non-UK country or city wins even if a UK city name is a substring
+# ("New York" contains "york", "London, Ontario" contains "london").
+_CW_NON_UK = re.compile(
+    r"\b(united states|u\.?s\.?a?|america|new york|san francisco|boston|chicago|"
+    r"seattle|austin|canada|toronto|ontario|india|bangalore|bengaluru|hyderabad|"
+    r"pune|mumbai|chennai|gurgaon|noida|germany|berlin|munich|france|paris|spain|"
+    r"madrid|barcelona|italy|milan|rome|netherlands|amsterdam|poland|warsaw|krakow|"
+    r"romania|hungary|budapest|serbia|ireland|dublin|brazil|mexico|australia|sydney|"
+    r"melbourne|singapore|china|shanghai|beijing|japan|tokyo|dubai|\buae\b|hong kong|"
+    r"switzerland|zurich|sweden|belgium|portugal|lisbon|philippines|malaysia|"
+    r"south africa|nigeria|kenya|egypt|new jersey|texas|florida|california)\b", re.I)
+
 def _looks_uk(location):
     loc = (location or "").strip()
-    return (not loc) or bool(_CW_UK.search(loc))
+    if not loc:
+        return True                              # cannot rule out; keep
+    return bool(_CW_UK.search(loc)) and not _CW_NON_UK.search(loc)
 
 def load_company_boards():
     """{company name -> [board, ...]}, board = {ats, slug} or a workday dict. The

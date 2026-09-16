@@ -178,23 +178,145 @@ def workday(board):
                 if not path or path in seen:
                     continue
                 seen.add(path)
-                out.append({"id": path, "title": j.get("title", ""),
-                            "location": j.get("locationsText", ""),
+                # Some tenants (e.g. Accenture) return locationsText null and put
+                # the location in the externalPath: /job/{location}/{slug}_{id}.
+                loc = j.get("locationsText") or ""
+                if not loc:
+                    seg = path.split("/")
+                    if len(seg) >= 3 and seg[1] == "job":
+                        loc = urllib.parse.unquote(seg[2]).replace("-", " ")
+                out.append({"id": path, "title": j.get("title", ""), "location": loc,
                             "url": "https://%s%s" % (host, path),
                             "posted": "", "description": ""})
         return out
     return _safe(go, "workday/" + tenant)
 
 
+# Enterprise ATS the big corporates use. Each is heavier than the startup ATS:
+# Oracle Cloud must discover its site; Eightfold and Phenom page small and carry
+# no salary in the listing (so their rows read "unverified" until opened).
+_ENTERPRISE_SEARCHES = ("data analyst", "business analyst", "data engineer",
+                        "analyst", "designer", "project")
+
+def oraclecloud(board):
+    """Oracle Cloud HCM (Candidate Experience). board carries {host}; the site is
+    discovered. The listing carries the description, so real salaries are read."""
+    host = board.get("host")
+    if not host:
+        return []
+    base = "https://%s/hcmRestApi/resources/latest" % host
+    def sites():
+        if board.get("site"):
+            return [board["site"]]                # confirmed site, skip discovery
+        try:
+            body = _req(base + "/recruitingCESites?onlyData=true")
+        except Exception:
+            return ["CX_1"]
+        items = body.get("items", [])
+        active = [s["SiteNumber"] for s in items
+                  if s.get("SiteNumber") and s.get("StatusCode", "ORA_ACTIVE") == "ORA_ACTIVE"]
+        return active or [s["SiteNumber"] for s in items if s.get("SiteNumber")] or ["CX_1"]
+    def go():
+        out, seen = [], set()
+        for site in sites()[:3]:                  # first few active sites
+            finder = ("findReqs;siteNumber=%s,limit=200,offset=0,sortBy=POSTING_DATES_DESC" % site)
+            url = (base + "/recruitingCEJobRequisitions?onlyData=true"
+                   "&expand=requisitionList.secondaryLocations&finder=" + urllib.parse.quote(finder, safe=";,="))
+            body = _req(url)
+            for item in body.get("items", []):
+                for r in item.get("requisitionList", []):
+                    rid = str(r.get("Id", ""))
+                    if rid in seen:
+                        continue
+                    seen.add(rid)
+                    locs = [r.get("PrimaryLocation")] + [l.get("Name") for l in r.get("secondaryLocations", [])]
+                    desc = " ".join(x for x in (r.get("ShortDescriptionStr"),
+                                    r.get("ExternalResponsibilitiesStr"), r.get("ExternalQualificationsStr")) if x)
+                    out.append({"id": rid, "title": r.get("Title", ""),
+                                "location": "; ".join(x for x in locs if x),
+                                "url": "https://%s/hcmUI/CandidateExperience/en/sites/%s/job/%s" % (host, site, urllib.parse.quote(rid)),
+                                "posted": (r.get("PostedDate") or "")[:10], "description": _text(desc)})
+        return out
+    return _safe(go, "oraclecloud/" + host)
+
+def eightfold(board):
+    """Eightfold. board carries {host, domain}: the request host (e.g.
+    hsbc.eightfold.ai or jobs.vodafone.com) and the `domain` param (hsbc.com,
+    vodafone.com) -- both are instance-specific. Two API generations exist, PCS
+    (/api/apply/v2/jobs, positions at top level) and PCSX (/api/pcsx/search,
+    positions under data); we try both. No salary in the listing, so unverified."""
+    host, domain = board.get("host"), board.get("domain")
+    if not host:
+        return []
+    domain = domain or host
+    def go():
+        out, seen = [], set()
+        for term in _ENTERPRISE_SEARCHES:
+            q = urllib.parse.urlencode({"domain": domain, "query": term, "start": 0, "num": 10})
+            positions = []
+            for path, dig in (("/api/apply/v2/jobs", lambda b: b.get("positions", [])),
+                              ("/api/pcsx/search", lambda b: (b.get("data") or {}).get("positions", []))):
+                try:
+                    positions = dig(_req("https://%s%s?%s" % (host, path, q)))
+                    if positions:
+                        break
+                except Exception:
+                    continue
+            for p in positions:
+                pid = str(p.get("id", ""))
+                if not pid or pid in seen:
+                    continue
+                seen.add(pid)
+                loc = p.get("location") or (p.get("locations") or [""])[0]
+                out.append({"id": pid, "title": p.get("name", ""), "location": loc or "",
+                            "url": p.get("canonicalPositionUrl") or "https://%s/careers/job/%s" % (host, pid),
+                            "posted": "", "description": ""})
+        return out
+    return _safe(go, "eightfold/" + host)
+
+def phenom(board):
+    """Phenom People. board carries {host} (the careers domain). Listing is a POST
+    to /widgets; no salary in the teaser, so rows read 'unverified' until opened."""
+    host = board.get("host")
+    if not host:
+        return []
+    def go():
+        out, seen = [], set()
+        for term in _ENTERPRISE_SEARCHES:
+            payload = {"ddoKey": "refineSearch", "sortBy": "", "subsearch": "", "from": 0,
+                       "jobs": True, "counts": False, "all_fields": [], "size": 50,
+                       "clearAll": False, "jdsource": "facets", "isSliderEnable": False,
+                       "keywords": term, "global": True}
+            try:
+                body = _req("https://%s/widgets" % host, data=payload)
+            except Exception:
+                continue
+            jobs = ((body.get("refineSearch") or {}).get("data") or {}).get("jobs", [])
+            for p in jobs:
+                jid = p.get("jobSeqNo") or p.get("jobId")
+                if not jid or jid in seen:
+                    continue
+                seen.add(jid)
+                out.append({"id": str(jid), "title": p.get("title", ""),
+                            "location": p.get("cityStateCountry") or p.get("location", ""),
+                            "url": "https://%s/us/en/job/%s" % (host, urllib.parse.quote(str(jid))),
+                            "posted": (p.get("postedDate") or "")[:10], "description": ""})
+        return out
+    return _safe(go, "phenom/" + host)
+
+
 _ADAPTERS = {"greenhouse": greenhouse, "lever": lever, "ashby": ashby,
              "smartrecruiters": smartrecruiters, "workable": workable, "recruitee": recruitee}
+# Adapters whose board carries a host/coordinates rather than a bare slug.
+_HOST_ADAPTERS = {"workday": workday, "oraclecloud": oraclecloud, "phenom": phenom,
+                  "eightfold": eightfold}
 
 
 def fetch_board(board):
-    """board: {ats, slug, ...}. Dispatches to the adapter. Workday takes the
-    board dict (host/tenant/site); the rest take the slug."""
+    """board: {ats, slug|host, ...}. Dispatches to the adapter. Workday, Oracle
+    Cloud and Phenom take the board dict (host etc.); the rest take the slug."""
     ats = board.get("ats")
-    if ats == "workday":
-        return workday(board)
+    if ats in _HOST_ADAPTERS:
+        return _HOST_ADAPTERS[ats](board)
     fn = _ADAPTERS.get(ats)
     return fn(board.get("slug", "")) if fn else []

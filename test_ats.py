@@ -8,16 +8,17 @@ import unittest
 import ats
 
 DATA = os.path.join(os.path.dirname(__file__), "data")
-KNOWN_ATS = set(ats._ADAPTERS) | {"workday"}
+KNOWN_ATS = set(ats._ADAPTERS) | set(ats._HOST_ADAPTERS)
 
 
 class Dispatch(unittest.TestCase):
     def test_unknown_ats_returns_empty(self):
         self.assertEqual(ats.fetch_board({"ats": "nonesuch", "slug": "x"}), [])
 
-    def test_workday_without_coordinates_returns_empty(self):
-        self.assertEqual(ats.fetch_board({"ats": "workday", "slug": "x"}), [])
+    def test_host_adapters_without_coordinates_return_empty(self):
         self.assertEqual(ats.workday({"host": "h", "tenant": "t"}), [])   # missing site
+        self.assertEqual(ats.oraclecloud({"ats": "oraclecloud"}), [])     # missing host
+        self.assertEqual(ats.phenom({"ats": "phenom"}), [])              # missing host
 
     def test_html_is_stripped(self):
         self.assertEqual(ats._text("<p>Hi <b>there</b></p>"), "Hi there")
@@ -52,6 +53,8 @@ class CompanyBoards(unittest.TestCase):
                 if b["ats"] == "workday":
                     for k in ("host", "tenant", "site"):
                         self.assertTrue(b.get(k), "%s workday missing %s" % (name, k))
+                elif b["ats"] in ats._HOST_ADAPTERS:        # oraclecloud, eightfold, phenom
+                    self.assertTrue(b.get("host"), "%s %s missing host" % (name, b["ats"]))
                 else:
                     self.assertTrue(b.get("slug"), "%s missing slug" % name)
 

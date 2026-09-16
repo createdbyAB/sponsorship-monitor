@@ -1714,12 +1714,12 @@ class AdzunaCompanySource:
                 "employer": comp, "location": (j.get("location") or {}).get("display_name", ""),
                 "url": j.get("redirect_url", ""), "posted": (j.get("created") or "")[:10],
                 # Adzuna gives a numeric band; the minimum is what we test. A
-                # predicted (estimated) figure is not an advertised salary.
-                "salary": None if predicted or not lo else
-                          {"min": round(lo), "max": round(hi or lo), "period": "year",
-                           "stated": True, "note": ""},
-                "salaryText": "" if not lo else ("£%s" % format(int(lo), ",") +
-                              ("" if not hi or hi == lo else "–£%s" % format(int(hi), ","))),
+                # predicted figure is not an advertised salary, so it stays
+                # `stated:False` (the verdict is unverified) but is carried as an
+                # estimate so the card can show it as one rather than blank.
+                "salary": (None if not lo else
+                           {"min": round(lo), "max": round(hi or lo), "period": "year",
+                            "stated": not predicted, "predicted": predicted, "note": ""}),
             })
         return out
 
@@ -1832,15 +1832,20 @@ def build_companywatch(sponsors):
             salary = eligibility.find_salary(description) if description else {"stated": False}
         v = eligibility.evaluate(role["soc"], salary, occ)
         stated = salary.get("stated")
-        salary_text = "" if not stated else ("£%s" % format(int(salary["min"]), ",") +
-                      ("" if salary["max"] == salary["min"] else "–£%s" % format(int(salary["max"]), ",")))
+        estimated = bool(salary.get("predicted") and salary.get("min"))
+        # A stated figure shows plainly; a predicted one as an estimate ("≈… est.")
+        # -- the verdict stays "salary not stated" either way.
+        band = ("£%s" % format(int(salary["min"]), ",") +
+                ("" if salary["max"] == salary["min"] else "–£%s" % format(int(salary["max"]), ","))
+                ) if (stated or estimated) else ""
+        salary_text = band if stated else ("≈%s est." % band if estimated else "")
         rows.append({
             "section": "companywatch", "company": co["name"], "sector": co["sector"],
             "tier": co["tier"], "rating": co["rating"], "registerCheckedOn": co["registerCheckedOn"],
             "title": title, "location": location, "url": url, "posted": posted, "source": src,
             "employer": employer, "employerMatch": match,
-            "salaryText": salary_text, "soc": role["soc"], "family": role["family"],
-            "confidence": role["confidence"],
+            "salaryText": salary_text, "salaryEstimated": estimated,
+            "soc": role["soc"], "family": role["family"], "confidence": role["confidence"],
             "verdict": v["verdict"], "reason": v["reason"],
             "requiredFloor": v["requiredFloor"], "advertisedFloor": v["advertisedFloor"],
             "shortfall": v["shortfall"], "headroom": v["headroom"],
@@ -2091,12 +2096,16 @@ def demo():
     _cw_rank = {"pass": 0, "unverified": 1, "fail": 2, "closed": 3}
     _cw_status = {"pass": "strong", "unverified": "caution", "fail": "weak", "closed": "weak"}
     def cwmk(company, sector, tier, title, soc, family, confidence, salary, **kw):
-        parsed = eligibility.parse_salary(salary) if salary else {"stated": False}
+        est = kw.get("estimated", False)
+        # An estimate is not a stated salary, so the verdict is unverified; it is
+        # shown as "≈… est." rather than blank.
+        parsed = {"stated": False} if est or not salary else eligibility.parse_salary(salary)
         v = eligibility.evaluate(soc, parsed, _cw_occ)
         return mk(section="companywatch", company=company, sector=sector, tier=tier,
                   rating=kw.get("rating", "A rating"), registerCheckedOn="2026-09-16",
                   title=title, soc=soc, family=family, confidence=confidence,
-                  salaryText=salary or "", employer=kw.get("employer", company),
+                  salaryText=("≈%s est." % salary if est else (salary or "")),
+                  salaryEstimated=est, employer=kw.get("employer", company),
                   employerMatch=kw.get("employerMatch", "confirmed"),
                   location=kw.get("location", ""), source="adzuna", status=_cw_status[v["verdict"]],
                   verdict=v["verdict"], reason=v["reason"], requiredFloor=v["requiredFloor"],
@@ -2111,7 +2120,7 @@ def demo():
         cwmk("Sage Group", "Tech, telecoms and consulting", 1, "Product Designer", "2141",
              "Design", "established", "£41,000", location="Newcastle"),
         cwmk("Ocado", "Energy, utilities, retail and logistics", 1, "Business Analyst", "2136",
-             "Technology", "check", "Competitive", location="Hatfield"),
+             "Technology", "check", "£45,000", location="Hatfield", estimated=True),
         cwmk("NatWest Group", "Banking, finance and insurance", 1, "Data Analyst", "3544",
              "Data and analytics", "established", "£32,073 to £39,043", location="Edinburgh",
              employer="NatWest Markets Plc", employerMatch="uncertain"),

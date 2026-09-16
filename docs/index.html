@@ -349,6 +349,50 @@ button{font:inherit;color:inherit;background:none;border:none;padding:0;cursor:p
 @media (min-width:1260px){ .list{grid-template-columns:repeat(3,minmax(0,1fr))} }
 @media (min-width:1680px){ .list{grid-template-columns:repeat(4,minmax(0,1fr))} }
 @media (min-width:2040px){ .list{grid-template-columns:repeat(5,minmax(0,1fr))} }
+
+/* ===== Company watch ===== */
+.cwdeadline{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:baseline;
+  font:600 12px var(--mono);color:var(--text-70);margin:14px 0 4px;padding:0 2px}
+.cwdeadline .n{color:var(--caution-tx)}
+.cwdeadline.soon .n{color:var(--weak-tx)}
+.cwdeadline .reg{font-weight:500;color:var(--text-55)}
+.cwdeadline .reg.stale{color:var(--weak-tx)}
+.cwfilters{display:flex;flex-wrap:wrap;gap:7px;margin:14px 0 4px}
+.cwfilters .cap{width:100%;font:600 9.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;
+  color:var(--text-38);margin:6px 0 -1px}
+.cwgroup{margin-top:22px}
+.cwgroup > h3{display:flex;align-items:center;gap:9px;font:700 12px var(--mono);letter-spacing:.04em;
+  text-transform:uppercase;color:var(--text-70);margin:0 0 9px;padding-bottom:7px;border-bottom:1px solid var(--line)}
+.cwgroup > h3 .dot{width:9px;height:9px;border-radius:50%}
+.cwgroup > h3 .n{margin-left:auto;color:var(--text-45);font-weight:500}
+.v-pass{background:var(--strong)} .v-unverified{background:var(--caution)}
+.v-fail{background:var(--weak)} .v-closed{background:var(--weak)}
+.cwscroll{overflow-x:auto}
+.cwtable{width:100%;border-collapse:collapse;font-size:12.5px;min-width:640px}
+.cwtable th{text-align:left;font:600 9.5px var(--mono);letter-spacing:.06em;text-transform:uppercase;
+  color:var(--text-38);padding:0 10px 7px;white-space:nowrap}
+.cwtable td{padding:9px 10px;border-top:1px solid var(--line);vertical-align:top}
+.cwtable tr.uncertain{opacity:.72}
+.cwtable .co{font-weight:600;white-space:nowrap}
+.cwtable .tierchip{font:600 9px var(--mono);color:var(--text-45);border:1px solid var(--line-10);
+  border-radius:4px;padding:1px 5px;margin-left:6px}
+.cwtable .role a{color:var(--text);text-decoration:none;border-bottom:1px solid var(--line-10)}
+.cwtable .role a:hover{border-color:currentColor}
+.cwtable .soccell{font-family:var(--mono);font-size:11px;color:var(--text-60);white-space:nowrap}
+.cwtable .money{font-family:var(--mono);white-space:nowrap}
+.cwtable .gap-pos{color:var(--strong-tx)} .cwtable .gap-neg{color:var(--weak-tx)}
+.cwtable .reason{color:var(--text-55);font-size:11.5px;max-width:340px}
+.cwbadge{display:inline-block;font:600 9px var(--mono);border-radius:4px;padding:1px 5px;margin-left:6px;
+  vertical-align:middle}
+.cwbadge.new{background:var(--strong-panel);color:var(--strong-tx)}
+.cwbadge.warn{background:var(--caution-panel);color:var(--caution-tx)}
+.cwbadge.uncertain{background:var(--weak-panel);color:var(--weak-tx)}
+.cwtable .act{font:600 9px var(--mono);color:var(--text-45);background:none;border:1px solid var(--line-10);
+  border-radius:5px;padding:3px 7px;cursor:pointer;white-space:nowrap}
+.cwtable .act:hover{color:var(--text)}
+.cwtable tr.marked{opacity:.4}
+.cwempty{color:var(--text-45);font-size:12px;padding:4px 2px 2px}
+@media (max-width:520px){ .cwtable .reason{display:none} }
 </style>
 </head>
 <body>
@@ -375,6 +419,7 @@ button{font:inherit;color:inherit;background:none;border:none;padding:0;cursor:p
     <button class="tab" role="tab" data-sec="phd" aria-selected="false">PHD</button>
     <button class="tab" role="tab" data-sec="pt" aria-selected="false">PART-TIME</button>
     <button class="tab" role="tab" data-sec="nhs" aria-selected="false">NHS</button>
+    <button class="tab" role="tab" data-sec="companywatch" aria-selected="false">COMPANIES</button>
   </div>
 
   <div class="body">
@@ -471,9 +516,13 @@ const money = n => n ? "£" + Number(n).toLocaleString("en-GB") : null;
 const shortMoney = n => n ? "£" + Math.round(n / 1000) + "k" : "salary not stated";
 
 /* ---------- state ---------- */
-const SECTIONS = ["jobs", "hs", "phd", "pt", "nhs"];
+const SECTIONS = ["jobs", "hs", "phd", "pt", "nhs", "companywatch"];
 const SECTION_NAME = {jobs:"sponsored jobs", hs:"health and safety", phd:"funded PhDs",
-                      pt:"part-time Leicester", nhs:"NHS jobs"};
+                      pt:"part-time Leicester", nhs:"NHS jobs", companywatch:"company watch"};
+// The Graduate visa deadline a first CoS must beat, mirrored from occupations.json.
+const VISA_EXPIRY = "2027-03-31";
+const VERDICT_GROUPS = [["pass","Sponsorable"], ["unverified","Salary not stated"],
+                        ["fail","Fails on salary"], ["closed","Closed occupation code"]];
 const STATUS_ORDER = {strong:0, caution:1, weak:2};
 const STATUS_LABEL = {strong:"✓ Strong", caution:"⚠ Caution", weak:"✕ Weak"};
 const SHIFT_LABEL  = {evening:"Evenings", weekend:"Weekends", flexible:"Flexible",
@@ -488,7 +537,8 @@ const SORTS = {
   // "Rate" reuses the score-desc path, since a part-time row's score is its
   // pay tier; ties fall to CV fit then newest.
   pt:   [["fit","Rate ↓"], ["new","Newest"]],
-  nhs:  [["fit","Fit ↓"], ["deadline","Closing soon"], ["new","Newest"], ["salary","Salary ↓"]]
+  nhs:  [["fit","Fit ↓"], ["deadline","Closing soon"], ["new","Newest"], ["salary","Salary ↓"]],
+  companywatch: [["verdict","Verdict"], ["new","Newest"], ["salary","Salary ↓"]]
 };
 
 let INDEX = {days:[], updated:""};
@@ -507,7 +557,9 @@ let rows = [];
 const blank = (show = "new") => ({show, status:[], minfit:0, money:null, field:null, place:null,
                                   recency:null, shifts:[], sort:"fit"});
 const F = {jobs: blank(), hs: blank(), phd: Object.assign(blank(), {sort:"deadline"}), pt: blank(),
-           nhs: blank()};
+           nhs: blank(), companywatch: blank()};
+// Company watch has its own filter shape (employer-centric, not fit/salary tiers).
+const CW = {verdict:null, sector:null, tier:null, soc:null};
 
 /* ---------- done / hidden marks ----------
    Kept in this browser only, since the site is static. Keyed on the advert URL
@@ -587,7 +639,20 @@ function normalise(raw, day){
       // the inferred SOC; sponsorable is undefined for sections without the test.
       soc: item.soc || "",
       sponsorable: typeof item.sponsorable === "boolean" ? item.sponsorable : null,
-      socReason: item.soc_reason || ""
+      socReason: item.soc_reason || "",
+      // company watch only: employer + three-part eligibility verdict
+      company: item.company || "", sector: item.sector || "", tier: item.tier || null,
+      rating: item.rating || "", registerCheckedOn: item.registerCheckedOn || "",
+      verdict: item.verdict || "", reason: item.reason || "",
+      requiredFloor: item.requiredFloor == null ? null : Number(item.requiredFloor),
+      advertisedFloor: item.advertisedFloor == null ? null : Number(item.advertisedFloor),
+      shortfall: item.shortfall == null ? null : Number(item.shortfall),
+      headroom: item.headroom == null ? null : Number(item.headroom),
+      proratedFloor: item.proratedFloor == null ? null : Number(item.proratedFloor),
+      generalMinimum: item.generalMinimum == null ? null : Number(item.generalMinimum),
+      salaryText: item.salaryText || "", family: item.family || "",
+      confidence: item.confidence || "", employer: item.employer || "",
+      employerMatch: item.employerMatch || ""
     });
   };
   if (Array.isArray(raw.jobs)) raw.jobs.forEach(j => push(j, HS_RE.test(j.title || "") ? "hs" : "jobs"));
@@ -595,6 +660,7 @@ function normalise(raw, day){
   if (Array.isArray(raw.phd))  raw.phd.forEach(j => push(j, "phd"));
   if (Array.isArray(raw.pt))   raw.pt.forEach(j => push(j, "pt"));
   if (Array.isArray(raw.nhs))  raw.nhs.forEach(j => push(j, "nhs"));
+  if (Array.isArray(raw.companywatch)) raw.companywatch.forEach(j => push(j, "companywatch"));
   if (raw.floors) FLOORS = Object.assign({}, FLOORS, raw.floors);
   return out;
 }
@@ -1182,17 +1248,160 @@ const FOOTNOTE = {
         "advert. Adverts that explicitly rule sponsorship out are dropped. New postings appear under <em>New</em>. " +
         "The occupation-code check applies here too: a role whose SOC code is closed since July 2025 (health and " +
         "safety, 3582) is greyed out even when the advert welcomes sponsorship. Clinical titles the check cannot " +
-        "place show a <em>SOC ?</em> badge and are left for you to confirm, not greyed."
+        "place show a <em>SOC ?</em> badge and are left for you to confirm, not greyed.",
+  companywatch: "A fixed list of employers, every one confirmed on the Home Office register with an A-rated " +
+        "Skilled Worker licence on the date shown below. This watches <em>employers</em>, not occupation codes, " +
+        "and applies all three tests a first Certificate of Sponsorship needs: the licence (already checked), an " +
+        "occupation code open to a first CoS, and pay that clears that code's floor. A band is tested at its " +
+        "<em>minimum</em>, because appointment is at the band minimum unless the advert says otherwise. Failing " +
+        "rows are shown, not hidden — seeing why a role failed is the point. <em>Employer uncertain</em> flags a " +
+        "row whose advertised employer did not clearly match the watched company; <em>confirm code</em> flags a " +
+        "SOC that is a judgement call. Confirm everything on the advert before applying."
 };
 
 function renderAll(){
   $$("#switcher .tab").forEach(t => t.setAttribute("aria-selected", t.dataset.sec === section));
+  if (section === "companywatch"){
+    $("#foot").innerHTML = FOOTNOTE.companywatch;
+    renderDays();
+    $("#rail").style.display = "none";
+    $("#openfilters").style.display = "none";
+    renderCompanyWatch();
+    return;
+  }
+  $("#rail").style.display = "";
+  $("#openfilters").style.display = "";
+  $("#list").style.display = "";          // back to the card grid
   $("#foot").innerHTML = FOOTNOTE[section];
   renderDays();
   renderTiles();
   renderRail();
   renderActive();
   renderList();
+}
+
+/* ---------- company watch ---------- */
+function cwToday(){ return (view && view !== "WEEK") ? view : ((INDEX.days[0] || {}).date || ""); }
+function cwDays(a, b){
+  if (!a || !b) return null;
+  const x = Date.parse(a + "T00:00:00Z"), y = Date.parse(b + "T00:00:00Z");
+  return (isNaN(x) || isNaN(y)) ? null : Math.round((y - x) / 86400000);
+}
+function cwChip(dim, val, label, on){
+  return '<button type="button" class="chip" data-dim="' + dim + '" data-val="' + esc(val) +
+         '" aria-pressed="' + on + '">' + esc(label) + '</button>';
+}
+function renderCompanyWatch(){
+  const all = sectionRows().filter(r => markOf(r) !== "hidden");
+  const found = all.length;
+  const passes = all.filter(r => r.verdict === "pass").length;
+  const failSalary = all.filter(r => r.verdict === "fail").length;
+
+  $("#tiles").innerHTML =
+    '<div class="tile hero"><div><div class="lab">Sponsorable</div><div class="num">' + passes + '</div></div></div>' +
+    '<div class="tile"><div class="lab">Vacancies today</div><div class="num">' + found + '</div></div>' +
+    '<div class="tile"><div class="lab">Fail on salary alone</div><div class="num">' + failSalary + '</div></div>' +
+    '<div class="tile"><div class="lab">Companies watched</div><div class="num">83</div></div>';
+
+  // deadline countdown + register freshness + last run
+  const left = cwDays(cwToday(), VISA_EXPIRY);
+  const stamp = (all.find(r => r.registerCheckedOn) || {}).registerCheckedOn || "";
+  const stale = stamp ? cwDays(stamp, cwToday()) : null;
+  const soon = left != null && left < 42;
+  let head = '<div class="cwdeadline' + (soon ? " soon" : "") + '">' +
+    '<span>Graduate visa deadline <strong>' + VISA_EXPIRY + '</strong> · a first CoS must be assigned before then</span>' +
+    (left != null ? '<span class="n">' + left + ' days left' + (soon ? " — a corporate hiring cycle may not complete in time" : "") + '</span>' : "");
+  if (stamp) head += '<span class="reg' + (stale != null && stale > 90 ? " stale" : "") + '">register checked ' + esc(stamp) +
+                     (stale != null ? " · " + stale + "d ago" + (stale > 90 ? " (over 90 days — re-verify)" : "") : "") + '</span>';
+  if (INDEX.updated) head += '<span class="reg">last run ' + esc(INDEX.updated.slice(0, 16).replace("T", " ")) + ' UTC · ok</span>';
+  head += '</div>';
+
+  // filters: verdict, sector, tier, SOC — distinct values present today
+  const uniq = k => [...new Set(all.map(r => r[k]).filter(v => v || v === 0))];
+  const socs = uniq("soc").sort();
+  const sectors = uniq("sector").sort();
+  const tiers = uniq("tier").sort();
+  let filt = '<div class="cwfilters"><div class="cap">Verdict</div>';
+  VERDICT_GROUPS.forEach(([k, lab]) => filt += cwChip("verdict", k, lab, CW.verdict === k));
+  if (sectors.length > 1){ filt += '<div class="cap">Sector</div>';
+    sectors.forEach(s => filt += cwChip("sector", s, s.split(",")[0], CW.sector === s)); }
+  if (tiers.length > 1){ filt += '<div class="cap">Tier</div>';
+    tiers.forEach(t => filt += cwChip("tier", String(t), "Tier " + t, String(CW.tier) === String(t))); }
+  if (socs.length > 1){ filt += '<div class="cap">SOC</div>';
+    socs.forEach(s => filt += cwChip("soc", s, s, CW.soc === s)); }
+  filt += '</div>';
+
+  const shown = all.filter(r =>
+    (!CW.verdict || r.verdict === CW.verdict) &&
+    (!CW.sector || r.sector === CW.sector) &&
+    (CW.tier == null || String(r.tier) === String(CW.tier)) &&
+    (!CW.soc || r.soc === CW.soc));
+
+  let body = "";
+  if (!found){
+    body = '<div class="cwempty">No company-watch vacancies for this day. The daily run needs an ' +
+           'Adzuna API key (<code>ADZUNA_ID</code> / <code>ADZUNA_KEY</code>); without one this section ' +
+           'is intentionally empty rather than pretending the market is quiet.</div>';
+  } else {
+    VERDICT_GROUPS.forEach(([key, label]) => {
+      const g = shown.filter(r => r.verdict === key);
+      if (!g.length && CW.verdict && CW.verdict !== key) return;   // hide off-filter groups
+      body += '<div class="cwgroup"><h3><span class="dot v-' + key + '"></span>' + label +
+              '<span class="n">' + g.length + '</span></h3>';
+      if (!g.length){ body += '<div class="cwempty">Nothing in this group' +
+            (key === "pass" ? " today — the useful number is how many fail on salary alone." : ".") + '</div></div>'; return; }
+      body += '<div class="cwscroll"><table class="cwtable"><thead><tr>' +
+        '<th>Company</th><th>Role</th><th>Location</th><th>Salary</th><th>SOC</th>' +
+        '<th>Required</th><th>Gap</th><th>Why</th><th></th></tr></thead><tbody>';
+      g.forEach(r => body += cwRow(r));
+      body += '</tbody></table></div></div>';
+    });
+  }
+  $("#count").textContent = found + (found === 1 ? " vacancy" : " vacancies") + " · " + passes + " sponsorable";
+  $("#active").innerHTML = "";
+  $("#emptyslot").innerHTML = "";
+  $("#list").style.display = "block";      // block flow, not the card grid, so the
+  $("#list").innerHTML = head + filt + body;  // filters wrap and the table scrolls in .cwscroll
+
+  $$("#list .cwfilters .chip").forEach(b => b.onclick = () => {
+    const d = b.dataset.dim, v = b.dataset.dim === "tier" ? b.dataset.val : b.dataset.val;
+    CW[d] = String(CW[d]) === String(v) ? null : (d === "tier" ? v : v);
+    renderCompanyWatch();
+  });
+  $$("#list .cwtable .act").forEach(b => b.onclick = () => {
+    setMark(b.dataset.key, b.dataset.mark);
+    renderCompanyWatch();
+    $("#live").textContent = (b.dataset.mark === "done" ? "Marked done" : b.dataset.mark === "hidden" ? "Hidden" : "Restored");
+  });
+  $("#live").textContent = found + " company-watch vacancies, " + passes + " sponsorable";
+}
+const cwMoney = n => "£" + Number(n || 0).toLocaleString("en-GB");
+function cwRow(r){
+  const badges = (isNew(r) ? '<span class="cwbadge new">NEW</span>' : "") +
+    (r.confidence === "check" ? '<span class="cwbadge warn" title="This SOC is a judgement call — confirm the code before applying">CONFIRM CODE</span>' : "") +
+    (r.employerMatch === "uncertain" ? '<span class="cwbadge uncertain" title="The advertised employer (' + esc(r.employer) + ') did not clearly match — verify it is the watched company">EMPLOYER ?</span>' : "");
+  const gap = r.verdict === "closed" ? "—"
+    : r.headroom != null ? '<span class="gap-pos">+' + esc(cwMoney(r.headroom)) + '</span>'
+    : r.shortfall != null ? '<span class="gap-neg">−' + esc(cwMoney(r.shortfall)) + '</span>' : "—";
+  const req = r.requiredFloor != null ? esc(cwMoney(r.requiredFloor)) : "—";
+  const mark = markOf(r), key = markKey(r);
+  const act = mark
+    ? '<button class="act" data-mark="" data-key="' + esc(key) + '">↺ undo</button>'
+    : '<button class="act" data-mark="done" data-key="' + esc(key) + '">✓</button> ' +
+      '<button class="act" data-mark="hidden" data-key="' + esc(key) + '">✕</button>';
+  const role = r.url
+    ? '<a href="' + esc(r.url) + '" target="_blank" rel="noopener">' + esc(r.title) + '</a>'
+    : esc(r.title);
+  return '<tr class="' + (r.employerMatch === "uncertain" ? "uncertain " : "") + (mark ? "marked" : "") + '">' +
+    '<td class="co">' + esc(r.company) + '<span class="tierchip" title="' + esc(r.rating) + '">T' + esc(r.tier) + '</span></td>' +
+    '<td class="role">' + role + badges + '</td>' +
+    '<td>' + esc(r.location || "—") + '</td>' +
+    '<td class="money">' + esc(r.salaryText || "—") + '</td>' +
+    '<td class="soccell">' + esc(r.soc) + '<br><span style="color:var(--text-38)">' + esc(r.family) + '</span></td>' +
+    '<td class="money">' + req + '</td>' +
+    '<td class="money">' + gap + '</td>' +
+    '<td class="reason">' + esc(r.reason) + '</td>' +
+    '<td style="white-space:nowrap">' + act + '</td></tr>';
 }
 
 /* ---------- controls ---------- */

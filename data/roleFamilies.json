@@ -25,6 +25,6 @@
                     "placement", "apprentice", "apprenticeship", "summer analyst",
                     "industrial placement", "work experience", "volunteer",
                     "health and safety", "hse", "ehs", "sheq"],
-  "excludeSeniority": ["senior", "lead", "principal", "head of", "manager", "director"],
+  "excludeSeniority": ["senior", "lead", "principal", "head of", "manager", "director", "staff ", "vice president", " vp", "chief"],
   "seniorityKeep": ["assistant project manager"]
 }

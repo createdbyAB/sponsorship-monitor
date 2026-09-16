@@ -42,7 +42,9 @@ def load(data_dir):
 
 
 # --- role matching --------------------------------------------------------
-_YEAR = re.compile(r"\b(20\d\d)\b")
+# A 4-digit year not glued to a longer number, so "AGGP2027" and "2027 Analyst"
+# both trip the future-cohort filter, but a reference like "10023456" does not.
+_YEAR = re.compile(r"(?<!\d)(20\d\d)(?!\d)")
 
 
 def match_role(title, roles, today_year=None):
@@ -116,6 +118,31 @@ def parse_salary(text, hours=FULL_TIME_HOURS):
     lo, hi = min(nums), max(nums)
     out.update({"min": round(lo), "max": round(hi), "period": period, "stated": True, "note": note})
     return out
+
+
+# A £-figure or band, optionally with a k suffix and a per-annum/hour/day tail.
+_SAL_IN_TEXT = re.compile(
+    r"£\s?\d[\d,]*(?:\.\d+)?\s*k?"
+    r"(?:\s*(?:-|–|—|to)\s*£?\s?\d[\d,]*(?:\.\d+)?\s*k?)?"
+    r"(?:\s*(?:per|/|p)\s*(?:annum|year|hour|hr|day))?", re.I)
+
+
+def find_salary(text, hours=FULL_TIME_HOURS):
+    """Pull an advertised salary out of a free-text advert body (ATS adverts
+    carry the real figure, unlike Adzuna's predicted number). Returns the same
+    shape as parse_salary; not stated when no plausible salary is found. A lone
+    small figure (e.g. "£10 voucher") is rejected as not a salary."""
+    blank = {"min": None, "max": None, "period": "unstated", "stated": False, "note": ""}
+    if not text:
+        return blank
+    for m in _SAL_IN_TEXT.finditer(text):
+        p = parse_salary(m.group(0), hours)
+        if not p["stated"]:
+            continue
+        if p["period"] == "year" and p["min"] < 12000:
+            continue                              # too low to be an annual salary
+        return p
+    return blank
 
 
 # --- the verdict engine ---------------------------------------------------

@@ -62,6 +62,23 @@ company on the register **first**, anchored to the start of the name, and set
 - CGI is deliberately absent: no A-rated licence under that name, and the only
   close register match (*CGI Axis Ltd*) is unrelated. Do not add it back.
 
+## `companyBoards.json`
+
+The primary feed's ATS map: company `name` → a list of boards, each `{ats, slug}`
+(or, for Workday, `{ats: "workday", host, tenant, site}`). A company mapped here is
+sourced **directly from its ATS's public JSON endpoint** — precise, real salaries,
+`employerMatch: confirmed` — instead of the Adzuna company filter. A company absent
+here falls back to Adzuna. Supported ATS: greenhouse, lever, ashby, smartrecruiters,
+workable, recruitee, workday. 31 of the 83 are mapped as at 16 September 2026.
+
+**Confirm before adding, never guess a slug.** Slug collisions are real — a `tcs`
+Greenhouse board is a UK healthcare provider, not Tata Consultancy; a `nationwide`
+Workday tenant is US Nationwide Mutual, not the UK society. Open the company's
+careers page, find which ATS host serves its listings, fetch the endpoint, and
+check the returned jobs are that UK employer's before adding the entry.
+`test_ats.py` asserts every board names a real company and carries the coordinates
+its adapter needs.
+
 ## `occupations.json`
 
 The eligibility figures, so no threshold sits in code. Semantics differ by group:

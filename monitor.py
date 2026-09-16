@@ -1639,6 +1639,7 @@ def build_nhs(sponsors):
 # without them.
 # ============================================================================
 import eligibility
+import ats
 
 CW_DIR         = "data"
 CW_MAX_DAYS    = 30            # advert recency window for company watch
@@ -1722,59 +1723,134 @@ class AdzunaCompanySource:
             })
         return out
 
+# ATS boards list an employer's jobs worldwide; company watch is about UK
+# sponsorship, so an ATS row with a clearly non-UK location is dropped. (Adzuna
+# is already GB-scoped.) A blank location is kept -- it cannot be ruled out.
+_CW_UK = re.compile(
+    r"\b(united kingdom|\buk\b|\bg\.?b\.?\b|great britain|england|scotland|wales|"
+    r"northern ireland|london|manchester|birmingham|leeds|glasgow|edinburgh|bristol|"
+    r"liverpool|sheffield|newcastle|nottingham|cardiff|belfast|leicester|coventry|"
+    r"reading|cambridge|oxford|milton keynes|swindon|southampton|portsmouth|brighton|"
+    r"norwich|york|derby|warwick|warrington|hatfield|welwyn|winchester|slough|bracknell|"
+    r"newbury|windsor|knutsford|northampton|bournemouth|telford|farnborough|harrow|"
+    r"uxbridge|stevenage|macclesfield|hinxton|sandwich|tadworth|perth|swansea|aberdeen|"
+    r"remote,? uk|uk remote|hybrid.*uk)\b", re.I)
+
+def _looks_uk(location):
+    loc = (location or "").strip()
+    return (not loc) or bool(_CW_UK.search(loc))
+
+def load_company_boards():
+    """{company name -> [board, ...]}, board = {ats, slug} or a workday dict. The
+    ATS map: which employers can be sourced directly and precisely. Missing file
+    or a company absent from it means that company falls back to Adzuna."""
+    try:
+        with open(os.path.join(CW_DIR, "companyBoards.json")) as f:
+            data = json.load(f)
+    except (OSError, ValueError):
+        return {}
+    return {k: v for k, v in data.items() if not k.startswith("_")}
+
+def _ats_board(board):
+    """Fetch one ATS board, 12h-cached and polite -- same cache as the Adzuna
+    source, so a re-run within the window re-bills nobody."""
+    key = "ats|%s|%s" % (board.get("ats"), board.get("slug") or board.get("tenant", ""))
+    cache = _cw_cache(key)
+    try:
+        if time.time() - os.path.getmtime(cache) < CW_CACHE_TTL:
+            with open(cache) as f:
+                return json.load(f)
+    except OSError:
+        pass
+    rows = ats.fetch_board(board)
+    try:
+        with open(cache, "w") as f:
+            json.dump(rows, f)
+    except OSError:
+        pass
+    time.sleep(0.3)
+    return rows
+
 def build_companywatch(sponsors):
     """Vacancies at the watched employers, verdicted against the eligibility gate.
-    Failing rows are kept and rendered as failing -- seeing why a role failed is
-    the point. Passing rows sort first."""
-    if not (ADZUNA_ID and ADZUNA_KEY):
-        print("companywatch  no Adzuna key -> empty (section shows an honest empty state)",
+
+    Primary feed is direct ATS sourcing (ats.py): an endpoint keyed by the
+    employer's own board slug, so every row is definitionally that employer's and
+    the advert body carries the real salary. Companies with no board mapping fall
+    back to the Adzuna company filter, whose employer name is re-verified and
+    whose predicted salaries read as 'not stated'. Failing rows are kept and
+    rendered as failing -- seeing why a role failed is the point."""
+    companies = load_companies()
+    boards = load_company_boards()
+    occ, roles = eligibility.load(CW_DIR)
+    have_adzuna = bool(ADZUNA_ID and ADZUNA_KEY)
+    if not boards and not have_adzuna:
+        print("companywatch  no ATS map and no Adzuna key -> empty (honest empty state)",
               file=sys.stderr)
         return []
-    companies = load_companies()
-    occ, roles = eligibility.load(CW_DIR)
     today_year = datetime.date.today().year
     calls = [0]
-    source = AdzunaCompanySource(calls)
+    adz = AdzunaCompanySource(calls)
     rank = {"pass": 0, "unverified": 1, "fail": 2, "closed": 3}
     status_of = {"pass": "strong", "unverified": "caution", "fail": "weak", "closed": "weak"}
     rows, seen_urls = [], set()
 
+    def emit(co, title, location, url, posted, description, employer, match, src, salary=None):
+        role = eligibility.match_role(title, roles, today_year=today_year)
+        if not role:
+            return                                 # not an entry/associate target role
+        u = (url or "").split("?")[0]
+        if not u or u in seen_urls:
+            return
+        seen_urls.add(u)
+        if salary is None:                         # ATS: read the real figure from the advert body
+            salary = eligibility.find_salary(description) if description else {"stated": False}
+        v = eligibility.evaluate(role["soc"], salary, occ)
+        stated = salary.get("stated")
+        salary_text = "" if not stated else ("£%s" % format(int(salary["min"]), ",") +
+                      ("" if salary["max"] == salary["min"] else "–£%s" % format(int(salary["max"]), ",")))
+        rows.append({
+            "section": "companywatch", "company": co["name"], "sector": co["sector"],
+            "tier": co["tier"], "rating": co["rating"], "registerCheckedOn": co["registerCheckedOn"],
+            "title": title, "location": location, "url": url, "posted": posted, "source": src,
+            "employer": employer, "employerMatch": match,
+            "salaryText": salary_text, "soc": role["soc"], "family": role["family"],
+            "confidence": role["confidence"],
+            "verdict": v["verdict"], "reason": v["reason"],
+            "requiredFloor": v["requiredFloor"], "advertisedFloor": v["advertisedFloor"],
+            "shortfall": v["shortfall"], "headroom": v["headroom"],
+            "generalMinimum": v["generalMinimum"], "proratedFloor": v["proratedFloor"],
+            "status": status_of[v["verdict"]], "deadline": "",
+            "score": 100 - rank[v["verdict"]] * 20,
+        })
+
+    ats_boards = 0
     for co in companies:
-        for alias in co["searchAliases"]:
-            for v in source.fetch(alias):
-                url = (v["url"] or "").split("?")[0]
-                if not url or url in seen_urls:
-                    continue
-                role = eligibility.match_role(v["title"], roles, today_year=today_year)
-                if not role:
-                    continue                       # not an entry/associate target role
-                seen_urls.add(url)
-                verdict = eligibility.evaluate(role["soc"], v["salary"] or {"stated": False}, occ)
-                rows.append({
-                    "section": "companywatch", "company": co["name"], "sector": co["sector"],
-                    "tier": co["tier"], "rating": co["rating"],
-                    "registerCheckedOn": co["registerCheckedOn"],
-                    "title": v["title"], "location": v["location"], "url": v["url"],
-                    "posted": v["posted"], "source": source.name,
-                    "employer": v["employer"], "employerMatch": employer_match(v["employer"], co["searchAliases"]),
-                    "salaryText": v["salaryText"], "soc": role["soc"], "family": role["family"],
-                    "confidence": role["confidence"],
-                    "verdict": verdict["verdict"], "reason": verdict["reason"],
-                    "requiredFloor": verdict["requiredFloor"], "advertisedFloor": verdict["advertisedFloor"],
-                    "shortfall": verdict["shortfall"], "headroom": verdict["headroom"],
-                    "generalMinimum": verdict["generalMinimum"], "proratedFloor": verdict["proratedFloor"],
-                    "status": status_of[verdict["verdict"]], "deadline": "",
-                    # score: passing first, then unverified, then fail, then closed;
-                    # within a group, uncertain employer matches sink.
-                    "score": 100 - rank[verdict["verdict"]] * 20 - (5 if v and False else 0),
-                })
+        cb = boards.get(co["name"])
+        if cb:                                     # direct ATS: precise, real salaries
+            for board in cb:
+                ats_boards += 1
+                for j in _ats_board(board):
+                    if not _looks_uk(j["location"]):
+                        continue                   # ATS boards are global; keep UK only
+                    emit(co, j["title"], j["location"], j["url"], j["posted"],
+                         j.get("description", ""), co["name"], "confirmed", board["ats"])
+        elif have_adzuna:                          # fallback: Adzuna company filter
+            for alias in co["searchAliases"]:
+                for j in adz.fetch(alias):
+                    emit(co, j["title"], j["location"], j["url"], j["posted"], "",
+                         j["employer"], employer_match(j["employer"], co["searchAliases"]),
+                         adz.name, salary=j["salary"] or {"stated": False})
 
     rows.sort(key=lambda r: (rank[r["verdict"]], r["employerMatch"] == "uncertain",
                              -(r["advertisedFloor"] or 0), r["company"]))
+    by_ats = sum(1 for r in rows if r["source"] != "adzuna")
     passes = sum(1 for r in rows if r["verdict"] == "pass")
     fails_salary = sum(1 for r in rows if r["verdict"] == "fail")
-    print("companywatch  %d companies, %d Adzuna calls -> %d roles (%d pass, %d fail on salary)"
-          % (len(companies), calls[0], len(rows), passes, fails_salary), file=sys.stderr)
+    print("companywatch  %d companies (%d via ATS boards, %d Adzuna calls) -> %d roles "
+          "(%d ATS-sourced, %d pass, %d fail on salary)"
+          % (len(companies), len(boards), calls[0], len(rows), by_ats, passes, fails_salary),
+          file=sys.stderr)
     return rows
 
 SEEN_PATH = os.path.join(DATA_DIR, "seen.json")

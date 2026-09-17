@@ -1,13 +1,18 @@
 {
-  "updated": "2026-09-17T11:03:31.979315Z",
+  "updated": "2026-09-17T18:08:01.231107Z",
   "floors": {
     "newEntrant": 33400,
     "general": 41700
   },
+  "companyWatch": {
+    "tslExpiry": "2026-12-31",
+    "graduateVisaExpiry": "2027-03-31",
+    "cosAssignmentAllowanceDays": 60
+  },
   "days": [
     {
       "date": "2026-09-17",
-      "count": 628
+      "count": 597
     },
     {
       "date": "2026-09-16",

@@ -84,15 +84,54 @@ its adapter needs.
 The eligibility figures, so no threshold sits in code. Semantics differ by group:
 
 - **`higherSkilled`** — the new-entrant floor, the higher of £33,400 and 70% of
-  the going rate. It **pro-rates** below a 37.5-hour week.
+  the going rate. It **pro-rates** below a 37.5-hour week. These codes have **no
+  expiry of their own**.
 - **`temporaryShortageList`** — the salary the job must actually pay. **No
   new-entrant discount on a shortage-list rate.**
-- **`generalMinimum`** (£33,400) — **never pro-rates**, for any code, at any hours.
+- **`generalMinimum`** (£33,400) — **never pro-rates**, for any code, at any
+  hours, and is never reduced by either shortage list.
 - **`closed`** — cannot produce a first CoS at any salary. Rendered red with the
   reason, never "unknown".
 
+### Two deadlines, and they differ
+
+There are two dates, and the earlier one governs the codes the user most wants:
+
+- **`temporaryShortageListExpiry`** (2026-12-31) — Appendix Skilled Worker rule
+  SW 6.1A treats an occupation as on the shortage list only where the application
+  uses a **Certificate of Sponsorship assigned before this date** (the CoS
+  *assignment* date, not the application or start date). It governs every
+  `temporaryShortageList` code — all sixteen, including **3544 data analysts**.
+  After it, those codes are closed.
+- **`graduateVisaExpiry`** (2027-03-31) — the user's Graduate visa expiry, a
+  personal deadline, not a rule about occupations. It governs the `higherSkilled`
+  codes, which have no expiry of their own.
+
+The engine derives each row's deadline from its own SOC code, never a single
+global date. **`cosAssignmentAllowanceDays`** (60) is the buffer between a
+vacancy's closing date and a realistic CoS assignment (shortlist, interview,
+offer, checks, assignment); a shortage-list vacancy whose close + this buffer
+runs past 2026-12-31 is flagged *too late*. It is a judgement call, so it is a
+named field here, not a literal in the logic.
+
+### Two traps for whoever refreshes this next
+
+1. **The lower going-rate column does not apply.** The gov.uk going-rates page
+   prints two salary columns per code — Standard and Lower. For 3544 they read
+   **£34,900** and £28,600. The lower column applies only to Health and Care
+   Worker applicants in eligible clinical occupations, and to people whose first
+   CoS was assigned before 4 April 2024 and who have held Skilled Worker
+   permission continuously since. **Neither applies to this user.** The figures
+   here are the **standard** column and must stay that way.
+2. **The going rate and the general threshold are two separate tests, and both
+   must pass.** A job can clear its code's going rate and still fail the £33,400
+   general minimum — which is exactly what an NHS Band 5 at £32,073 does against
+   3544 (it clears nothing, but the point holds: a role over its going rate can
+   still be under £33,400). Keep both tests.
+
 Update these when the Temporary Shortage List or the going rates are revised, and
-move `expiry` to the new review date. Verified against gov.uk on 2026-09-10.
+move the two expiry dates to their new values. Verified against gov.uk on
+2026-09-10.
 
 ## `roleFamilies.json`
 

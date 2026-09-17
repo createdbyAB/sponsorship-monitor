@@ -24,6 +24,7 @@ The salary rules differ and are easy to get wrong, so read these:
 """
 from __future__ import annotations
 
+import datetime
 import json
 import os
 import re
@@ -171,18 +172,55 @@ def _pounds(n):
     return "£%s" % format(int(round(n)), ",")
 
 
-def evaluate(soc, parsed, occ, hours=FULL_TIME_HOURS):
-    """Verdict for one vacancy: pass / fail / unverified / closed, with the
-    required floor, the advertised floor, the gap, and a plain-English reason."""
+def applicable_deadline(soc, occ):
+    """The deadline that governs this code, and why. There are two, and the
+    earlier one governs the codes the user most wants:
+      - a Temporary Shortage List code is only on the list for a CoS assigned
+        before temporaryShortageListExpiry (31 Dec 2026); after that it is closed;
+      - a higher-skilled code has no expiry of its own, so the binding date is the
+        user's own Graduate visa expiry (31 Mar 2027).
+    A closed code has no deadline -- it already fails."""
+    if soc in occ["temporaryShortageList"]:
+        return occ.get("temporaryShortageListExpiry"), "temporary shortage list"
+    if soc in occ["higherSkilled"]:
+        return occ.get("graduateVisaExpiry"), "graduate visa"
+    return None, ""
+
+
+def _too_late_for_tsl(closing, occ):
+    """True when a shortage-list vacancy's closing date plus the CoS-assignment
+    allowance runs past the shortage-list expiry, so a first CoS could not be
+    assigned in time. It is the CoS assignment date that matters, so we add the
+    allowance (shortlisting, interview, offer, checks, assignment) to the close."""
+    exp = occ.get("temporaryShortageListExpiry")
+    allow = occ.get("cosAssignmentAllowanceDays", 60)
+    if not (closing and exp):
+        return False
+    try:
+        c = datetime.date.fromisoformat(str(closing)[:10])
+        e = datetime.date.fromisoformat(exp)
+    except ValueError:
+        return False
+    return c + datetime.timedelta(days=allow) > e
+
+
+def evaluate(soc, parsed, occ, hours=FULL_TIME_HOURS, closing=""):
+    """Verdict for one vacancy: pass / fail / unverified / too_late / closed, with
+    the required floor, the advertised floor, the gap, the deadline that governs
+    the code, and a plain-English reason. `closing` is the vacancy's closing date
+    (ISO), used only for the shortage-list timing check."""
     rf = required_floor(soc, occ, hours)
     basisword = "rate" if rf["basis"] == "rate" else "floor"
+    deadline, basis = applicable_deadline(soc, occ)
     res = {"soc": soc, "verdict": None, "requiredFloor": rf["floor"],
            "advertisedFloor": None, "shortfall": None, "headroom": None,
            "generalMinimum": rf["general"], "proratedFloor": rf["prorated"],
+           "applicableDeadline": deadline, "deadlineBasis": basis,
            "stated": bool(parsed and parsed.get("stated")), "reason": ""}
 
     if rf["basis"] == "closed":
-        res.update(verdict="closed", reason="closed occupation code %s" % soc)
+        res.update(verdict="closed", reason="closed occupation code %s" % soc,
+                   applicableDeadline=None, deadlineBasis="")
         if res["stated"]:
             res["advertisedFloor"] = parsed["min"]
         return res
@@ -196,19 +234,30 @@ def evaluate(soc, parsed, occ, hours=FULL_TIME_HOURS):
         tail += " (pro-rated floor %s at %gh, general minimum %s never pro-rates)" % (
             _pounds(rf["prorated"]), hours, _pounds(rf["general"]))
 
+    # Salary verdict first.
     if not res["stated"]:
         res.update(verdict="unverified",
                    reason="salary not stated — needs %s %s%s" % (_pounds(rf["floor"]), basisword, tail))
-        return res
-
-    advertised = parsed["min"]
-    res["advertisedFloor"] = advertised
-    if advertised >= rf["floor"]:
-        res.update(verdict="pass", headroom=advertised - rf["floor"],
-                   reason="%s above the %s %s%s" % (_pounds(advertised - rf["floor"]),
-                                                    _pounds(rf["floor"]), basisword, tail))
     else:
-        res.update(verdict="fail", shortfall=rf["floor"] - advertised,
-                   reason="%s below the %s %s%s" % (_pounds(rf["floor"] - advertised),
-                                                    _pounds(rf["floor"]), basisword, tail))
+        advertised = parsed["min"]
+        res["advertisedFloor"] = advertised
+        if advertised >= rf["floor"]:
+            res.update(verdict="pass", headroom=advertised - rf["floor"],
+                       reason="%s above the %s %s%s" % (_pounds(advertised - rf["floor"]),
+                                                        _pounds(rf["floor"]), basisword, tail))
+        else:
+            res.update(verdict="fail", shortfall=rf["floor"] - advertised,
+                       reason="%s below the %s %s%s" % (_pounds(rf["floor"] - advertised),
+                                                        _pounds(rf["floor"]), basisword, tail))
+
+    # A shortage-list role that cannot reach an assigned CoS before the list
+    # closes is dead whatever the salary, so this overrides the salary verdict
+    # (but never a closed code, handled above). Higher-skilled codes never trip
+    # it -- their deadline is the personal Graduate visa, shown but not enforced.
+    if rf["basis"] == "rate" and _too_late_for_tsl(closing, occ):
+        res.update(verdict="too_late",
+                   reason="closes %s — a Certificate of Sponsorship could not be assigned "
+                          "before the shortage list closes %s (allowing %d days)"
+                          % (str(closing)[:10], occ.get("temporaryShortageListExpiry"),
+                             occ.get("cosAssignmentAllowanceDays", 60)))
     return res

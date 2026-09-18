@@ -351,52 +351,91 @@ button{font:inherit;color:inherit;background:none;border:none;padding:0;cursor:p
 @media (min-width:2040px){ .list{grid-template-columns:repeat(5,minmax(0,1fr))} }
 
 /* ===== Company watch ===== */
-.cwdeadline{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:baseline;
-  font:600 12px var(--mono);color:var(--text-70);margin:14px 0 4px;padding:0 2px}
-.cwdeadline .n{color:var(--caution-tx)}
-.cwdeadline.soon .n{color:var(--weak-tx)}
-.cwdeadline .reg{font-weight:500;color:var(--text-55)}
-.cwdeadline .reg.stale{color:var(--weak-tx)}
 .cwfilters{display:flex;flex-wrap:wrap;gap:7px;margin:14px 0 4px}
 .cwfilters .cap{width:100%;font:600 9.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;
   color:var(--text-38);margin:6px 0 -1px}
-.cwgroup{margin-top:22px}
-.cwgroup > h3{display:flex;align-items:center;gap:9px;font:700 12px var(--mono);letter-spacing:.04em;
-  text-transform:uppercase;color:var(--text-70);margin:0 0 9px;padding-bottom:7px;border-bottom:1px solid var(--line)}
-.cwgroup > h3 .dot{width:9px;height:9px;border-radius:50%}
-.cwgroup > h3 .n{margin-left:auto;color:var(--text-45);font-weight:500}
 .v-pass{background:var(--strong)} .v-unverified{background:var(--caution)}
 .v-fail{background:var(--weak)} .v-too_late{background:var(--weak)} .v-closed{background:var(--weak)}
 .cwnote{font-size:11.5px;color:var(--text-55);margin:2px 0 10px;padding:0 2px}
-.cwtable .dl{font:600 9px var(--mono);color:var(--text-45);white-space:nowrap}
-.cwtable .dl.tsl{color:var(--caution-tx)}
-.cwscroll{overflow-x:auto}
-.cwtable{width:100%;border-collapse:collapse;font-size:12.5px;min-width:640px}
-.cwtable th{text-align:left;font:600 9.5px var(--mono);letter-spacing:.06em;text-transform:uppercase;
-  color:var(--text-38);padding:0 10px 7px;white-space:nowrap}
-.cwtable td{padding:9px 10px;border-top:1px solid var(--line);vertical-align:top}
-.cwtable tr.uncertain{opacity:.72}
-.cwtable .co{font-weight:600;white-space:nowrap}
-.cwtable .tierchip{font:600 9px var(--mono);color:var(--text-45);border:1px solid var(--line-10);
-  border-radius:4px;padding:1px 5px;margin-left:6px}
-.cwtable .role a{color:var(--text);text-decoration:none;border-bottom:1px solid var(--line-10)}
-.cwtable .role a:hover{border-color:currentColor}
-.cwtable .soccell{font-family:var(--mono);font-size:11px;color:var(--text-60);white-space:nowrap}
-.cwtable .money{font-family:var(--mono);white-space:nowrap}
-.cwtable .money.est{color:var(--text-45);font-style:italic;cursor:help}
-.cwtable .gap-pos{color:var(--strong-tx)} .cwtable .gap-neg{color:var(--weak-tx)}
-.cwtable .reason{color:var(--text-55);font-size:11.5px;max-width:340px}
 .cwbadge{display:inline-block;font:600 9px var(--mono);border-radius:4px;padding:1px 5px;margin-left:6px;
   vertical-align:middle}
 .cwbadge.new{background:var(--strong-panel);color:var(--strong-tx)}
 .cwbadge.warn{background:var(--caution-panel);color:var(--caution-tx)}
 .cwbadge.uncertain{background:var(--weak-panel);color:var(--weak-tx)}
-.cwtable .act{font:600 9px var(--mono);color:var(--text-45);background:none;border:1px solid var(--line-10);
-  border-radius:5px;padding:3px 7px;cursor:pointer;white-space:nowrap}
-.cwtable .act:hover{color:var(--text)}
-.cwtable tr.marked{opacity:.4}
 .cwempty{color:var(--text-45);font-size:12px;padding:4px 2px 2px}
-@media (max-width:520px){ .cwtable .reason{display:none} }
+
+/* ---- Company watch: briefing (default) + cockpit (expanded) ---- */
+.bf{max-width:560px}
+.bf .date{font:500 10px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--text-42);margin-bottom:6px}
+.bf .head{font-family:Georgia,'Times New Roman',serif;font-size:26px;line-height:1.22;font-weight:600;
+  letter-spacing:-.01em;color:var(--text);margin:0 0 18px}
+.bf .lede{font-size:16px;line-height:1.65;color:var(--text);margin:0 0 4px}
+.bf .lede .g{color:var(--strong-tx);font-weight:600}
+.bf .lede .b{color:var(--weak-tx);font-weight:600}
+.bf .lede .w{color:var(--caution-tx);font-weight:600}
+.bf .actcard{display:block;background:var(--strong-panel);border:1px solid var(--strong-edge);border-left-width:3px;
+  border-radius:12px;padding:14px 16px;margin:22px 0}
+.bf .actcard.none{background:var(--card);border-color:var(--line);border-left-color:var(--line)}
+.bf .actcard .lbl{font:600 10px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--strong-tx);margin-bottom:7px}
+.bf .actcard h3{font-family:var(--sans);font-size:16px;font-weight:600;margin:0}
+.bf .actcard .m{color:var(--text-55);font-size:13px;margin:3px 0 0}
+.bf .actcard .fig{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:11px;font:500 12.5px var(--mono);font-variant-numeric:tabular-nums}
+.bf .actcard .fig .k{color:var(--text-45)} .bf .actcard .fig .v{color:var(--strong-tx)} .bf .actcard .fig .v.mut{color:var(--text-60)}
+.bf .actcard a{display:inline-block;margin-top:12px;font-size:13.5px;color:var(--link);text-decoration:none}
+.bf .actcard a:hover{text-decoration:underline}
+.bf .actcard + .actcard{margin-top:-8px}
+.bf .run{font-size:14.5px;line-height:1.6;color:var(--text-55);margin:22px 0;padding:14px 0;
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.bf .run .n{font-family:var(--mono);color:var(--caution-tx)} .bf .run .n.soon{color:var(--weak-tx)}
+.bf .run .n.mut{color:var(--text)}
+.bf .rec{font-size:13.5px;line-height:1.7;color:var(--text-45);margin:18px 0 0}
+.bf .rec b{color:var(--text-70);font-weight:600}
+.bf .showall{margin-top:22px;font:600 11px var(--mono);letter-spacing:.04em;color:var(--link);
+  background:none;border:1px solid var(--line-10);border-radius:8px;padding:10px 14px;cursor:pointer}
+.bf .showall:hover{border-color:var(--link);color:var(--link)}
+.bf .sign{margin-top:24px;font:500 10.5px var(--mono);color:var(--text-38)}
+
+.cwback{font:600 10.5px var(--mono);letter-spacing:.04em;color:var(--text-55);background:none;
+  border:none;cursor:pointer;padding:2px 0;margin-bottom:10px}
+.cwback:hover{color:var(--text)}
+.cwrun{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:2px 0 16px}
+.cwrun .top{display:flex;justify-content:space-between;font:500 9.5px var(--mono);letter-spacing:.1em;
+  text-transform:uppercase;color:var(--text-42);margin-bottom:11px}
+.cwrun .bar{position:relative;height:8px;border-radius:5px;background:var(--inset);overflow:hidden}
+.cwrun .bar i{position:absolute;top:0;bottom:0;left:0;background:var(--weak);opacity:.8}
+.cwrun .bar u{position:absolute;top:-3px;height:14px;width:2px;background:var(--weak);text-decoration:none}
+.cwrun .legs{display:flex;gap:22px;margin-top:14px}
+.cwrun .legs .num{font:600 18px var(--mono);font-variant-numeric:tabular-nums}
+.cwrun .legs .num.soon{color:var(--weak-tx)} .cwrun .legs .num.ok{color:var(--caution-tx)}
+.cwrun .legs .cap{font-size:11.5px;color:var(--text-45);margin-top:1px}
+
+.cwops{display:flex;flex-direction:column;gap:9px;margin-top:8px}
+.cwop{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--line-10);border-radius:11px;padding:13px 15px}
+.cwop.v-pass{border-left-color:var(--strong)} .cwop.v-too_late,.cwop.v-fail,.cwop.v-closed{border-left-color:var(--weak)}
+.cwop.v-unverified{border-left-color:var(--caution)}
+.cwop.marked{opacity:.4}
+.cwop .r1{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.cwop .co{font-size:15px;font-weight:600}
+.cwop .tierchip{font:600 9px var(--mono);color:var(--text-45);border:1px solid var(--line-10);border-radius:4px;padding:1px 4px;margin-left:6px}
+.cwop .ro{color:var(--text-60);font-size:13px;margin:3px 0 0}
+.cwop .ro a{color:var(--text);text-decoration:none;border-bottom:1px solid var(--line-10)}
+.cwop .ro a:hover{border-color:currentColor}
+.cwop .pay{text-align:right;flex:none}
+.cwop .pay .amt{font:600 16px var(--mono);font-variant-numeric:tabular-nums}
+.cwop .pay .amt.est{color:var(--text-45);font-style:italic}
+.cwop .pay .d{font:500 11px var(--mono);margin-top:2px}
+.cwop .pay .d.pos{color:var(--strong-tx)} .cwop .pay .d.neg{color:var(--weak-tx)} .cwop .pay .d.mut{color:var(--text-45)}
+.cwop .r2{display:flex;align-items:center;gap:10px;margin-top:11px;padding-top:11px;border-top:1px solid var(--line);flex-wrap:wrap}
+.cwop .tag{font:500 10px var(--mono);border-radius:6px;padding:2px 7px;color:var(--text-55);border:1px solid var(--line-10)}
+.cwop .tag.tsl{color:var(--weak-tx);border-color:var(--weak-edge)} .cwop .tag.grad{color:var(--text-45)}
+.cwop .why{font-size:12px;color:var(--text-45);flex:1;min-width:120px}
+.cwop .marks{display:flex;gap:6px;flex:none}
+.cwop .act{font:600 9px var(--mono);color:var(--text-45);background:none;border:1px solid var(--line-10);
+  border-radius:5px;padding:3px 7px;cursor:pointer}
+.cwop .act:hover{color:var(--text)}
+.cwgh{display:flex;align-items:center;gap:9px;margin:20px 2px 2px;font:600 11.5px var(--mono);letter-spacing:.03em}
+.cwgh .dot{width:8px;height:8px;border-radius:50%}
+.cwgh .n{margin-left:auto;color:var(--text-45);font-weight:500}
 </style>
 </head>
 <body>
@@ -570,7 +609,8 @@ const blank = (show = "new") => ({show, status:[], minfit:0, money:null, field:n
 const F = {jobs: blank(), hs: blank(), phd: Object.assign(blank(), {sort:"deadline"}), pt: blank(),
            nhs: blank(), companywatch: blank()};
 // Company watch has its own filter shape (employer-centric, not fit/salary tiers).
-const CW = {verdict:null, sector:null, tier:null, soc:null};
+// `expanded` toggles the daily briefing (default) for the full cockpit list.
+const CW = {verdict:null, sector:null, tier:null, soc:null, expanded:false};
 
 /* ---------- done / hidden marks ----------
    Kept in this browser only, since the site is static. Keyed on the advert URL
@@ -1315,40 +1355,144 @@ function cwChip(dim, val, label, on){
 function renderCompanyWatch(){
   const all = sectionRows().filter(r => markOf(r) !== "hidden");
   const found = all.length;
-  const passes = all.filter(r => r.verdict === "pass").length;
-  const failSalary = all.filter(r => r.verdict === "fail").length;
-  const tooLate = all.filter(r => r.verdict === "too_late").length;
+  const groups = {};
+  VERDICT_GROUPS.forEach(([k]) => groups[k] = all.filter(r => r.verdict === k));
+  const passes = (groups.pass || []).length;
 
-  $("#tiles").innerHTML =
-    '<div class="tile hero"><div><div class="lab">Sponsorable</div><div class="num">' + passes + '</div></div></div>' +
-    '<div class="tile"><div class="lab">Vacancies today</div><div class="num">' + found + '</div></div>' +
-    '<div class="tile"><div class="lab">Fail on salary alone</div><div class="num">' + failSalary + '</div></div>' +
-    '<div class="tile"><div class="lab">Too late (shortage list)</div><div class="num">' + tooLate + '</div></div>' +
-    '<div class="tile"><div class="lab">Companies watched</div><div class="num">83</div></div>';
-
-  // two countdowns (data-driven) + register freshness + last run. The shortage
-  // list closing is the urgent one and renders in the danger colour under 120 days.
+  // Two deadlines, read from occupations.json via index.json (never hardcoded).
   const dl = cwDeadlines();
   const tslLeft = cwDays(cwToday(), dl.tsl), gradLeft = cwDays(cwToday(), dl.graduate);
   const tslSoon = tslLeft != null && tslLeft < 120;
+
+  $("#count").textContent = found + (found === 1 ? " vacancy" : " vacancies") + " · " + passes + " sponsorable";
+  $("#active").innerHTML = "";
+  $("#emptyslot").innerHTML = "";
+  $("#list").style.display = "block";   // block flow, not the card grid
+
+  if (CW.expanded) cwCockpit(all, groups, found, passes, dl, tslLeft, gradLeft, tslSoon);
+  else             cwBriefing(all, groups, found, passes, dl, tslLeft, gradLeft, tslSoon);
+}
+
+const cwMoney = n => "£" + Number(n || 0).toLocaleString("en-GB");
+function cwLongDate(iso){
+  if (!iso) return "";
+  const d = new Date(iso + "T00:00:00Z");
+  return isNaN(d) ? iso : d.toLocaleDateString("en-GB",
+    {weekday:"long", day:"numeric", month:"long", year:"numeric", timeZone:"UTC"}).replace(", ", " · ");
+}
+
+/* ---- briefing (default): a five-second read of what needs you today ---- */
+function cwBriefing(all, groups, found, passes, dl, tslLeft, gradLeft, tslSoon){
+  $("#tiles").innerHTML = "";                 // the briefing carries no stat tiles
+  const pass = groups.pass || [];
+  const head = passes === 0 ? "Nothing needs you today."
+             : passes === 1 ? "One role worth a look today."
+             : passes + " roles worth a look today.";
+
+  let lede = "";
+  if (!found) lede = "No company-watch vacancies in this run.";
+  else if (passes === 0) lede = "No advertised role clears its floor today. The runway and everything still live are below.";
+  else {
+    const t = pass[0];
+    lede = '<span class="g">' + esc(t.company) + '</span> posted a ' + esc(t.title) +
+      (t.location ? " in " + esc(t.location) : "") +
+      (t.salaryText ? ' at <span class="mono">' + esc(t.salaryText) + "</span>" : "") +
+      " — " + cwDeadlineClause(t) +
+      (passes > 1 ? " Plus " + (passes - 1) + " more below." : " Everything else can wait.");
+  }
+
+  let acts = "";
+  pass.slice(0, 3).forEach(r => acts += cwActCard(r));
+  if (passes > 3) acts += '<p class="rec">+' + (passes - 3) + " more sponsorable in the full list.</p>";
+  if (passes === 0 && found) acts = '<div class="actcard none"><div class="lbl" style="color:var(--text-45)">Nothing to act on</div>' +
+    '<p class="m">No advertised role currently clears its floor. Open the full list to see what is waiting on a salary.</p></div>';
+
+  const rest = cwForTheRecord(groups);
   const stamp = (all.find(r => r.registerCheckedOn) || {}).registerCheckedOn || "";
-  const stale = stamp ? cwDays(stamp, cwToday()) : null;
-  let head = '<div class="cwdeadline' + (tslSoon ? " soon" : "") + '">' +
-    '<span>Shortage list closes <strong>' + esc(dl.tsl) + '</strong> — governs shortage-list codes (e.g. data analyst 3544)</span>' +
-    (tslLeft != null ? '<span class="n">' + tslLeft + ' days to the shortage-list deadline' +
-                       (tslSoon ? " — tight for a corporate hiring cycle" : "") + '</span>' : "") +
-    '<span class="reg">Graduate leave ends <strong>' + esc(dl.graduate) + '</strong>' +
-      (gradLeft != null ? ' · ' + gradLeft + ' days left' : "") + '</span>';
-  if (stamp) head += '<span class="reg' + (stale != null && stale > 90 ? " stale" : "") + '">register checked ' + esc(stamp) +
-                     (stale != null ? " · " + stale + "d ago" + (stale > 90 ? " (over 90 days — re-verify)" : "") : "") + '</span>';
-  if (INDEX.updated) head += '<span class="reg">last run ' + esc(INDEX.updated.slice(0, 16).replace("T", " ")) + ' UTC · ok</span>';
-  head += '</div>';
+  let sign = "Company watch · 83 sponsors";
+  if (stamp) sign += " · register checked " + stamp;
+  if (INDEX.updated) sign += " · last run " + INDEX.updated.slice(0, 10);
+
+  $("#list").innerHTML = '<div class="bf">' +
+    '<div class="date">' + esc(cwLongDate(cwToday())) + "</div>" +
+    '<h2 class="head">Good morning. ' + esc(head) + "</h2>" +
+    (lede ? '<p class="lede">' + lede + "</p>" : "") +
+    acts +
+    cwRunwaySentence(dl, tslLeft, gradLeft, tslSoon) +
+    (rest ? '<p class="rec">' + rest + "</p>" : "") +
+    '<button class="showall" id="cwexpand">Show all ' + found + " " + (found === 1 ? "vacancy" : "vacancies") + " →</button>" +
+    '<p class="sign">' + esc(sign) + "</p></div>";
+
+  $("#cwexpand").onclick = () => { CW.expanded = true; renderCompanyWatch(); };
+  $("#live").textContent = "Company watch briefing — " + passes + " sponsorable of " + found;
+}
+
+// The deadline that governs a sponsorable row, in one plain clause.
+function cwDeadlineClause(r){
+  const tsl = r.deadlineBasis === "temporary shortage list";
+  const clears = r.headroom != null ? "clears the floor by " + cwMoney(r.headroom) : "clears the floor";
+  return tsl
+    ? "a shortage-list code that " + clears + ", but its clock is the list close on " + (r.applicableDeadline || dl0().tsl) + "."
+    : "a higher-skilled code that " + clears + ", clocked by your Graduate visa (" + (r.applicableDeadline || dl0().graduate) + "), not the shortage list.";
+}
+function dl0(){ return cwDeadlines(); }
+
+function cwActCard(r){
+  const tsl = r.deadlineBasis === "temporary shortage list";
+  const dlv = r.applicableDeadline || (tsl ? dl0().tsl : dl0().graduate);
+  const meta = [r.location, r.soc ? "code " + r.soc : "", tsl ? "shortage-list code" : "higher-skilled"].filter(Boolean).join(" · ");
+  const fig =
+    (r.salaryText ? '<span><span class="k">pays </span><span class="v">' + esc(r.salaryText) + "</span></span>" : "") +
+    (r.requiredFloor != null ? '<span><span class="k">floor </span><span class="v">' + esc(cwMoney(r.requiredFloor)) + "</span></span>" : "") +
+    '<span><span class="k">deadline </span><span class="v mut">' + esc(dlv) + "</span></span>";
+  const link = r.url ? '<a href="' + esc(r.url) + '" target="_blank" rel="noopener">Open the advert →</a>' : "";
+  return '<div class="actcard"><div class="lbl">Act on this</div>' +
+    "<h3>" + esc(r.company) + " — " + esc(r.title) + "</h3>" +
+    '<p class="m">' + esc(meta) + "</p>" +
+    '<div class="fig">' + fig + "</div>" + link + "</div>";
+}
+
+function cwRunwaySentence(dl, tslLeft, gradLeft, tslSoon){
+  const tsl = tslLeft != null ? '<span class="n' + (tslSoon ? " soon" : "") + '">' + tslLeft + " days</span>" : "";
+  const grad = gradLeft != null ? '<span class="n mut">' + gradLeft + " days</span>" : "";
+  return '<p class="run">' +
+    (tslLeft != null ? tsl + " until the shortage list closes on " + esc(dl.tsl) +
+       " — the clock on shortage-list codes like data analyst 3544. " : "") +
+    (gradLeft != null ? grad + " of Graduate leave left, to " + esc(dl.graduate) + "." : "") +
+    "</p>";
+}
+
+// The understated back-half: what is live but not act-on-now, named where it is short.
+function cwForTheRecord(groups){
+  const parts = [];
+  const tl = groups.too_late || [];
+  tl.slice(0, 2).forEach(r => parts.push("<b>" + esc(r.company) + "</b>’s " + esc(r.title) +
+    (r.location ? " in " + esc(r.location) : "") + " is <b>too late</b> for the shortage-list deadline"));
+  if (tl.length > 2) parts.push("<b>" + tl.length + "</b> roles are too late in total");
+  const un = (groups.unverified || []).length;
+  if (un) parts.push("<b>" + un + "</b> other live " + (un === 1 ? "role hasn’t" : "roles haven’t") +
+    " advertised a salary yet, so " + (un === 1 ? "it’s" : "they’re") + " unverified rather than out");
+  const fl = (groups.fail || []).length;
+  if (fl) parts.push("<b>" + fl + "</b> " + (fl === 1 ? "role fails" : "roles fail") + " on salary alone");
+  const cl = (groups.closed || []).length;
+  if (cl) parts.push("<b>" + cl + "</b> " + (cl === 1 ? "is on a closed code" : "are on closed codes"));
+  return parts.length ? "For the record: " + parts.join("; ") + "." : "";
+}
+
+/* ---- cockpit (expanded): the full, legible list ---- */
+function cwCockpit(all, groups, found, passes, dl, tslLeft, gradLeft, tslSoon){
+  $("#tiles").innerHTML =
+    '<div class="tile hero"><div><div class="lab">Sponsorable</div><div class="num">' + passes + "</div></div></div>" +
+    '<div class="tile"><div class="lab">Vacancies today</div><div class="num">' + found + "</div></div>" +
+    '<div class="tile"><div class="lab">Salary not stated</div><div class="num">' + (groups.unverified || []).length + "</div></div>" +
+    '<div class="tile"><div class="lab">Too late (shortage list)</div><div class="num">' + (groups.too_late || []).length + "</div></div>" +
+    '<div class="tile"><div class="lab">Companies watched</div><div class="num">83</div></div>';
+
+  const run = cwRunwayComp(dl, tslLeft, gradLeft, tslSoon);
 
   // filters: verdict, sector, tier, SOC — distinct values present today
   const uniq = k => [...new Set(all.map(r => r[k]).filter(v => v || v === 0))];
-  const socs = uniq("soc").sort();
-  const sectors = uniq("sector").sort();
-  const tiers = uniq("tier").sort();
+  const socs = uniq("soc").sort(), sectors = uniq("sector").sort(), tiers = uniq("tier").sort();
   let filt = '<div class="cwfilters"><div class="cap">Verdict</div>';
   VERDICT_GROUPS.forEach(([k, lab]) => filt += cwChip("verdict", k, lab, CW.verdict === k));
   if (sectors.length > 1){ filt += '<div class="cap">Sector</div>';
@@ -1357,7 +1501,7 @@ function renderCompanyWatch(){
     tiers.forEach(t => filt += cwChip("tier", String(t), "Tier " + t, String(CW.tier) === String(t))); }
   if (socs.length > 1){ filt += '<div class="cap">SOC</div>';
     socs.forEach(s => filt += cwChip("soc", s, s, CW.soc === s)); }
-  filt += '</div>';
+  filt += "</div>";
 
   const shown = all.filter(r =>
     (!CW.verdict || r.verdict === CW.verdict) &&
@@ -1368,82 +1512,89 @@ function renderCompanyWatch(){
   let body = "";
   if (!found){
     body = '<div class="cwempty">No company-watch vacancies for this day. The daily run needs an ' +
-           'Adzuna API key (<code>ADZUNA_ID</code> / <code>ADZUNA_KEY</code>); without one this section ' +
-           'is intentionally empty rather than pretending the market is quiet.</div>';
+           "Adzuna API key (<code>ADZUNA_ID</code> / <code>ADZUNA_KEY</code>); without one this section " +
+           "is intentionally empty rather than pretending the market is quiet.</div>";
   } else {
     body += '<div class="cwnote">Higher-skilled codes do not expire; shortage-list codes close on <strong>' +
-            esc(dl.tsl) + '</strong>. Higher-skilled roles are sorted first — they are the durable route now.</div>';
-    // Within a group, higher-skilled (graduate-visa deadline) above shortage-list.
+            esc(dl.tsl) + "</strong>. Higher-skilled roles are sorted first — they are the durable route now.</div>";
     const hsFirst = (a, b) => (a.deadlineBasis === "temporary shortage list") -
                               (b.deadlineBasis === "temporary shortage list");
     VERDICT_GROUPS.forEach(([key, label]) => {
       const g = shown.filter(r => r.verdict === key).sort(hsFirst);
       if (!g.length && CW.verdict && CW.verdict !== key) return;   // hide off-filter groups
-      body += '<div class="cwgroup"><h3><span class="dot v-' + key + '"></span>' + label +
-              '<span class="n">' + g.length + '</span></h3>';
+      body += '<div class="cwgh"><span class="dot v-' + key + '"></span>' + label + '<span class="n">' + g.length + "</span></div>";
       if (!g.length){ body += '<div class="cwempty">Nothing in this group' +
-            (key === "pass" ? " today — the useful number is how many fail on salary alone." : ".") + '</div></div>'; return; }
-      body += '<div class="cwscroll"><table class="cwtable"><thead><tr>' +
-        '<th>Company</th><th>Role</th><th>Location</th><th>Salary</th><th>SOC</th>' +
-        '<th>Required</th><th>Gap</th><th>Why</th><th></th></tr></thead><tbody>';
-      g.forEach(r => body += cwRow(r));
-      body += '</tbody></table></div></div>';
+            (key === "pass" ? " today — the useful number is how many fail on salary alone." : ".") + "</div>"; return; }
+      body += '<div class="cwops">';
+      g.forEach(r => body += cwCard(r));
+      body += "</div>";
     });
   }
-  $("#count").textContent = found + (found === 1 ? " vacancy" : " vacancies") + " · " + passes + " sponsorable";
-  $("#active").innerHTML = "";
-  $("#emptyslot").innerHTML = "";
-  $("#list").style.display = "block";      // block flow, not the card grid, so the
-  $("#list").innerHTML = head + filt + body;  // filters wrap and the table scrolls in .cwscroll
 
+  $("#list").innerHTML = '<button class="cwback" id="cwback">← Back to briefing</button>' + run + filt + body;
+  $("#cwback").onclick = () => { CW.expanded = false; renderCompanyWatch(); };
   $$("#list .cwfilters .chip").forEach(b => b.onclick = () => {
-    const d = b.dataset.dim, v = b.dataset.dim === "tier" ? b.dataset.val : b.dataset.val;
-    CW[d] = String(CW[d]) === String(v) ? null : (d === "tier" ? v : v);
+    const d = b.dataset.dim, v = b.dataset.val;
+    CW[d] = String(CW[d]) === String(v) ? null : v;
     renderCompanyWatch();
   });
-  $$("#list .cwtable .act").forEach(b => b.onclick = () => {
+  $$("#list .cwop .act").forEach(b => b.onclick = () => {
     setMark(b.dataset.key, b.dataset.mark);
     renderCompanyWatch();
     $("#live").textContent = (b.dataset.mark === "done" ? "Marked done" : b.dataset.mark === "hidden" ? "Hidden" : "Restored");
   });
   $("#live").textContent = found + " company-watch vacancies, " + passes + " sponsorable";
 }
-const cwMoney = n => "£" + Number(n || 0).toLocaleString("en-GB");
-function cwRow(r){
+
+function cwRunwayComp(dl, tslLeft, gradLeft, tslSoon){
+  const total = gradLeft && gradLeft > 0 ? gradLeft : 1;
+  const cliffPct = tslLeft != null ? Math.max(2, Math.min(98, Math.round((tslLeft / total) * 100))) : 0;
+  return '<div class="cwrun">' +
+    '<div class="top"><span>today · ' + esc(cwToday()) + "</span><span>graduate · " + esc(dl.graduate) + "</span></div>" +
+    '<div class="bar"><i style="width:' + cliffPct + '%"></i><u style="left:' + cliffPct + '%"></u></div>' +
+    '<div class="legs">' +
+      '<div><div class="num ' + (tslSoon ? "soon" : "ok") + '">' + (tslLeft != null ? tslLeft : "—") +
+        '</div><div class="cap">days until the shortage list closes · ' + esc(dl.tsl) + "</div></div>" +
+      '<div><div class="num">' + (gradLeft != null ? gradLeft : "—") +
+        '</div><div class="cap">days of Graduate leave · ' + esc(dl.graduate) + "</div></div>" +
+    "</div></div>";
+}
+
+function cwCard(r){
   const badges = (isNew(r) ? '<span class="cwbadge new">NEW</span>' : "") +
     (r.confidence === "check" ? '<span class="cwbadge warn" title="This SOC is a judgement call — confirm the code before applying">CONFIRM CODE</span>' : "") +
     (r.employerMatch === "uncertain" ? '<span class="cwbadge uncertain" title="The advertised employer (' + esc(r.employer) + ') did not clearly match — verify it is the watched company">EMPLOYER ?</span>' : "");
-  const gap = r.verdict === "closed" ? "—"
-    : r.headroom != null ? '<span class="gap-pos">+' + esc(cwMoney(r.headroom)) + '</span>'
-    : r.shortfall != null ? '<span class="gap-neg">−' + esc(cwMoney(r.shortfall)) + '</span>' : "—";
-  const req = r.requiredFloor != null ? esc(cwMoney(r.requiredFloor)) : "—";
-  const mark = markOf(r), key = markKey(r);
-  const act = mark
-    ? '<button class="act" data-mark="" data-key="' + esc(key) + '">↺ undo</button>'
-    : '<button class="act" data-mark="done" data-key="' + esc(key) + '">✓</button> ' +
-      '<button class="act" data-mark="hidden" data-key="' + esc(key) + '">✕</button>';
   const role = r.url
-    ? '<a href="' + esc(r.url) + '" target="_blank" rel="noopener">' + esc(r.title) + '</a>'
+    ? '<a href="' + esc(r.url) + '" target="_blank" rel="noopener">' + esc(r.title) + "</a>"
     : esc(r.title);
   const tsl = r.deadlineBasis === "temporary shortage list";
-  const dlChip = r.applicableDeadline
-    ? '<br><span class="dl' + (tsl ? " tsl" : "") + '" title="' +
+  const delta = r.verdict === "closed" ? '<div class="d mut">closed</div>'
+    : r.headroom != null ? '<div class="d pos">+' + esc(cwMoney(r.headroom)) + "</div>"
+    : r.shortfall != null ? '<div class="d neg">−' + esc(cwMoney(r.shortfall)) + "</div>"
+    : r.requiredFloor != null ? '<div class="d mut">needs ' + esc(cwMoney(r.requiredFloor)) + "</div>" : "";
+  const dlTag = r.applicableDeadline
+    ? '<span class="tag ' + (tsl ? "tsl" : "grad") + '" title="' +
       esc(tsl ? "On the shortage list only for a CoS assigned before this date; after it the code is closed"
               : "Your Graduate visa deadline — higher-skilled codes have no expiry of their own") + '">' +
-      (tsl ? "TSL" : "grad") + " · " + esc(r.applicableDeadline) + '</span>'
+      (tsl ? "TSL" : "grad") + " · " + esc(r.applicableDeadline) + "</span>"
     : "";
-  return '<tr class="' + (r.employerMatch === "uncertain" ? "uncertain " : "") + (mark ? "marked" : "") + '">' +
-    '<td class="co">' + esc(r.company) + '<span class="tierchip" title="' + esc(r.rating) + '">T' + esc(r.tier) + '</span></td>' +
-    '<td class="role">' + role + badges + '</td>' +
-    '<td>' + esc(r.location || "—") + '</td>' +
-    '<td class="money' + (r.salaryEstimated ? " est" : "") + '"' +
-      (r.salaryEstimated ? ' title="Estimated by Adzuna, not the advertised salary — confirm on the advert"' : "") +
-      '>' + esc(r.salaryText || "—") + '</td>' +
-    '<td class="soccell">' + esc(r.soc) + '<br><span style="color:var(--text-38)">' + esc(r.family) + '</span>' + dlChip + '</td>' +
-    '<td class="money">' + req + '</td>' +
-    '<td class="money">' + gap + '</td>' +
-    '<td class="reason">' + esc(r.reason) + '</td>' +
-    '<td style="white-space:nowrap">' + act + '</td></tr>';
+  const socTag = '<span class="tag">' + esc(r.soc) + (r.family ? " · " + esc(r.family) : "") + "</span>";
+  const mark = markOf(r), key = markKey(r);
+  const marks = mark
+    ? '<button class="act" data-mark="" data-key="' + esc(key) + '">↺ undo</button>'
+    : '<button class="act" data-mark="done" data-key="' + esc(key) + '">✓ done</button>' +
+      '<button class="act" data-mark="hidden" data-key="' + esc(key) + '">✕ hide</button>';
+  return '<div class="cwop v-' + r.verdict + (mark ? " marked" : "") + '">' +
+    '<div class="r1"><div>' +
+      '<span class="co">' + esc(r.company) + '<span class="tierchip" title="' + esc(r.rating) + '">T' + esc(r.tier) + "</span></span>" +
+      '<div class="ro">' + role + badges + (r.location ? " · " + esc(r.location) : "") + "</div></div>" +
+      '<div class="pay"><div class="amt' + (r.salaryEstimated ? " est" : "") + '"' +
+        (r.salaryEstimated ? ' title="Estimated by Adzuna, not the advertised salary — confirm on the advert"' : "") +
+        ">" + esc(r.salaryText || "—") + "</div>" + delta + "</div></div>" +
+    '<div class="r2">' + socTag + dlTag +
+      '<span class="why">' + esc(r.reason) + "</span>" +
+      '<span class="marks">' + marks + "</span></div>" +
+  "</div>";
 }
 
 /* ---------- controls ---------- */

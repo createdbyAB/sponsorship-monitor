@@ -78,3 +78,29 @@ The calm-cockpit mock: legible, card-based, monospace only for numbers.
   the two deadlines, the too-late and closed rows, deadline chips, mark buttons,
   and a quiet-day/zero-sponsorable state.
 - Then branch, PR, describe the two-mode design in plain English.
+
+## Follow-up (2026-09-18): extended to Jobs, H&S, NHS
+
+The same briefing → cockpit pattern now fronts three more tabs. PhD and
+Part-time keep the plain card list (their "act-on" signal is weaker and the
+briefing would add little). The cockpit is the existing tiles + filter rail +
+card grid, reached by "Show all"; a "← Back to briefing" link returns.
+
+Each briefing is *tailored* — the act-on signal differs by section:
+
+- **Jobs / H&S** — strong matches by CV fit that a July-2025 occupation code
+  does not rule out (`status === "strong" && sponsorable !== false`, minus rows
+  already marked done). H&S is honest about its reality: code 3582 is closed, so
+  most days it leads with "Nothing sponsorable today" and explains why.
+- **NHS** — leads with adverts that *welcome* sponsorship (`sponsorship ===
+  "welcome"`), then strong matches; the signal line names what is closing
+  soonest. A welcomed advert on a closed code is still greyed and counted under
+  "greyed by a closed code", not shown as act-on.
+
+Shared shell reused from the Company watch briefing (`.bf` / `.actcard` /
+`.run` / `.showall`). New pieces: `BRIEF`/`EXPANDED` state, `renderBriefing`,
+`briefLede`/`briefActCard`/`briefSignal`/`briefRest`, and an English `plural()`.
+"For the record" partitions its counts so a closed-code row is reported once
+(greyed), never double-counted as a caution/long-shot. The sort control is
+hidden in any briefing (also fixes the same leftover in the Company watch
+briefing). Still no change to `monitor.py`, `eligibility.py`, or the schema.

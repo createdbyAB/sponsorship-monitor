@@ -395,6 +395,7 @@ button{font:inherit;color:inherit;background:none;border:none;padding:0;cursor:p
 .bf .showall:hover{border-color:var(--link);color:var(--link)}
 .bf .sign{margin-top:24px;font:500 10.5px var(--mono);color:var(--text-38)}
 
+#f-sort.brief-off{display:none !important}   /* no sort control in a briefing */
 .cwback{font:600 10.5px var(--mono);letter-spacing:.04em;color:var(--text-55);background:none;
   border:none;cursor:pointer;padding:2px 0;margin-bottom:10px}
 .cwback:hover{color:var(--text)}
@@ -611,6 +612,14 @@ const F = {jobs: blank(), hs: blank(), phd: Object.assign(blank(), {sort:"deadli
 // Company watch has its own filter shape (employer-centric, not fit/salary tiers).
 // `expanded` toggles the daily briefing (default) for the full cockpit list.
 const CW = {verdict:null, sector:null, tier:null, soc:null, expanded:false};
+
+// Jobs, H&S and NHS also open as a daily briefing that expands into the full
+// card list; PhD and Part-time keep the plain list. Per-section, browser-only.
+const BRIEF = new Set(["jobs", "hs", "nhs"]);
+const EXPANDED = {jobs:false, hs:false, nhs:false};
+const plural = (n, w) => n === 1 ? w
+  : /(?:ch|sh|s|x|z)$/.test(w) ? w + "es"
+  : /[^aeiou]y$/.test(w) ? w.slice(0, -1) + "ies" : w + "s";
 
 /* ---------- done / hidden marks ----------
    Kept in this browser only, since the site is static. Keyed on the advert URL
@@ -1181,7 +1190,10 @@ function renderList(){
   $("#fcount").innerHTML = n ? '<span class="badge">' + n + '</span>' : '<span style="opacity:.5">▾</span>';
   $("#apply").textContent = "Show " + sorted.length + (sorted.length === 1 ? " match" : " matches");
 
-  $("#list").innerHTML = sorted.map(cardHtml).join("");
+  const backLink = (BRIEF.has(section) && EXPANDED[section])
+    ? '<button class="cwback" id="briefback">← Back to briefing</button>' : "";
+  $("#list").innerHTML = backLink + sorted.map(cardHtml).join("");
+  if ($("#briefback")) $("#briefback").onclick = () => { EXPANDED[section] = false; renderAll(); };
   $$("#list .act").forEach(b => b.onclick = () => {
     const said = b.dataset.mark === "done" ? "Marked done"
                : b.dataset.mark === "hidden" ? "Hidden" : "Restored";
@@ -1320,6 +1332,135 @@ const FOOTNOTE = {
         "applies here. Confirm everything on the advert before applying."
 };
 
+/* ---------- section briefings (jobs / hs / nhs) ----------
+   The same five-second read as Company watch, tailored per section: jobs and
+   health & safety lead with strong, sponsor-eligible matches by CV fit; NHS
+   leads with adverts that welcome sponsorship and what is closing soonest. */
+function briefLede(r, section, welcomed){
+  const where = r.employer ? " at " + esc(r.employer) : "";
+  const loc = r.location ? " (" + esc(r.location) + ")" : "";
+  const fit = r.score >= 80 ? "scores " + r.score + "/100 on your CV" : "fits at " + r.score + "/100";
+  const sal = r.salary ? ", " + esc(shortMoney(r.salary)) : "";
+  const tail = section === "nhs" && welcomed ? ", and the advert welcomes sponsorship" : "";
+  return '<span class="g">' + esc(r.title) + "</span>" + where + loc + " " + fit + sal + tail +
+         ". Everything else can wait.";
+}
+
+function briefActCard(r, section){
+  const where = [r.employer, r.location].filter(Boolean).join(" · ");
+  const dl = daysToDeadline(r);
+  const welcomed = section === "nhs" && r.sponsorship === "welcome";
+  const fig =
+    '<span><span class="k">fit </span><span class="v">' + r.score + "</span></span>" +
+    (r.salary ? '<span><span class="k">salary </span><span class="v">' + esc(shortMoney(r.salary)) + "</span></span>" : "") +
+    (r.soc ? '<span><span class="k">code </span><span class="v mut">' + esc(r.soc) + "</span></span>" : "") +
+    (dl !== null && dl >= 0 ? '<span><span class="k">closes </span><span class="v mut">' + dl + "d</span></span>" : "");
+  const link = r.url ? '<a href="' + esc(r.url) + '" target="_blank" rel="noopener">Open the advert →</a>' : "";
+  return '<div class="actcard"><div class="lbl">Act on this' + (welcomed ? " · welcomes sponsorship" : "") + "</div>" +
+    "<h3>" + esc(r.title) + "</h3>" +
+    '<p class="m">' + esc(where) + "</p>" +
+    '<div class="fig">' + fig + "</div>" + link + "</div>";
+}
+
+function briefSignal(section, all){
+  const live = all.length, fresh = all.filter(isNew).length;
+  const closed = all.filter(r => r.sponsorable === false).length;
+  if (section === "nhs"){
+    const withDl = all.filter(r => { const d = daysToDeadline(r); return d !== null && d >= 0; })
+                      .sort((a, b) => daysToDeadline(a) - daysToDeadline(b));
+    const soon = withDl[0];
+    const welcomed = all.filter(r => r.sponsorship === "welcome" && r.sponsorable !== false).length;
+    return '<p class="run">' +
+      (soon ? '<span class="n soon">Closing soonest</span> — ' + esc(soon.title) + " at " +
+              esc(soon.employer || "an NHS body") + ", in " + daysToDeadline(soon) + " days. " : "") +
+      '<span class="n mut">' + welcomed + "</span> advert" + (welcomed === 1 ? "" : "s") +
+      " explicitly " + (welcomed === 1 ? "welcomes" : "welcome") +
+      " sponsorship; the rest are licensed sponsors that have not said." + "</p>";
+  }
+  if (section === "hs"){
+    return '<p class="run">The health &amp; safety occupation code (3582) is <span class="n soon">closed</span> ' +
+      "to a first Skilled Worker visa, so most roles here are shown for awareness, not as leads. Salaries are " +
+      'measured against the <span class="n mut">' + esc(money(FLOORS.general)) + "</span> general floor.</p>";
+  }
+  return '<p class="run"><span class="n mut">' + live + '</span> live · <span class="n mut">' + fresh +
+    "</span> new today. Fit is scored against your CV; salaries against the " +
+    '<span class="n mut">' + esc(money(FLOORS.general)) + "</span> general floor." +
+    (closed ? ' <span class="n soon">' + closed + "</span> greyed by a closed occupation code." : "") + "</p>";
+}
+
+function briefRest(all){
+  // Partition so the counts do not overlap: a closed-code row is reported once,
+  // under "greyed", not also as a caution/long-shot.
+  const open = all.filter(r => r.sponsorable !== false);
+  const caution = open.filter(r => r.status === "caution").length;
+  const weak = open.filter(r => r.status === "weak").length;
+  const closed = all.filter(r => r.sponsorable === false).length;
+  const parts = [];
+  if (caution) parts.push("<b>" + caution + "</b> to check");
+  if (weak) parts.push("<b>" + weak + "</b> long " + plural(weak, "shot"));
+  if (closed) parts.push("<b>" + closed + "</b> greyed by a closed code");
+  return parts.length ? "For the record: " + parts.join("; ") + "." : "";
+}
+
+function renderBriefing(section){
+  $("#tiles").innerHTML = "";
+  $("#active").innerHTML = "";
+  $("#emptyslot").innerHTML = "";
+  $("#count").textContent = "";
+  $("#list").style.display = "block";
+
+  const all = sectionRows().filter(r => markOf(r) !== "hidden");
+  const live = r => r.sponsorable !== false && markOf(r) !== "done";
+  let actRows, head, lede;
+
+  if (section === "nhs"){
+    const byFit = (a, b) => b.score - a.score;
+    const welcomed = all.filter(r => r.sponsorship === "welcome" && live(r)).sort(byFit);
+    const strong = all.filter(r => r.sponsorship !== "welcome" && r.status === "strong" && live(r)).sort(byFit);
+    actRows = welcomed.concat(strong);
+    const w = welcomed.length;
+    head = w > 0 ? w + " NHS " + plural(w, "role") + " welcome" + (w === 1 ? "s" : "") + " sponsorship today."
+         : strong.length > 0 ? strong.length + " strong NHS " + plural(strong.length, "match") + " to check today."
+         : "Nothing stands out on the wards today.";
+    lede = actRows.length
+      ? briefLede(actRows[0], section, actRows[0].sponsorship === "welcome")
+      : "No advert currently welcomes sponsorship, and nothing scores as a strong match. The full list is still live below.";
+  } else {
+    actRows = all.filter(r => r.status === "strong" && live(r)).sort((a, b) => b.score - a.score);
+    const n = actRows.length, word = section === "hs" ? "role" : "match";
+    head = n > 0 ? n + " strong " + plural(n, word) + " worth a look today."
+         : section === "hs" ? "Nothing sponsorable in health &amp; safety today."
+         : "No strong match clears today.";
+    lede = actRows.length ? briefLede(actRows[0], section, false)
+         : section === "hs"
+           ? "The health &amp; safety code stays closed, so today's roles are awareness-only. The signal line and full list are below."
+           : "Nothing scored as a strong, sponsor-eligible match today. The full list is still live below.";
+  }
+
+  let acts = "";
+  actRows.slice(0, 3).forEach(r => acts += briefActCard(r, section));
+  if (actRows.length > 3) acts += '<p class="rec">+' + (actRows.length - 3) + " more in the full list.</p>";
+  if (!actRows.length) acts = '<div class="actcard none"><div class="lbl" style="color:var(--text-45)">Nothing to act on</div>' +
+    '<p class="m">Open the full list to see everything still live — quiet days are normal on these boards.</p></div>';
+
+  const stamp = INDEX.updated ? INDEX.updated.slice(0, 10) : "";
+  const sign = SECTION_NAME[section].replace(/^./, c => c.toUpperCase()) + (stamp ? " · last run " + stamp : "");
+  const rest = briefRest(all);
+
+  $("#list").innerHTML = '<div class="bf">' +
+    '<div class="date">' + esc(cwLongDate(cwToday())) + "</div>" +
+    '<h2 class="head">Good morning. ' + head + "</h2>" +
+    '<p class="lede">' + lede + "</p>" +
+    acts +
+    briefSignal(section, all) +
+    (rest ? '<p class="rec">' + rest + "</p>" : "") +
+    '<button class="showall" id="briefexpand">Show all ' + all.length + " " + plural(all.length, "role") + " →</button>" +
+    '<p class="sign">' + esc(sign) + "</p></div>";
+
+  $("#briefexpand").onclick = () => { EXPANDED[section] = true; renderAll(); };
+  $("#live").textContent = SECTION_NAME[section] + " briefing — " + actRows.length + " to act on of " + all.length;
+}
+
 function renderAll(){
   $$("#switcher .tab").forEach(t => t.setAttribute("aria-selected", t.dataset.sec === section));
   if (section === "companywatch"){
@@ -1327,14 +1468,24 @@ function renderAll(){
     renderDays();
     $("#rail").style.display = "none";
     $("#openfilters").style.display = "none";
+    $("#f-sort").classList.add("brief-off");
     renderCompanyWatch();
     return;
   }
+  renderDays();
+  if (BRIEF.has(section) && !EXPANDED[section]){
+    $("#foot").innerHTML = FOOTNOTE[section];
+    $("#rail").style.display = "none";
+    $("#openfilters").style.display = "none";
+    $("#f-sort").classList.add("brief-off");
+    renderBriefing(section);
+    return;
+  }
+  $("#f-sort").classList.remove("brief-off");
   $("#rail").style.display = "";
   $("#openfilters").style.display = "";
   $("#list").style.display = "";          // back to the card grid
   $("#foot").innerHTML = FOOTNOTE[section];
-  renderDays();
   renderTiles();
   renderRail();
   renderActive();

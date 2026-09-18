@@ -613,10 +613,10 @@ const F = {jobs: blank(), hs: blank(), phd: Object.assign(blank(), {sort:"deadli
 // `expanded` toggles the daily briefing (default) for the full cockpit list.
 const CW = {verdict:null, sector:null, tier:null, soc:null, expanded:false};
 
-// Jobs, H&S and NHS also open as a daily briefing that expands into the full
-// card list; PhD and Part-time keep the plain list. Per-section, browser-only.
-const BRIEF = new Set(["jobs", "hs", "nhs"]);
-const EXPANDED = {jobs:false, hs:false, nhs:false};
+// Every section except Company watch (which has its own) opens as a daily
+// briefing that expands into the full card list. Per-section, browser-only.
+const BRIEF = new Set(["jobs", "hs", "nhs", "phd", "pt"]);
+const EXPANDED = {jobs:false, hs:false, nhs:false, phd:false, pt:false};
 const plural = (n, w) => n === 1 ? w
   : /(?:ch|sh|s|x|z)$/.test(w) ? w + "es"
   : /[^aeiou]y$/.test(w) ? w.slice(0, -1) + "ies" : w + "s";
@@ -1336,27 +1336,60 @@ const FOOTNOTE = {
    The same five-second read as Company watch, tailored per section: jobs and
    health & safety lead with strong, sponsor-eligible matches by CV fit; NHS
    leads with adverts that welcome sponsorship and what is closing soonest. */
-function briefLede(r, section, welcomed){
+function briefLede(r, section){
   const where = r.employer ? " at " + esc(r.employer) : "";
-  const loc = r.location ? " (" + esc(r.location) + ")" : "";
+  const loc = (r.location || r.country) ? " (" + esc(r.location || r.country) + ")" : "";
+  if (section === "phd"){
+    const dl = daysToDeadline(r);
+    const when = dl !== null && dl >= 0 ? "closing in " + dl + " day" + (dl === 1 ? "" : "s") : "with a rolling deadline";
+    const intl = r.intlEligible === true ? ", open to international students" : "";
+    const stip = r.stipend ? ", " + esc(money(r.stipend)) + "/yr stipend" : "";
+    const fund = r.funding === "full" ? "fully funded" : "funded";
+    return '<span class="g">' + esc(r.title) + "</span>" + where + loc + " is " + fund + intl + ", " + when + stip +
+           ". The rest are below.";
+  }
+  if (section === "pt"){
+    const rate = r.hourly != null ? "≈£" + Number(r.hourly).toFixed(2) + "/hr" : "an unstated rate";
+    const fte = r.salary ? " (about " + esc(shortMoney(r.salary)) + "/yr full-time)" : "";
+    return '<span class="g">' + esc(r.title) + "</span>" + where + loc + " pays " + rate + fte + ". Everything else can wait.";
+  }
   const fit = r.score >= 80 ? "scores " + r.score + "/100 on your CV" : "fits at " + r.score + "/100";
   const sal = r.salary ? ", " + esc(shortMoney(r.salary)) : "";
-  const tail = section === "nhs" && welcomed ? ", and the advert welcomes sponsorship" : "";
-  return '<span class="g">' + esc(r.title) + "</span>" + where + loc + " " + fit + sal + tail +
-         ". Everything else can wait.";
+  const tail = section === "nhs" && r.sponsorship === "welcome" ? ", and the advert welcomes sponsorship" : "";
+  return '<span class="g">' + esc(r.title) + "</span>" + where + loc + " " + fit + sal + tail + ". Everything else can wait.";
 }
 
 function briefActCard(r, section){
-  const where = [r.employer, r.location].filter(Boolean).join(" · ");
-  const dl = daysToDeadline(r);
-  const welcomed = section === "nhs" && r.sponsorship === "welcome";
-  const fig =
-    '<span><span class="k">fit </span><span class="v">' + r.score + "</span></span>" +
-    (r.salary ? '<span><span class="k">salary </span><span class="v">' + esc(shortMoney(r.salary)) + "</span></span>" : "") +
-    (r.soc ? '<span><span class="k">code </span><span class="v mut">' + esc(r.soc) + "</span></span>" : "") +
-    (dl !== null && dl >= 0 ? '<span><span class="k">closes </span><span class="v mut">' + dl + "d</span></span>" : "");
+  const where = [r.employer, r.location || r.country].filter(Boolean).join(" · ");
   const link = r.url ? '<a href="' + esc(r.url) + '" target="_blank" rel="noopener">Open the advert →</a>' : "";
-  return '<div class="actcard"><div class="lbl">Act on this' + (welcomed ? " · welcomes sponsorship" : "") + "</div>" +
+  const dl = daysToDeadline(r);
+  let fig, lbl = "Act on this";
+  if (section === "phd"){
+    const fund = r.funding === "full" ? "fully funded" : r.funding === "partial" ? "part funded" : "funding ?";
+    fig =
+      '<span><span class="k">funding </span><span class="v">' + fund + "</span></span>" +
+      (r.stipend ? '<span><span class="k">stipend </span><span class="v mut">' + esc(money(r.stipend)) + "/yr</span></span>" : "") +
+      (dl !== null && dl >= 0
+        ? '<span><span class="k">closes </span><span class="v mut">' + dl + "d</span></span>"
+        : '<span><span class="v mut">rolling deadline</span></span>');
+    if (r.intlEligible === true) lbl += " · open to international students";
+  } else if (section === "pt"){
+    const rate = r.hourly != null ? "£" + Number(r.hourly).toFixed(2) + "/hr" : "rate not stated";
+    const shifts = (r.shifts || []).filter(s => s !== "daytime")
+      .map(s => ({evening:"evenings", weekend:"weekends", flexible:"flexible"}[s] || s)).join(", ");
+    fig =
+      '<span><span class="k">rate </span><span class="v">' + esc(rate) + "</span></span>" +
+      (shifts ? '<span><span class="k">shifts </span><span class="v mut">' + esc(shifts) + "</span></span>" : "") +
+      (r.salary ? '<span><span class="k">FTE </span><span class="v mut">≈' + esc(shortMoney(r.salary)) + "/yr</span></span>" : "");
+  } else {
+    if (section === "nhs" && r.sponsorship === "welcome") lbl += " · welcomes sponsorship";
+    fig =
+      '<span><span class="k">fit </span><span class="v">' + r.score + "</span></span>" +
+      (r.salary ? '<span><span class="k">salary </span><span class="v">' + esc(shortMoney(r.salary)) + "</span></span>" : "") +
+      (r.soc ? '<span><span class="k">code </span><span class="v mut">' + esc(r.soc) + "</span></span>" : "") +
+      (dl !== null && dl >= 0 ? '<span><span class="k">closes </span><span class="v mut">' + dl + "d</span></span>" : "");
+  }
+  return '<div class="actcard"><div class="lbl">' + lbl + "</div>" +
     "<h3>" + esc(r.title) + "</h3>" +
     '<p class="m">' + esc(where) + "</p>" +
     '<div class="fig">' + fig + "</div>" + link + "</div>";
@@ -1365,6 +1398,27 @@ function briefActCard(r, section){
 function briefSignal(section, all){
   const live = all.length, fresh = all.filter(isNew).length;
   const closed = all.filter(r => r.sponsorable === false).length;
+  if (section === "phd"){
+    const dated = all.filter(r => { const d = daysToDeadline(r); return d !== null && d >= 0; })
+                     .sort((a, b) => daysToDeadline(a) - daysToDeadline(b));
+    const soon = dated[0];
+    const rolling = all.filter(r => !r.deadline).length;
+    const funded = all.filter(r => r.funding === "full" || r.funding === "partial").length;
+    return '<p class="run">' +
+      (soon ? '<span class="n soon">Closing soonest</span> — ' + esc(soon.title) + ", in " +
+              daysToDeadline(soon) + " day" + (daysToDeadline(soon) === 1 ? "" : "s") + ". " : "") +
+      '<span class="n mut">' + funded + "</span> of " + live + " are funded" +
+      (rolling ? '; <span class="n mut">' + rolling + "</span> roll with no fixed deadline" : "") +
+      ". A studentship is not a Skilled Worker route, so the sponsor rules do not apply here.</p>";
+  }
+  if (section === "pt"){
+    const strong = all.filter(r => r.status === "strong").length;
+    const partT = all.filter(r => r.contract === "part_time").length;
+    const flex = all.filter(r => r.contract === "full_time").length;
+    return '<p class="run"><span class="n mut">' + strong + "</span> clear a good hourly rate today. Rates are " +
+      '<span class="n soon">estimated</span> from the advertised figure, so a genuinely part-time salary can read low — ' +
+      "confirm on the advert. " + partT + " part-time · " + flex + " full-time with evening or weekend hours.</p>";
+  }
   if (section === "nhs"){
     const withDl = all.filter(r => { const d = daysToDeadline(r); return d !== null && d >= 0; })
                       .sort((a, b) => daysToDeadline(a) - daysToDeadline(b));
@@ -1388,9 +1442,27 @@ function briefSignal(section, all){
     (closed ? ' <span class="n soon">' + closed + "</span> greyed by a closed occupation code." : "") + "</p>";
 }
 
-function briefRest(all){
-  // Partition so the counts do not overlap: a closed-code row is reported once,
-  // under "greyed", not also as a caution/long-shot.
+function briefRest(all, section){
+  if (section === "phd"){
+    const ukonly = all.filter(r => r.intlEligible === false).length;
+    const unfunded = all.filter(r => r.funding !== "full" && r.funding !== "partial").length;
+    const past = all.filter(r => { const d = daysToDeadline(r); return d !== null && d < 0; }).length;
+    const parts = [];
+    if (ukonly) parts.push("<b>" + ukonly + "</b> UK-only");
+    if (unfunded) parts.push("<b>" + unfunded + "</b> with funding unconfirmed");
+    if (past) parts.push("<b>" + past + "</b> already closed");
+    return parts.length ? "For the record: " + parts.join("; ") + "." : "";
+  }
+  if (section === "pt"){
+    const fair = all.filter(r => r.status === "caution").length;
+    const low = all.filter(r => r.status === "weak").length;
+    const parts = [];
+    if (fair) parts.push("<b>" + fair + "</b> at a fair rate");
+    if (low) parts.push("<b>" + low + "</b> low or unstated");
+    return parts.length ? "For the record: " + parts.join("; ") + "." : "";
+  }
+  // jobs / hs / nhs — partition so a closed-code row is reported once (greyed),
+  // never also as a caution/long-shot.
   const open = all.filter(r => r.sponsorable !== false);
   const caution = open.filter(r => r.status === "caution").length;
   const weak = open.filter(r => r.status === "weak").length;
@@ -1410,31 +1482,48 @@ function renderBriefing(section){
   $("#list").style.display = "block";
 
   const all = sectionRows().filter(r => markOf(r) !== "hidden");
-  const live = r => r.sponsorable !== false && markOf(r) !== "done";
+  const undone = r => markOf(r) !== "done";
+  const openGate = r => r.sponsorable !== false && undone(r);
+  const unit = section === "phd" ? "opening" : "role";
   let actRows, head, lede;
 
   if (section === "nhs"){
     const byFit = (a, b) => b.score - a.score;
-    const welcomed = all.filter(r => r.sponsorship === "welcome" && live(r)).sort(byFit);
-    const strong = all.filter(r => r.sponsorship !== "welcome" && r.status === "strong" && live(r)).sort(byFit);
+    const welcomed = all.filter(r => r.sponsorship === "welcome" && openGate(r)).sort(byFit);
+    const strong = all.filter(r => r.sponsorship !== "welcome" && r.status === "strong" && openGate(r)).sort(byFit);
     actRows = welcomed.concat(strong);
     const w = welcomed.length;
     head = w > 0 ? w + " NHS " + plural(w, "role") + " welcome" + (w === 1 ? "s" : "") + " sponsorship today."
          : strong.length > 0 ? strong.length + " strong NHS " + plural(strong.length, "match") + " to check today."
          : "Nothing stands out on the wards today.";
-    lede = actRows.length
-      ? briefLede(actRows[0], section, actRows[0].sponsorship === "welcome")
+    lede = actRows.length ? briefLede(actRows[0], section)
       : "No advert currently welcomes sponsorship, and nothing scores as a strong match. The full list is still live below.";
+  } else if (section === "phd"){
+    const isOpen = r => { const d = daysToDeadline(r); return d === null || d >= 0; };
+    const dOf = r => { const d = daysToDeadline(r); return d === null ? Infinity : d; };
+    actRows = all.filter(r => r.intlEligible !== false && (r.funding === "full" || r.funding === "partial") &&
+                              undone(r) && isOpen(r))
+                 .sort((a, b) => dOf(a) - dOf(b) || (a.funding === "full" ? 0 : 1) - (b.funding === "full" ? 0 : 1));
+    const n = actRows.length;
+    head = n > 0 ? n + " funded " + plural(n, "PhD") + " worth a look today." : "No funded, eligible PhD is open today.";
+    lede = actRows.length ? briefLede(actRows[0], section)
+      : "Nothing funded and open to international students is live right now. The full list is below.";
+  } else if (section === "pt"){
+    actRows = all.filter(r => r.status === "strong" && undone(r)).sort((a, b) => (b.hourly || 0) - (a.hourly || 0));
+    const n = actRows.length;
+    head = n > 0 ? n + " part-time " + plural(n, "role") + " at a good rate today." : "No standout rate today.";
+    lede = actRows.length ? briefLede(actRows[0], section)
+      : "Nothing clears a good hourly rate today. The full list is still live below.";
   } else {
-    actRows = all.filter(r => r.status === "strong" && live(r)).sort((a, b) => b.score - a.score);
+    actRows = all.filter(r => r.status === "strong" && openGate(r)).sort((a, b) => b.score - a.score);
     const n = actRows.length, word = section === "hs" ? "role" : "match";
     head = n > 0 ? n + " strong " + plural(n, word) + " worth a look today."
          : section === "hs" ? "Nothing sponsorable in health &amp; safety today."
          : "No strong match clears today.";
-    lede = actRows.length ? briefLede(actRows[0], section, false)
-         : section === "hs"
-           ? "The health &amp; safety code stays closed, so today's roles are awareness-only. The signal line and full list are below."
-           : "Nothing scored as a strong, sponsor-eligible match today. The full list is still live below.";
+    lede = actRows.length ? briefLede(actRows[0], section)
+      : section === "hs"
+        ? "The health &amp; safety code stays closed, so today's roles are awareness-only. The signal line and full list are below."
+        : "Nothing scored as a strong, sponsor-eligible match today. The full list is still live below.";
   }
 
   let acts = "";
@@ -1445,7 +1534,7 @@ function renderBriefing(section){
 
   const stamp = INDEX.updated ? INDEX.updated.slice(0, 10) : "";
   const sign = SECTION_NAME[section].replace(/^./, c => c.toUpperCase()) + (stamp ? " · last run " + stamp : "");
-  const rest = briefRest(all);
+  const rest = briefRest(all, section);
 
   $("#list").innerHTML = '<div class="bf">' +
     '<div class="date">' + esc(cwLongDate(cwToday())) + "</div>" +
@@ -1454,7 +1543,7 @@ function renderBriefing(section){
     acts +
     briefSignal(section, all) +
     (rest ? '<p class="rec">' + rest + "</p>" : "") +
-    '<button class="showall" id="briefexpand">Show all ' + all.length + " " + plural(all.length, "role") + " →</button>" +
+    '<button class="showall" id="briefexpand">Show all ' + all.length + " " + plural(all.length, unit) + " →</button>" +
     '<p class="sign">' + esc(sign) + "</p></div>";
 
   $("#briefexpand").onclick = () => { EXPANDED[section] = true; renderAll(); };

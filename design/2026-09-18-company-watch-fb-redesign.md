@@ -104,3 +104,26 @@ Shared shell reused from the Company watch briefing (`.bf` / `.actcard` /
 (greyed), never double-counted as a caution/long-shot. The sort control is
 hidden in any briefing (also fixes the same leftover in the Company watch
 briefing). Still no change to `monitor.py`, `eligibility.py`, or the schema.
+
+## Follow-up (2026-09-19): PhD and Part-time too
+
+Every section except Company watch now opens as a briefing. PhD and Part-time
+were held back at first because their "act-on" signal is neither fit nor a
+sponsor gate — so they get their own tailoring rather than the jobs template:
+
+- **PhD** — a studentship is not a Skilled Worker route, so the sponsor rules
+  do not apply. Act-on is *funded* (`funding` full/partial) and open to
+  international students (`intlEligible !== false`) with the deadline not yet
+  past, ranked by soonest deadline (it is a deadline-driven tab). The card
+  leads with funding, stipend and days-to-close; the signal line names what is
+  closing soonest and how many are funded; "for the record" counts UK-only,
+  funding-unconfirmed and already-closed. Unit is "opening", not "role".
+- **Part-time** — ranked by pay. Act-on is a good hourly rate
+  (`status === "strong"`), ranked by `hourly` descending. The card leads with
+  £/hr, the wanted shifts and the FTE-equivalent salary; the signal line notes
+  the rate is estimated and splits part-time vs full-time-with-flex; "for the
+  record" counts fair-rate and low/unstated.
+
+`BRIEF`/`EXPANDED` now include `phd` and `pt`; `briefLede`/`briefActCard`/
+`briefSignal`/`briefRest`/`renderBriefing` gained per-section branches. Nothing
+else changed — still no `monitor.py`/`eligibility.py`/schema edits.

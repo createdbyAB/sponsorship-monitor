@@ -1386,7 +1386,6 @@ function briefActCard(r, section){
     fig =
       '<span><span class="k">fit </span><span class="v">' + r.score + "</span></span>" +
       (r.salary ? '<span><span class="k">salary </span><span class="v">' + esc(shortMoney(r.salary)) + "</span></span>" : "") +
-      (r.soc ? '<span><span class="k">code </span><span class="v mut">' + esc(r.soc) + "</span></span>" : "") +
       (dl !== null && dl >= 0 ? '<span><span class="k">closes </span><span class="v mut">' + dl + "d</span></span>" : "");
   }
   return '<div class="actcard"><div class="lbl">' + lbl + "</div>" +
@@ -1680,7 +1679,7 @@ function dl0(){ return cwDeadlines(); }
 function cwActCard(r){
   const tsl = r.deadlineBasis === "temporary shortage list";
   const dlv = r.applicableDeadline || (tsl ? dl0().tsl : dl0().graduate);
-  const meta = [r.location, r.soc ? "code " + r.soc : "", tsl ? "shortage-list code" : "higher-skilled"].filter(Boolean).join(" · ");
+  const meta = [r.location, tsl ? "shortage-list code" : "higher-skilled"].filter(Boolean).join(" · ");
   const fig =
     (r.salaryText ? '<span><span class="k">pays </span><span class="v">' + esc(r.salaryText) + "</span></span>" : "") +
     (r.requiredFloor != null ? '<span><span class="k">floor </span><span class="v">' + esc(cwMoney(r.requiredFloor)) + "</span></span>" : "") +

@@ -364,41 +364,8 @@ button{font:inherit;color:inherit;background:none;border:none;padding:0;cursor:p
 .cwbadge.uncertain{background:var(--weak-panel);color:var(--weak-tx)}
 .cwempty{color:var(--text-45);font-size:12px;padding:4px 2px 2px}
 
-/* ---- Company watch: briefing (default) + cockpit (expanded) ---- */
-.bf{max-width:560px}
-.bf .date{font:500 10px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--text-42);margin-bottom:6px}
-.bf .head{font-family:Georgia,'Times New Roman',serif;font-size:26px;line-height:1.22;font-weight:600;
-  letter-spacing:-.01em;color:var(--text);margin:0 0 18px}
-.bf .lede{font-size:16px;line-height:1.65;color:var(--text);margin:0 0 4px}
-.bf .lede .g{color:var(--strong-tx);font-weight:600}
-.bf .lede .b{color:var(--weak-tx);font-weight:600}
-.bf .lede .w{color:var(--caution-tx);font-weight:600}
-.bf .actcard{display:block;background:var(--strong-panel);border:1px solid var(--strong-edge);border-left-width:3px;
-  border-radius:12px;padding:14px 16px;margin:22px 0}
-.bf .actcard.none{background:var(--card);border-color:var(--line);border-left-color:var(--line)}
-.bf .actcard .lbl{font:600 10px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--strong-tx);margin-bottom:7px}
-.bf .actcard h3{font-family:var(--sans);font-size:16px;font-weight:600;margin:0}
-.bf .actcard .m{color:var(--text-55);font-size:13px;margin:3px 0 0}
-.bf .actcard .fig{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:11px;font:500 12.5px var(--mono);font-variant-numeric:tabular-nums}
-.bf .actcard .fig .k{color:var(--text-45)} .bf .actcard .fig .v{color:var(--strong-tx)} .bf .actcard .fig .v.mut{color:var(--text-60)}
-.bf .actcard a{display:inline-block;margin-top:12px;font-size:13.5px;color:var(--link);text-decoration:none}
-.bf .actcard a:hover{text-decoration:underline}
-.bf .actcard + .actcard{margin-top:-8px}
-.bf .run{font-size:14.5px;line-height:1.6;color:var(--text-55);margin:22px 0;padding:14px 0;
-  border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-.bf .run .n{font-family:var(--mono);color:var(--caution-tx)} .bf .run .n.soon{color:var(--weak-tx)}
-.bf .run .n.mut{color:var(--text)}
-.bf .rec{font-size:13.5px;line-height:1.7;color:var(--text-45);margin:18px 0 0}
-.bf .rec b{color:var(--text-70);font-weight:600}
-.bf .showall{margin-top:22px;font:600 11px var(--mono);letter-spacing:.04em;color:var(--link);
-  background:none;border:1px solid var(--line-10);border-radius:8px;padding:10px 14px;cursor:pointer}
-.bf .showall:hover{border-color:var(--link);color:var(--link)}
-.bf .sign{margin-top:24px;font:500 10.5px var(--mono);color:var(--text-38)}
-
-#f-sort.brief-off{display:none !important}   /* no sort control in a briefing */
-.cwback{font:600 10.5px var(--mono);letter-spacing:.04em;color:var(--text-55);background:none;
-  border:none;cursor:pointer;padding:2px 0;margin-bottom:10px}
-.cwback:hover{color:var(--text)}
+/* ---- Company watch cockpit ---- */
+#f-sort.brief-off{display:none !important}   /* no jobs-style sort control on Company watch */
 .cwrun{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:2px 0 16px}
 .cwrun .top{display:flex;justify-content:space-between;font:500 9.5px var(--mono);letter-spacing:.1em;
   text-transform:uppercase;color:var(--text-42);margin-bottom:11px}
@@ -610,16 +577,7 @@ const blank = (show = "new") => ({show, status:[], minfit:0, money:null, field:n
 const F = {jobs: blank(), hs: blank(), phd: Object.assign(blank(), {sort:"deadline"}), pt: blank(),
            nhs: blank(), companywatch: blank()};
 // Company watch has its own filter shape (employer-centric, not fit/salary tiers).
-// `expanded` toggles the daily briefing (default) for the full cockpit list.
-const CW = {verdict:null, sector:null, tier:null, soc:null, expanded:false};
-
-// Every section except Company watch (which has its own) opens as a daily
-// briefing that expands into the full card list. Per-section, browser-only.
-const BRIEF = new Set(["jobs", "hs", "nhs", "phd", "pt"]);
-const EXPANDED = {jobs:false, hs:false, nhs:false, phd:false, pt:false};
-const plural = (n, w) => n === 1 ? w
-  : /(?:ch|sh|s|x|z)$/.test(w) ? w + "es"
-  : /[^aeiou]y$/.test(w) ? w.slice(0, -1) + "ies" : w + "s";
+const CW = {verdict:null, sector:null, tier:null, soc:null};
 
 /* ---------- done / hidden marks ----------
    Kept in this browser only, since the site is static. Keyed on the advert URL
@@ -1190,10 +1148,7 @@ function renderList(){
   $("#fcount").innerHTML = n ? '<span class="badge">' + n + '</span>' : '<span style="opacity:.5">▾</span>';
   $("#apply").textContent = "Show " + sorted.length + (sorted.length === 1 ? " match" : " matches");
 
-  const backLink = (BRIEF.has(section) && EXPANDED[section])
-    ? '<button class="cwback" id="briefback">← Back to briefing</button>' : "";
-  $("#list").innerHTML = backLink + sorted.map(cardHtml).join("");
-  if ($("#briefback")) $("#briefback").onclick = () => { EXPANDED[section] = false; renderAll(); };
+  $("#list").innerHTML = sorted.map(cardHtml).join("");
   $$("#list .act").forEach(b => b.onclick = () => {
     const said = b.dataset.mark === "done" ? "Marked done"
                : b.dataset.mark === "hidden" ? "Hidden" : "Restored";
@@ -1332,223 +1287,6 @@ const FOOTNOTE = {
         "applies here. Confirm everything on the advert before applying."
 };
 
-/* ---------- section briefings (jobs / hs / nhs) ----------
-   The same five-second read as Company watch, tailored per section: jobs and
-   health & safety lead with strong, sponsor-eligible matches by CV fit; NHS
-   leads with adverts that welcome sponsorship and what is closing soonest. */
-function briefLede(r, section){
-  const where = r.employer ? " at " + esc(r.employer) : "";
-  const loc = (r.location || r.country) ? " (" + esc(r.location || r.country) + ")" : "";
-  if (section === "phd"){
-    const dl = daysToDeadline(r);
-    const when = dl !== null && dl >= 0 ? "closing in " + dl + " day" + (dl === 1 ? "" : "s") : "with a rolling deadline";
-    const intl = r.intlEligible === true ? ", open to international students" : "";
-    const stip = r.stipend ? ", " + esc(money(r.stipend)) + "/yr stipend" : "";
-    const fund = r.funding === "full" ? "fully funded" : "funded";
-    return '<span class="g">' + esc(r.title) + "</span>" + where + loc + " is " + fund + intl + ", " + when + stip +
-           ". The rest are below.";
-  }
-  if (section === "pt"){
-    const rate = r.hourly != null ? "≈£" + Number(r.hourly).toFixed(2) + "/hr" : "an unstated rate";
-    const fte = r.salary ? " (about " + esc(shortMoney(r.salary)) + "/yr full-time)" : "";
-    return '<span class="g">' + esc(r.title) + "</span>" + where + loc + " pays " + rate + fte + ". Everything else can wait.";
-  }
-  const fit = r.score >= 80 ? "scores " + r.score + "/100 on your CV" : "fits at " + r.score + "/100";
-  const sal = r.salary ? ", " + esc(shortMoney(r.salary)) : "";
-  const tail = section === "nhs" && r.sponsorship === "welcome" ? ", and the advert welcomes sponsorship" : "";
-  return '<span class="g">' + esc(r.title) + "</span>" + where + loc + " " + fit + sal + tail + ". Everything else can wait.";
-}
-
-function briefActCard(r, section){
-  const where = [r.employer, r.location || r.country].filter(Boolean).join(" · ");
-  const link = r.url ? '<a href="' + esc(r.url) + '" target="_blank" rel="noopener">Open the advert →</a>' : "";
-  const dl = daysToDeadline(r);
-  let fig, lbl = "Act on this";
-  if (section === "phd"){
-    const fund = r.funding === "full" ? "fully funded" : r.funding === "partial" ? "part funded" : "funding ?";
-    fig =
-      '<span><span class="k">funding </span><span class="v">' + fund + "</span></span>" +
-      (r.stipend ? '<span><span class="k">stipend </span><span class="v mut">' + esc(money(r.stipend)) + "/yr</span></span>" : "") +
-      (dl !== null && dl >= 0
-        ? '<span><span class="k">closes </span><span class="v mut">' + dl + "d</span></span>"
-        : '<span><span class="v mut">rolling deadline</span></span>');
-    if (r.intlEligible === true) lbl += " · open to international students";
-  } else if (section === "pt"){
-    const rate = r.hourly != null ? "£" + Number(r.hourly).toFixed(2) + "/hr" : "rate not stated";
-    const shifts = (r.shifts || []).filter(s => s !== "daytime")
-      .map(s => ({evening:"evenings", weekend:"weekends", flexible:"flexible"}[s] || s)).join(", ");
-    fig =
-      '<span><span class="k">rate </span><span class="v">' + esc(rate) + "</span></span>" +
-      (shifts ? '<span><span class="k">shifts </span><span class="v mut">' + esc(shifts) + "</span></span>" : "") +
-      (r.salary ? '<span><span class="k">FTE </span><span class="v mut">≈' + esc(shortMoney(r.salary)) + "/yr</span></span>" : "");
-  } else {
-    if (section === "nhs" && r.sponsorship === "welcome") lbl += " · welcomes sponsorship";
-    fig =
-      '<span><span class="k">fit </span><span class="v">' + r.score + "</span></span>" +
-      (r.salary ? '<span><span class="k">salary </span><span class="v">' + esc(shortMoney(r.salary)) + "</span></span>" : "") +
-      (dl !== null && dl >= 0 ? '<span><span class="k">closes </span><span class="v mut">' + dl + "d</span></span>" : "");
-  }
-  return '<div class="actcard"><div class="lbl">' + lbl + "</div>" +
-    "<h3>" + esc(r.title) + "</h3>" +
-    '<p class="m">' + esc(where) + "</p>" +
-    '<div class="fig">' + fig + "</div>" + link + "</div>";
-}
-
-function briefSignal(section, all){
-  const live = all.length, fresh = all.filter(isNew).length;
-  const closed = all.filter(r => r.sponsorable === false).length;
-  if (section === "phd"){
-    const dated = all.filter(r => { const d = daysToDeadline(r); return d !== null && d >= 0; })
-                     .sort((a, b) => daysToDeadline(a) - daysToDeadline(b));
-    const soon = dated[0];
-    const rolling = all.filter(r => !r.deadline).length;
-    const funded = all.filter(r => r.funding === "full" || r.funding === "partial").length;
-    return '<p class="run">' +
-      (soon ? '<span class="n soon">Closing soonest</span> — ' + esc(soon.title) + ", in " +
-              daysToDeadline(soon) + " day" + (daysToDeadline(soon) === 1 ? "" : "s") + ". " : "") +
-      '<span class="n mut">' + funded + "</span> of " + live + " are funded" +
-      (rolling ? '; <span class="n mut">' + rolling + "</span> roll with no fixed deadline" : "") +
-      ". A studentship is not a Skilled Worker route, so the sponsor rules do not apply here.</p>";
-  }
-  if (section === "pt"){
-    const strong = all.filter(r => r.status === "strong").length;
-    const partT = all.filter(r => r.contract === "part_time").length;
-    const flex = all.filter(r => r.contract === "full_time").length;
-    return '<p class="run"><span class="n mut">' + strong + "</span> clear a good hourly rate today. Rates are " +
-      '<span class="n soon">estimated</span> from the advertised figure, so a genuinely part-time salary can read low — ' +
-      "confirm on the advert. " + partT + " part-time · " + flex + " full-time with evening or weekend hours.</p>";
-  }
-  if (section === "nhs"){
-    const withDl = all.filter(r => { const d = daysToDeadline(r); return d !== null && d >= 0; })
-                      .sort((a, b) => daysToDeadline(a) - daysToDeadline(b));
-    const soon = withDl[0];
-    const welcomed = all.filter(r => r.sponsorship === "welcome" && r.sponsorable !== false).length;
-    return '<p class="run">' +
-      (soon ? '<span class="n soon">Closing soonest</span> — ' + esc(soon.title) + " at " +
-              esc(soon.employer || "an NHS body") + ", in " + daysToDeadline(soon) + " days. " : "") +
-      '<span class="n mut">' + welcomed + "</span> advert" + (welcomed === 1 ? "" : "s") +
-      " explicitly " + (welcomed === 1 ? "welcomes" : "welcome") +
-      " sponsorship; the rest are licensed sponsors that have not said." + "</p>";
-  }
-  if (section === "hs"){
-    return '<p class="run">The health &amp; safety occupation code (3582) is <span class="n soon">closed</span> ' +
-      "to a first Skilled Worker visa, so most roles here are shown for awareness, not as leads. Salaries are " +
-      'measured against the <span class="n mut">' + esc(money(FLOORS.general)) + "</span> general floor.</p>";
-  }
-  return '<p class="run"><span class="n mut">' + live + '</span> live · <span class="n mut">' + fresh +
-    "</span> new today. Fit is scored against your CV; salaries against the " +
-    '<span class="n mut">' + esc(money(FLOORS.general)) + "</span> general floor." +
-    (closed ? ' <span class="n soon">' + closed + "</span> greyed by a closed occupation code." : "") + "</p>";
-}
-
-function briefRest(all, section){
-  if (section === "phd"){
-    const ukonly = all.filter(r => r.intlEligible === false).length;
-    const unfunded = all.filter(r => r.funding !== "full" && r.funding !== "partial").length;
-    const past = all.filter(r => { const d = daysToDeadline(r); return d !== null && d < 0; }).length;
-    const parts = [];
-    if (ukonly) parts.push("<b>" + ukonly + "</b> UK-only");
-    if (unfunded) parts.push("<b>" + unfunded + "</b> with funding unconfirmed");
-    if (past) parts.push("<b>" + past + "</b> already closed");
-    return parts.length ? "For the record: " + parts.join("; ") + "." : "";
-  }
-  if (section === "pt"){
-    const fair = all.filter(r => r.status === "caution").length;
-    const low = all.filter(r => r.status === "weak").length;
-    const parts = [];
-    if (fair) parts.push("<b>" + fair + "</b> at a fair rate");
-    if (low) parts.push("<b>" + low + "</b> low or unstated");
-    return parts.length ? "For the record: " + parts.join("; ") + "." : "";
-  }
-  // jobs / hs / nhs — partition so a closed-code row is reported once (greyed),
-  // never also as a caution/long-shot.
-  const open = all.filter(r => r.sponsorable !== false);
-  const caution = open.filter(r => r.status === "caution").length;
-  const weak = open.filter(r => r.status === "weak").length;
-  const closed = all.filter(r => r.sponsorable === false).length;
-  const parts = [];
-  if (caution) parts.push("<b>" + caution + "</b> to check");
-  if (weak) parts.push("<b>" + weak + "</b> long " + plural(weak, "shot"));
-  if (closed) parts.push("<b>" + closed + "</b> greyed by a closed code");
-  return parts.length ? "For the record: " + parts.join("; ") + "." : "";
-}
-
-function renderBriefing(section){
-  $("#tiles").innerHTML = "";
-  $("#active").innerHTML = "";
-  $("#emptyslot").innerHTML = "";
-  $("#count").textContent = "";
-  $("#list").style.display = "block";
-
-  const all = sectionRows().filter(r => markOf(r) !== "hidden");
-  const undone = r => markOf(r) !== "done";
-  const openGate = r => r.sponsorable !== false && undone(r);
-  const unit = section === "phd" ? "opening" : "role";
-  let actRows, head, lede;
-
-  if (section === "nhs"){
-    const byFit = (a, b) => b.score - a.score;
-    const welcomed = all.filter(r => r.sponsorship === "welcome" && openGate(r)).sort(byFit);
-    const strong = all.filter(r => r.sponsorship !== "welcome" && r.status === "strong" && openGate(r)).sort(byFit);
-    actRows = welcomed.concat(strong);
-    const w = welcomed.length;
-    head = w > 0 ? w + " NHS " + plural(w, "role") + " welcome" + (w === 1 ? "s" : "") + " sponsorship today."
-         : strong.length > 0 ? strong.length + " strong NHS " + plural(strong.length, "match") + " to check today."
-         : "Nothing stands out on the wards today.";
-    lede = actRows.length ? briefLede(actRows[0], section)
-      : "No advert currently welcomes sponsorship, and nothing scores as a strong match. The full list is still live below.";
-  } else if (section === "phd"){
-    const isOpen = r => { const d = daysToDeadline(r); return d === null || d >= 0; };
-    const dOf = r => { const d = daysToDeadline(r); return d === null ? Infinity : d; };
-    actRows = all.filter(r => r.intlEligible !== false && (r.funding === "full" || r.funding === "partial") &&
-                              undone(r) && isOpen(r))
-                 .sort((a, b) => dOf(a) - dOf(b) || (a.funding === "full" ? 0 : 1) - (b.funding === "full" ? 0 : 1));
-    const n = actRows.length;
-    head = n > 0 ? n + " funded " + plural(n, "PhD") + " worth a look today." : "No funded, eligible PhD is open today.";
-    lede = actRows.length ? briefLede(actRows[0], section)
-      : "Nothing funded and open to international students is live right now. The full list is below.";
-  } else if (section === "pt"){
-    actRows = all.filter(r => r.status === "strong" && undone(r)).sort((a, b) => (b.hourly || 0) - (a.hourly || 0));
-    const n = actRows.length;
-    head = n > 0 ? n + " part-time " + plural(n, "role") + " at a good rate today." : "No standout rate today.";
-    lede = actRows.length ? briefLede(actRows[0], section)
-      : "Nothing clears a good hourly rate today. The full list is still live below.";
-  } else {
-    actRows = all.filter(r => r.status === "strong" && openGate(r)).sort((a, b) => b.score - a.score);
-    const n = actRows.length, word = section === "hs" ? "role" : "match";
-    head = n > 0 ? n + " strong " + plural(n, word) + " worth a look today."
-         : section === "hs" ? "Nothing sponsorable in health &amp; safety today."
-         : "No strong match clears today.";
-    lede = actRows.length ? briefLede(actRows[0], section)
-      : section === "hs"
-        ? "The health &amp; safety code stays closed, so today's roles are awareness-only. The signal line and full list are below."
-        : "Nothing scored as a strong, sponsor-eligible match today. The full list is still live below.";
-  }
-
-  let acts = "";
-  actRows.slice(0, 3).forEach(r => acts += briefActCard(r, section));
-  if (actRows.length > 3) acts += '<p class="rec">+' + (actRows.length - 3) + " more in the full list.</p>";
-  if (!actRows.length) acts = '<div class="actcard none"><div class="lbl" style="color:var(--text-45)">Nothing to act on</div>' +
-    '<p class="m">Open the full list to see everything still live — quiet days are normal on these boards.</p></div>';
-
-  const stamp = INDEX.updated ? INDEX.updated.slice(0, 10) : "";
-  const sign = SECTION_NAME[section].replace(/^./, c => c.toUpperCase()) + (stamp ? " · last run " + stamp : "");
-  const rest = briefRest(all, section);
-
-  $("#list").innerHTML = '<div class="bf">' +
-    '<div class="date">' + esc(cwLongDate(cwToday())) + "</div>" +
-    '<h2 class="head">Good morning. ' + head + "</h2>" +
-    '<p class="lede">' + lede + "</p>" +
-    acts +
-    briefSignal(section, all) +
-    (rest ? '<p class="rec">' + rest + "</p>" : "") +
-    '<button class="showall" id="briefexpand">Show all ' + all.length + " " + plural(all.length, unit) + " →</button>" +
-    '<p class="sign">' + esc(sign) + "</p></div>";
-
-  $("#briefexpand").onclick = () => { EXPANDED[section] = true; renderAll(); };
-  $("#live").textContent = SECTION_NAME[section] + " briefing — " + actRows.length + " to act on of " + all.length;
-}
-
 function renderAll(){
   $$("#switcher .tab").forEach(t => t.setAttribute("aria-selected", t.dataset.sec === section));
   if (section === "companywatch"){
@@ -1561,14 +1299,6 @@ function renderAll(){
     return;
   }
   renderDays();
-  if (BRIEF.has(section) && !EXPANDED[section]){
-    $("#foot").innerHTML = FOOTNOTE[section];
-    $("#rail").style.display = "none";
-    $("#openfilters").style.display = "none";
-    $("#f-sort").classList.add("brief-off");
-    renderBriefing(section);
-    return;
-  }
   $("#f-sort").classList.remove("brief-off");
   $("#rail").style.display = "";
   $("#openfilters").style.display = "";
@@ -1608,115 +1338,10 @@ function renderCompanyWatch(){
   $("#emptyslot").innerHTML = "";
   $("#list").style.display = "block";   // block flow, not the card grid
 
-  if (CW.expanded) cwCockpit(all, groups, found, passes, dl, tslLeft, gradLeft, tslSoon);
-  else             cwBriefing(all, groups, found, passes, dl, tslLeft, gradLeft, tslSoon);
+  cwCockpit(all, groups, found, passes, dl, tslLeft, gradLeft, tslSoon);
 }
 
 const cwMoney = n => "£" + Number(n || 0).toLocaleString("en-GB");
-function cwLongDate(iso){
-  if (!iso) return "";
-  const d = new Date(iso + "T00:00:00Z");
-  return isNaN(d) ? iso : d.toLocaleDateString("en-GB",
-    {weekday:"long", day:"numeric", month:"long", year:"numeric", timeZone:"UTC"}).replace(", ", " · ");
-}
-
-/* ---- briefing (default): a five-second read of what needs you today ---- */
-function cwBriefing(all, groups, found, passes, dl, tslLeft, gradLeft, tslSoon){
-  $("#tiles").innerHTML = "";                 // the briefing carries no stat tiles
-  const pass = groups.pass || [];
-  const head = passes === 0 ? "Nothing needs you today."
-             : passes === 1 ? "One role worth a look today."
-             : passes + " roles worth a look today.";
-
-  let lede = "";
-  if (!found) lede = "No company-watch vacancies in this run.";
-  else if (passes === 0) lede = "No advertised role clears its floor today. The runway and everything still live are below.";
-  else {
-    const t = pass[0];
-    lede = '<span class="g">' + esc(t.company) + '</span> posted a ' + esc(t.title) +
-      (t.location ? " in " + esc(t.location) : "") +
-      (t.salaryText ? ' at <span class="mono">' + esc(t.salaryText) + "</span>" : "") +
-      " — " + cwDeadlineClause(t) +
-      (passes > 1 ? " Plus " + (passes - 1) + " more below." : " Everything else can wait.");
-  }
-
-  let acts = "";
-  pass.slice(0, 3).forEach(r => acts += cwActCard(r));
-  if (passes > 3) acts += '<p class="rec">+' + (passes - 3) + " more sponsorable in the full list.</p>";
-  if (passes === 0 && found) acts = '<div class="actcard none"><div class="lbl" style="color:var(--text-45)">Nothing to act on</div>' +
-    '<p class="m">No advertised role currently clears its floor. Open the full list to see what is waiting on a salary.</p></div>';
-
-  const rest = cwForTheRecord(groups);
-  const stamp = (all.find(r => r.registerCheckedOn) || {}).registerCheckedOn || "";
-  let sign = "Company watch · 83 sponsors";
-  if (stamp) sign += " · register checked " + stamp;
-  if (INDEX.updated) sign += " · last run " + INDEX.updated.slice(0, 10);
-
-  $("#list").innerHTML = '<div class="bf">' +
-    '<div class="date">' + esc(cwLongDate(cwToday())) + "</div>" +
-    '<h2 class="head">Good morning. ' + esc(head) + "</h2>" +
-    (lede ? '<p class="lede">' + lede + "</p>" : "") +
-    acts +
-    cwRunwaySentence(dl, tslLeft, gradLeft, tslSoon) +
-    (rest ? '<p class="rec">' + rest + "</p>" : "") +
-    '<button class="showall" id="cwexpand">Show all ' + found + " " + (found === 1 ? "vacancy" : "vacancies") + " →</button>" +
-    '<p class="sign">' + esc(sign) + "</p></div>";
-
-  $("#cwexpand").onclick = () => { CW.expanded = true; renderCompanyWatch(); };
-  $("#live").textContent = "Company watch briefing — " + passes + " sponsorable of " + found;
-}
-
-// The deadline that governs a sponsorable row, in one plain clause.
-function cwDeadlineClause(r){
-  const tsl = r.deadlineBasis === "temporary shortage list";
-  const clears = r.headroom != null ? "clears the floor by " + cwMoney(r.headroom) : "clears the floor";
-  return tsl
-    ? "a shortage-list code that " + clears + ", but its clock is the list close on " + (r.applicableDeadline || dl0().tsl) + "."
-    : "a higher-skilled code that " + clears + ", clocked by your Graduate visa (" + (r.applicableDeadline || dl0().graduate) + "), not the shortage list.";
-}
-function dl0(){ return cwDeadlines(); }
-
-function cwActCard(r){
-  const tsl = r.deadlineBasis === "temporary shortage list";
-  const dlv = r.applicableDeadline || (tsl ? dl0().tsl : dl0().graduate);
-  const meta = [r.location, tsl ? "shortage-list code" : "higher-skilled"].filter(Boolean).join(" · ");
-  const fig =
-    (r.salaryText ? '<span><span class="k">pays </span><span class="v">' + esc(r.salaryText) + "</span></span>" : "") +
-    (r.requiredFloor != null ? '<span><span class="k">floor </span><span class="v">' + esc(cwMoney(r.requiredFloor)) + "</span></span>" : "") +
-    '<span><span class="k">deadline </span><span class="v mut">' + esc(dlv) + "</span></span>";
-  const link = r.url ? '<a href="' + esc(r.url) + '" target="_blank" rel="noopener">Open the advert →</a>' : "";
-  return '<div class="actcard"><div class="lbl">Act on this</div>' +
-    "<h3>" + esc(r.company) + " — " + esc(r.title) + "</h3>" +
-    '<p class="m">' + esc(meta) + "</p>" +
-    '<div class="fig">' + fig + "</div>" + link + "</div>";
-}
-
-function cwRunwaySentence(dl, tslLeft, gradLeft, tslSoon){
-  const tsl = tslLeft != null ? '<span class="n' + (tslSoon ? " soon" : "") + '">' + tslLeft + " days</span>" : "";
-  const grad = gradLeft != null ? '<span class="n mut">' + gradLeft + " days</span>" : "";
-  return '<p class="run">' +
-    (tslLeft != null ? tsl + " until the shortage list closes on " + esc(dl.tsl) +
-       " — the clock on shortage-list codes like data analyst 3544. " : "") +
-    (gradLeft != null ? grad + " of Graduate leave left, to " + esc(dl.graduate) + "." : "") +
-    "</p>";
-}
-
-// The understated back-half: what is live but not act-on-now, named where it is short.
-function cwForTheRecord(groups){
-  const parts = [];
-  const tl = groups.too_late || [];
-  tl.slice(0, 2).forEach(r => parts.push("<b>" + esc(r.company) + "</b>’s " + esc(r.title) +
-    (r.location ? " in " + esc(r.location) : "") + " is <b>too late</b> for the shortage-list deadline"));
-  if (tl.length > 2) parts.push("<b>" + tl.length + "</b> roles are too late in total");
-  const un = (groups.unverified || []).length;
-  if (un) parts.push("<b>" + un + "</b> other live " + (un === 1 ? "role hasn’t" : "roles haven’t") +
-    " advertised a salary yet, so " + (un === 1 ? "it’s" : "they’re") + " unverified rather than out");
-  const fl = (groups.fail || []).length;
-  if (fl) parts.push("<b>" + fl + "</b> " + (fl === 1 ? "role fails" : "roles fail") + " on salary alone");
-  const cl = (groups.closed || []).length;
-  if (cl) parts.push("<b>" + cl + "</b> " + (cl === 1 ? "is on a closed code" : "are on closed codes"));
-  return parts.length ? "For the record: " + parts.join("; ") + "." : "";
-}
 
 /* ---- cockpit (expanded): the full, legible list ---- */
 function cwCockpit(all, groups, found, passes, dl, tslLeft, gradLeft, tslSoon){
@@ -1770,8 +1395,7 @@ function cwCockpit(all, groups, found, passes, dl, tslLeft, gradLeft, tslSoon){
     });
   }
 
-  $("#list").innerHTML = '<button class="cwback" id="cwback">← Back to briefing</button>' + run + filt + body;
-  $("#cwback").onclick = () => { CW.expanded = false; renderCompanyWatch(); };
+  $("#list").innerHTML = run + filt + body;
   $$("#list .cwfilters .chip").forEach(b => b.onclick = () => {
     const d = b.dataset.dim, v = b.dataset.val;
     CW[d] = String(CW[d]) === String(v) ? null : v;

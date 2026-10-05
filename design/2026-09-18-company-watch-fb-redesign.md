@@ -127,3 +127,19 @@ sponsor gate — so they get their own tailoring rather than the jobs template:
 `BRIEF`/`EXPANDED` now include `phd` and `pt`; `briefLede`/`briefActCard`/
 `briefSignal`/`briefRest`/`renderBriefing` gained per-section branches. Nothing
 else changed — still no `monitor.py`/`eligibility.py`/schema edits.
+
+## Reverted (2026-09-30): briefing removed
+
+Per the owner, the "Good morning" briefing layer is removed from every section.
+Each tab now opens straight to its card list (the former "cockpit"): jobs/H&S/
+NHS/PhD/Part-time to the tiles + filter rail + card grid, Company watch to its
+tiles + runway + verdict-grouped cards. The occupation code lives on each card,
+which is what the owner wanted to keep.
+
+Removed: `renderBriefing` and the `brief*` builders, the Company-watch briefing
+(`cwBriefing` and its helpers), `cwLongDate`, the `BRIEF`/`EXPANDED`/`CW.expanded`
+state, the `plural()` helper, the "Show all"/"Back to briefing" controls, and the
+`.bf`/`.actcard`/`.cwback` CSS. Kept: the card view itself (`cardHtml`, `cwCard`),
+the Company-watch runway component, the two-deadline engine, and everything from
+`monitor.py`/`eligibility.py`. The `#f-sort.brief-off` rule stays — it just hides
+the jobs-style sort control on Company watch.

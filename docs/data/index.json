@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-26T12:20:35.972091Z",
+  "updated": "2026-10-27T11:42:36.534793Z",
   "floors": {
     "newEntrant": 33400,
     "general": 41700
@@ -10,6 +10,10 @@
     "cosAssignmentAllowanceDays": 60
   },
   "days": [
+    {
+      "date": "2026-10-27",
+      "count": 526
+    },
     {
       "date": "2026-10-26",
       "count": 550
